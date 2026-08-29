@@ -110,6 +110,21 @@ export function StatusBadge({ status }) {
   return <span className={"badge badge-sm bg-gradient-" + statusTone(status)}>{status || "—"}</span>;
 }
 
+export function AdminNotifyEmailField({ value }) {
+  return (
+    <>
+      <div className="input-group input-group-outline mb-2 is-filled">
+        <label className="form-label">Send to email</label>
+        <input className="form-control" type="email" value={value || ""} readOnly tabIndex={-1} />
+      </div>
+      <p className="text-xs text-secondary mb-3">
+        This is the admin email from{" "}
+        <a href="#/notifications/config">Notification configure</a>. Change it there.
+      </p>
+    </>
+  );
+}
+
 export function Card({ title, action, children, bodyClass = "p-3" }) {
   return (
     <div className="card">

@@ -1,4 +1,6 @@
 import { requireAdmin, unauthorized } from "../../../../../server/lib/auth.js";
+import { writeAudit } from "../../../../../server/lib/logs.js";
+import { resetNotificationHistory } from "../../../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../../../server/lib/supabase.js";
 
 export function OPTIONS() {
@@ -26,6 +28,18 @@ export async function GET(req) {
       start,
       rows: list.slice(start, start + pageSize)
     });
+  } catch (err) {
+    if (err.status === 401) return unauthorized();
+    return json({ error: err.message }, 500);
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    requireAdmin(req);
+    await resetNotificationHistory();
+    writeAudit({ req, action: "delete", entity: "notification", entityId: "logs", detail: "Reset notification log and inbox" });
+    return json({ ok: true });
   } catch (err) {
     if (err.status === 401) return unauthorized();
     return json({ error: err.message }, 500);

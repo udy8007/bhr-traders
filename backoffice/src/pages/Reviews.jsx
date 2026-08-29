@@ -41,7 +41,7 @@ export function CustomerReviews() {
     if (filter !== "all") list = list.filter((r) => String(r.rating) === String(filter));
     if (q.trim()) {
       const s = q.toLowerCase();
-      list = list.filter((r) => [r.name, r.comment, r.productTitle, r.city].join(" ").toLowerCase().includes(s));
+      list = list.filter((r) => [r.orderId, r.comment, r.productTitle, r.name].join(" ").toLowerCase().includes(s));
     }
     return list;
   }, [data, filter, q]);
@@ -130,7 +130,7 @@ export function CustomerReviews() {
           ))}
         </div>
         <div className={"input-group input-group-outline mb-3" + (q ? " is-filled" : "")}>
-          <label className="form-label">Search name, product, comment</label>
+          <label className="form-label">Search order id, product, comment</label>
           <input className="form-control" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
         <div className="row">
@@ -140,8 +140,8 @@ export function CustomerReviews() {
                 <div className="d-flex justify-content-between align-items-start">
                   <div>
                     <p className="rev-stars mb-1">{r.stars}</p>
-                    <p className="text-sm font-weight-bold mb-0">{r.name}</p>
-                    <p className="text-xs text-secondary mb-2">{r.city || "Customer"} · {r.productTitle || r.productId}</p>
+                    <p className="text-sm font-weight-bold mb-0">{r.orderId || "Order"}</p>
+                    <p className="text-xs text-secondary mb-2">{r.productTitle || r.productId}</p>
                   </div>
                   <button type="button" className="btn btn-link text-danger text-xs p-0 mb-0" onClick={() => remove(r.id)}>Remove</button>
                 </div>

@@ -69,6 +69,7 @@ export const api = {
   orders: () => request("/api/admin/orders"),
   order: (id) => request("/api/admin/orders/" + encodeURIComponent(id)),
   updateOrder: (id, status) => request("/api/admin/orders/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ status }) }),
+  deleteOrder: (id) => request("/api/admin/orders/" + encodeURIComponent(id), { method: "DELETE" }),
   downloadOrderInvoice: async (id) => {
     showLoader();
     try {
@@ -128,6 +129,7 @@ export const api = {
   readInbox: (id, opts = {}) => request("/api/admin/notifications/inbox/" + encodeURIComponent(id), { method: "PATCH", quiet: opts.quiet }),
   readAllInbox: (opts = {}) => request("/api/admin/notifications/inbox", { method: "PATCH", quiet: opts.quiet }),
   clearInbox: (opts = {}) => request("/api/admin/notifications/inbox", { method: "DELETE", quiet: opts.quiet }),
+  resetNotificationLogs: (opts = {}) => request("/api/admin/notifications/logs", { method: "DELETE", quiet: opts.quiet }),
   reportBug: (body) => request("/api/admin/bugs", { method: "POST", body: JSON.stringify(body) }),
   reviewsAdmin: () => request("/api/admin/reviews"),
   deleteReview: (id) => request("/api/admin/reviews/" + encodeURIComponent(id), { method: "DELETE" }),

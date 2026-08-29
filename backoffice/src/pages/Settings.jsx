@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api.js";
 import { useAuth } from "../lib/auth.jsx";
-import { Card, PageHead } from "../components/Template.jsx";
+import { AdminNotifyEmailField, Card, PageHead } from "../components/Template.jsx";
 
 export function ChangePassword() {
   const { user } = useAuth();
@@ -157,10 +157,7 @@ export function DbBackup() {
                   label="Email dump"
                   hint="Required for Backup now and for the schedule. Disable to pause sending."
                 />
-                <div className={"input-group input-group-outline mb-3" + (form.email ? " is-filled" : "")}>
-                  <label className="form-label">Send to email</label>
-                  <input className="form-control" type="email" value={form.email} onChange={(e) => patch({ email: e.target.value })} required />
-                </div>
+                <AdminNotifyEmailField value={form.email} />
                 <p className="text-xs text-uppercase text-secondary font-weight-bold mb-2">Cron presets</p>
                 <div className="bug-chips mb-3">
                   {CRON_PRESETS.map((p) => (

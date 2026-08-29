@@ -10,13 +10,13 @@ function send(kind, extra = {}) {
   if (/^(login|dashboard|master|sales|reports|logs|catalog)(\/|$)/i.test(path.replace(/^#\/?/, ""))) return;
   const body = {
     kind,
-    path,
     title: document.title,
     referrer: document.referrer || "",
     tz: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
     lang: navigator.language || "",
     screen: (window.screen && window.screen.width + "x" + window.screen.height) || "",
-    ...extra
+    ...extra,
+    path: kind === "page" ? "home" : path
   };
   fetch(API + "/api/visits", {
     method: "POST",
@@ -49,6 +49,12 @@ async function geo() {
 }
 
 export async function logPageVisit() {
+  try {
+    if (sessionStorage.getItem("bhr-visit")) return;
+    sessionStorage.setItem("bhr-visit", "1");
+  } catch {
+    /* ignore */
+  }
   const g = await geo();
   send("page", g);
 }

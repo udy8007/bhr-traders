@@ -42,10 +42,21 @@ export async function getNotifyConfig() {
   return normalizeConfig(data);
 }
 
+export async function adminNotifyEmail() {
+  const cfg = await getNotifyConfig();
+  return String(cfg.admin_email || DEFAULT_CONFIG.admin_email).trim();
+}
+
 export async function saveNotifyConfig(input) {
   const next = normalizeConfig(input);
   const supabase = getSupabase();
-  const { data, error } = await supabase.from("notification_config").upsert(next).select().single();
+  let { data, error } = await supabase.from("notification_config").upsert(next).select().single();
+  if (error && /inbox_cleared_at|schema cache/i.test(error.message || "")) {
+    const { inbox_cleared_at: _cleared, ...row } = next;
+    const retry = await supabase.from("notification_config").upsert(row).select().single();
+    data = retry.data;
+    error = retry.error;
+  }
   if (error) throw new Error(error.message);
   return normalizeConfig(data || next);
 }
@@ -114,6 +125,20 @@ export async function clearAdminInbox() {
   }
   const config = await getNotifyConfig();
   await saveNotifyConfig({ ...config, inbox_cleared_at: Math.floor(Date.now() / 1000) });
+}
+
+export async function clearNotificationLogs() {
+  const supabase = getSupabase();
+  const { data } = await supabase.from("notification_logs").select("id");
+  const rows = data || [];
+  for (const row of rows) {
+    await supabase.from("notification_logs").delete().eq("id", row.id);
+  }
+}
+
+export async function resetNotificationHistory() {
+  await clearNotificationLogs();
+  await clearAdminInbox();
 }
 
 export async function markAdminInboxRead() {

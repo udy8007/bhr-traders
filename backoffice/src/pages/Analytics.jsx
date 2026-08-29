@@ -14,24 +14,6 @@ function visitWhen(iso) {
   });
 }
 
-function pageLabel(path) {
-  const p = String(path || "home").replace(/^#\/?/, "").replace(/^\//, "") || "home";
-  const names = {
-    home: "Home",
-    products: "Products",
-    guide: "Buying guide",
-    packs: "Pack sizes",
-    about: "About",
-    quality: "Quality",
-    shop: "Shop",
-    contact: "Location",
-    enquiry: "Enquiry",
-    checkout: "Checkout",
-    "order-placed": "Order placed"
-  };
-  return names[p] || p;
-}
-
 function FourteenDayChart({ rows }) {
   const w = 720;
   const h = 240;
@@ -261,17 +243,12 @@ export function Analytics() {
       </div>
 
       <div className="row">
-        <div className="col-lg-4 mb-4">
-          <Card title="Top pages">
-            <RankBars rows={data?.topPages || []} color="#143524" />
-          </Card>
-        </div>
-        <div className="col-lg-4 mb-4">
+        <div className="col-lg-6 mb-4">
           <Card title="Referrers">
             <RankBars rows={data?.topReferrers || []} color="#c4a35a" />
           </Card>
         </div>
-        <div className="col-lg-4 mb-4">
+        <div className="col-lg-6 mb-4">
           <Card title="Top cities" bodyClass="px-0 pt-0 pb-2">
             <div className="table-responsive p-0">
               <table className="table align-items-center mb-0">
@@ -306,7 +283,6 @@ export function Analytics() {
                 <thead>
                   <tr>
                     <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Location</th>
-                    <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Page</th>
                     <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 pe-3">Time</th>
                   </tr>
                 </thead>
@@ -314,12 +290,11 @@ export function Analytics() {
                   {(data?.liveVisits || []).map((v) => (
                     <tr key={v.id}>
                       <td className="ps-3"><p className="text-xs mb-0">{v.place}</p></td>
-                      <td><p className="text-xs mb-0">{pageLabel(v.path)}</p></td>
                       <td className="pe-3"><p className="text-xs text-secondary mb-0">{visitWhen(v.at)}</p></td>
                     </tr>
                   ))}
                   {!data?.liveVisits?.length ? (
-                    <tr><td colSpan="3" className="ps-3 text-sm">Waiting for storefront traffic…</td></tr>
+                    <tr><td colSpan="2" className="ps-3 text-sm">Waiting for storefront traffic…</td></tr>
                   ) : null}
                 </tbody>
               </table>

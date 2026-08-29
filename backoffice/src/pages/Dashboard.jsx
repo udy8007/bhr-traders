@@ -165,24 +165,6 @@ function CityChart({ rows }) {
   );
 }
 
-function pageLabel(path) {
-  const p = String(path || "home").replace(/^#\/?/, "").replace(/^\//, "") || "home";
-  const names = {
-    home: "Home",
-    products: "Products",
-    guide: "Buying guide",
-    packs: "Pack sizes",
-    about: "About",
-    quality: "Quality",
-    shop: "Shop",
-    contact: "Location",
-    enquiry: "Enquiry",
-    checkout: "Checkout",
-    "order-placed": "Order placed"
-  };
-  return names[p] || p;
-}
-
 const VISIT_TONES = ["info", "success", "warning", "primary", "danger", "dark"];
 
 function visitTone(place) {
@@ -230,7 +212,6 @@ export function Dashboard() {
   ];
 
   const visitPager = usePager(data?.liveVisits || [], 9);
-  const visitPages = data?.topPages || [];
 
   return (
     <>
@@ -383,42 +364,16 @@ export function Dashboard() {
         </div>
       </div>
       <div className="row">
-        <div className="col-lg-4 mb-4">
-          <Card title="Shop pages">
-            {visitPages.length ? (
-              <div className="dash-status">
-                {visitPages.map((r) => {
-                  const max = Math.max(1, ...visitPages.map((x) => Number(x.count || 0)));
-                  return (
-                    <div className="dash-status-row mb-3" key={r.label}>
-                      <div className="d-flex justify-content-between text-xs mb-1">
-                        <span>{pageLabel(r.label)}</span>
-                        <strong>{r.count}</strong>
-                      </div>
-                      <svg viewBox="0 0 100 8" preserveAspectRatio="none" className="dash-status-bar">
-                        <rect width="100" height="8" rx="4" fill="#eadfc8" />
-                        <rect width={Math.max(4, (r.count / max) * 100)} height="8" rx="4" fill="#143524" />
-                      </svg>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-xs text-secondary mb-0">Shop page mix appears as storefront visits come in.</p>
-            )}
-          </Card>
-        </div>
-        <div className="col-lg-8 mb-4">
+        <div className="col-12 mb-4">
           <Card title="Live shop visits">
             <div className="row">
               {visitPager.slice.map((v) => (
-                <div className="col-md-6 col-xl-4 mb-3" key={v.id || v.place + v.path + v.at}>
+                <div className="col-md-6 col-xl-4 mb-3" key={v.id || v.place + v.at}>
                   <div className="visit-card">
                     <div className={"visit-pin bg-gradient-" + visitTone(v.place)}>
                       <i className="material-symbols-rounded">location_on</i>
                     </div>
                     <p className="text-sm font-weight-bold mb-1">{v.place}</p>
-                    <span className="visit-page">{pageLabel(v.path)}</span>
                     <p className="text-xs text-secondary mb-0 mt-2">{when(v.at)}</p>
                   </div>
                 </div>

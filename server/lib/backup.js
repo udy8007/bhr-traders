@@ -1,5 +1,5 @@
 import { gzipSync } from "zlib";
-import { getNotifyConfig } from "./notify.js";
+import { adminNotifyEmail } from "./notify.js";
 import { sendMail, wrapHtml } from "./mail.js";
 import { istParts } from "./reports.js";
 import { getSupabase } from "./supabase.js";
@@ -63,25 +63,37 @@ export function normalizeBackup(row) {
   };
 }
 
+async function withNotifyEmail(schedule) {
+  return { ...schedule, email: await adminNotifyEmail() };
+}
+
 export async function getBackupSchedule() {
   const supabase = getSupabase();
   const { data, error } = await supabase.from("backup_schedules").select("*").eq("id", SCHEDULE_ID).maybeSingle();
   if (error) {
-    if (/does not exist|schema cache|Could not find/i.test(error.message || "")) return normalizeBackup(null);
+    if (/does not exist|schema cache|Could not find/i.test(error.message || "")) return withNotifyEmail(normalizeBackup(null));
     throw new Error(error.message);
   }
-  return normalizeBackup(data);
+  return withNotifyEmail(normalizeBackup(data));
 }
 
 export async function saveBackupSchedule(input) {
-  const prev = await getBackupSchedule();
-  const next = normalizeBackup({ ...prev, ...input, id: SCHEDULE_ID });
+  const supabase = getSupabase();
+  const loaded = await supabase.from("backup_schedules").select("*").eq("id", SCHEDULE_ID).maybeSingle();
+  if (loaded.error && /does not exist|schema cache|Could not find/i.test(loaded.error.message || "")) {
+    const err = new Error("Create the backup_schedules table in Supabase (server/supabase/schema.sql), then save again.");
+    err.status = 400;
+    throw err;
+  }
+  const prev = normalizeBackup(loaded.data);
+  const rest = { ...(input || {}) };
+  delete rest.email;
+  const next = normalizeBackup({ ...prev, ...rest, email: prev.email, id: SCHEDULE_ID });
   if (!validCron(next.cron)) {
     const err = new Error("Enter a valid 5-field cron expression, e.g. 0 2 * * *");
     err.status = 400;
     throw err;
   }
-  const supabase = getSupabase();
   const { error } = await supabase.from("backup_schedules").upsert(next);
   if (error) {
     if (/does not exist|schema cache|Could not find/i.test(error.message || "")) {
@@ -91,7 +103,7 @@ export async function saveBackupSchedule(input) {
     }
     throw new Error(error.message);
   }
-  return next;
+  return withNotifyEmail(next);
 }
 
 async function allRows(supabase, table) {
@@ -169,15 +181,13 @@ export async function buildDbDump() {
   };
 }
 
-async function recipientFor(schedule) {
-  if (schedule.email) return schedule.email;
-  const cfg = await getNotifyConfig();
-  return cfg.admin_email || "info@bhrtraders.com";
+async function recipientFor() {
+  return adminNotifyEmail();
 }
 
-export async function sendDbBackup(schedule) {
+export async function sendDbBackup() {
   const dump = await buildDbDump();
-  const to = await recipientFor(schedule);
+  const to = await recipientFor();
   const summary = Object.entries(dump.counts)
     .map(([k, v]) => k + ": " + v)
     .join("\n");

@@ -25,15 +25,15 @@ export async function POST(req) {
     const row = {
       id: "v-" + Date.now() + "-" + Math.floor(Math.random() * 9999),
       kind,
-      path: clean(shopPath(body.path) || "home"),
-      title: clean(body.title),
+      path: kind === "page" ? "home" : clean(shopPath(body.path) || "home"),
+      title: "",
       referrer: clean(body.referrer),
       city: clean(body.city),
       region: clean(body.region),
       country: clean(body.country),
-      tz: clean(body.tz),
-      lang: clean(body.lang),
-      screen: clean(body.screen),
+      tz: "",
+      lang: "",
+      screen: "",
       created_at: new Date().toISOString()
     };
     const supabase = getSupabase();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../lib/api.js";
 import { StatusSelect } from "../components/Template.jsx";
 import { FLOW_STEPS, flowIndex, formatInr, formatWhen, itemCount, itemLabel, statusForFlow, waNumber } from "../lib/orderStatus.js";
@@ -17,9 +17,11 @@ const STEP_ICONS = {
 
 export function OrderDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [order, setOrder] = useState(null);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState("");
+  const [busy, setBusy] = useState(false);
 
   function load() {
     api.order(id).then((r) => setOrder(r.order)).catch((e) => setError(e.message));
@@ -45,6 +47,18 @@ export function OrderDetail() {
       await api.downloadOrderInvoice(order.id);
     } catch (e) {
       setError(e.message);
+    }
+  }
+
+  async function deleteOrder() {
+    if (!confirm("Delete order " + order.id + " permanently? This cannot be undone.")) return;
+    setBusy(true);
+    try {
+      await api.deleteOrder(order.id);
+      navigate("/sales/orders", { replace: true });
+    } catch (e) {
+      setError(e.message);
+      setBusy(false);
     }
   }
 
@@ -179,6 +193,10 @@ export function OrderDetail() {
             }}
           >
             Cancel order
+          </button>
+          <button type="button" className="od-act danger solid" disabled={busy} onClick={deleteOrder}>
+            <i className="material-symbols-rounded">delete</i>
+            {busy ? "Deleting…" : "Delete order"}
           </button>
         </div>
       </section>

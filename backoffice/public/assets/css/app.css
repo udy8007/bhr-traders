@@ -1364,6 +1364,12 @@ body.bhr-graphic .breadcrumb-item .text-dark {
   border-color: #ef9a9a;
   color: #c62828;
 }
+.od-act.danger.solid {
+  background: #c62828;
+  border-color: #c62828;
+  color: #fff;
+}
+.od-act.danger.solid:hover { background: #b71c1c; border-color: #b71c1c; }
 .od-act:hover { transform: translateY(-1px); }
 .od-card {
   background: #fffef9;

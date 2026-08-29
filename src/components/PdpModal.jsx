@@ -55,10 +55,7 @@ export function PdpModal() {
   const [qty, setQty] = useState(1);
   const [packId, setPackId] = useState("");
   const [live, setLive] = useState([]);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
   const [orderId, setOrderId] = useState("");
-  const [city, setCity] = useState("");
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [busy, setBusy] = useState(false);
@@ -72,10 +69,7 @@ export function PdpModal() {
     setMsg("");
     setComment("");
     setRating(5);
-    setName("");
-    setPhone("");
     setOrderId("");
-    setCity("");
     setLive([]);
     setPolicyOpen(false);
   }, [pdpId]);
@@ -112,18 +106,12 @@ export function PdpModal() {
       const res = await api.createReview({
         productId: p.id,
         productTitle: p.title,
-        name,
-        phone,
         orderId,
-        city,
         rating,
         comment
       });
       setLive((prev) => [res.review, ...prev]);
-      setName("");
-      setPhone("");
       setOrderId("");
-      setCity("");
       setComment("");
       setRating(5);
       setMsg("Thank you. Your review is live.");
@@ -242,7 +230,7 @@ export function PdpModal() {
               <h3>Customer reviews</h3>
               <form className="pdp-review-form" onSubmit={submitReview}>
                 <p className="pdp-review-label">Write a review</p>
-                <p className="pdp-review-hint">Only customers who purchased this variety can post. Enter the order ID and the phone number used at checkout.</p>
+                <p className="pdp-review-hint">Only customers who purchased this variety can post. Enter your order ID.</p>
                 <div className="pdp-star-pick" role="radiogroup" aria-label="Star rating">
                   {[1, 2, 3, 4, 5].map((n) => (
                     <button type="button" key={n} className={"pdp-star-btn" + (n <= rating ? " on" : "")} onClick={() => setRating(n)} aria-label={n + " stars"}>
@@ -250,12 +238,7 @@ export function PdpModal() {
                     </button>
                   ))}
                 </div>
-                <div className="pdp-review-grid">
-                  <input required placeholder="Order ID (e.g. BHR-1234)" value={orderId} onChange={(e) => setOrderId(e.target.value)} />
-                  <input required placeholder="Phone on the order" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                  <input required placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
-                  <input placeholder="City (optional)" value={city} onChange={(e) => setCity(e.target.value)} />
-                </div>
+                <input required placeholder="Order ID (e.g. BHR-1234)" value={orderId} onChange={(e) => setOrderId(e.target.value)} />
                 <textarea required rows={3} placeholder="Your comment" value={comment} onChange={(e) => setComment(e.target.value)} />
                 {msg ? <p className={"pdp-review-msg" + (msg.toLowerCase().includes("thank") ? "" : " err")}>{msg}</p> : null}
                 <button className="btn btn-green" type="submit" disabled={busy}>{busy ? "Saving…" : "Submit review"}</button>
@@ -265,11 +248,10 @@ export function PdpModal() {
                   <p className="pdp-review-empty">No reviews yet for this product.</p>
                 ) : (
                   reviews.map((r) => (
-                    <article className="pdp-review" key={r.id || r.name + r.comment}>
+                    <article className="pdp-review" key={r.id || r.orderId + r.comment}>
                       <div className="stars">{r.stars || starChars(r.rating)}</div>
                       <q>{r.comment || r.text}</q>
-                      <strong>{r.name}</strong>{" "}
-                      <span>{r.city || ""}{r.verified ? (r.city ? " · Verified purchase" : "Verified purchase") : ""}</span>
+                      <strong>{r.orderId || "Verified purchase"}</strong>
                     </article>
                   ))
                 )}

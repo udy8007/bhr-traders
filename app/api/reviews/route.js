@@ -9,11 +9,6 @@ function stars(n) {
   return "★".repeat(r) + "☆".repeat(5 - r);
 }
 
-function phoneKey(v) {
-  const d = String(v || "").replace(/\D/g, "");
-  return d.length >= 10 ? d.slice(-10) : d;
-}
-
 function itemIsProduct(item, productId, productTitle) {
   const pid = String(item.product_id || "");
   if (pid && pid === productId) return true;
@@ -33,6 +28,7 @@ function mapReview(row) {
     productTitle: row.product_title || "",
     name: row.name,
     city: row.city || "",
+    orderId: row.order_id || "",
     rating: Number(row.rating || 5),
     stars: stars(row.rating),
     comment: row.comment,
@@ -63,14 +59,10 @@ export async function POST(req) {
     const productId = String(body.productId || body.product_id || "").trim();
     const productTitle = String(body.productTitle || body.product_title || "").trim();
     const orderId = String(body.orderId || body.order_id || "").trim().toUpperCase();
-    const phone = String(body.phone || "").trim();
-    const nameIn = String(body.name || "").trim();
-    const city = String(body.city || "").trim();
     const comment = String(body.comment || body.text || "").trim();
     const rating = Math.max(1, Math.min(5, Number(body.rating || 5)));
     if (!productId) return json({ error: "Product is required." }, 400);
     if (!orderId) return json({ error: "Order ID is required to post a review." }, 400);
-    if (!phone) return json({ error: "Phone number used on the order is required." }, 400);
     if (!comment) return json({ error: "Please write a comment." }, 400);
 
     const supabase = getSupabase();
@@ -79,9 +71,6 @@ export async function POST(req) {
     if (!order) return json({ error: "No order found for this ID." }, 404);
     if (/cancelled/i.test(String(order.status || ""))) {
       return json({ error: "Cancelled orders cannot be reviewed." }, 400);
-    }
-    if (phoneKey(order.phone) !== phoneKey(phone)) {
-      return json({ error: "Phone number does not match this order." }, 403);
     }
 
     const { data: items, error: itemErr } = await supabase.from("order_items").select("*").eq("order_id", order.id);
@@ -92,15 +81,12 @@ export async function POST(req) {
     const { data: existing } = await supabase.from("product_reviews").select("id").eq("product_id", productId).eq("order_id", order.id);
     if (existing?.length) return json({ error: "You already reviewed this product for this order." }, 409);
 
-    const name = nameIn || String(order.name || "").trim();
-    if (!name) return json({ error: "Your name is required." }, 400);
-
     const row = {
       id: "rv-" + Date.now() + "-" + Math.floor(Math.random() * 9999),
       product_id: productId,
       product_title: productTitle,
-      name,
-      city: city || String(order.city || ""),
+      name: String(order.name || "Customer").trim() || "Customer",
+      city: String(order.city || ""),
       phone: order.phone,
       order_id: order.id,
       rating,

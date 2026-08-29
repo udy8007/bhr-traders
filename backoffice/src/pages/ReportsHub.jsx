@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api.js";
-import { Card, PageHead } from "../components/Template.jsx";
+import { AdminNotifyEmailField, Card, PageHead } from "../components/Template.jsx";
 
 const KINDS = [
   { id: "overall", label: "Overall", hint: "Catalog, orders, value, top products, shop visits" },
   { id: "orders", label: "Orders", hint: "Every order with customer and total" },
   { id: "products", label: "Products", hint: "Full catalog with category and price" },
   { id: "category", label: "Category", hint: "One rice category, products and sales" },
-  { id: "visits", label: "Visits", hint: "Shop website visits, pages, cities, and referrers" }
+  { id: "visits", label: "Visits", hint: "Shop website visits, cities, countries, and times" }
 ];
 
 function KindPicker({ kind, onKind, category, onCategory, categories }) {
@@ -110,7 +110,7 @@ export function DownloadReport() {
               <li className="mb-2"><strong>Orders</strong> — full order list with customer, city, status and total.</li>
               <li className="mb-2"><strong>Products</strong> — catalog with category, pack, price and active/hidden.</li>
               <li className="mb-2"><strong>Category</strong> — products in that group and matching order lines.</li>
-              <li className="mb-0"><strong>Visits</strong> — shop page views, last 14 days, top pages, cities, countries, and referrers.</li>
+              <li className="mb-0"><strong>Visits</strong> — shop visits, last 14 days, cities, countries, and times.</li>
             </ul>
           </Card>
         </div>
@@ -217,10 +217,7 @@ export function ScheduleReport() {
                     </div>
                   </div>
                 </div>
-                <div className={"input-group input-group-outline mb-3" + (form.email ? " is-filled" : "")}>
-                  <label className="form-label">Send to email</label>
-                  <input className="form-control" type="email" value={form.email} onChange={(e) => patch({ email: e.target.value })} placeholder="Uses notification admin email if empty" />
-                </div>
+                <AdminNotifyEmailField value={form.email} />
                 <p className="report-cron-line text-xs mb-3">
                   Cron: <code>{cronPreview(form.hour, form.minute, form.frequency)}</code>
                   <span className="text-secondary"> · Asia/Kolkata</span>

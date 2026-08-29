@@ -21,6 +21,7 @@ export function NotificationConfig() {
   const [error, setError] = useState("");
   const [ok, setOk] = useState("");
   const [busy, setBusy] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     api.notificationConfig().then((d) => setForm(d.config)).catch((e) => setError(e.message));
@@ -42,6 +43,21 @@ export function NotificationConfig() {
     }
   }
 
+  async function resetLogs() {
+    if (!confirm("Delete all notification log data? This also clears the admin inbox and cannot be undone.")) return;
+    setResetting(true);
+    setError("");
+    setOk("");
+    try {
+      await api.resetNotificationLogs();
+      setOk("Notification log and inbox were reset.");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setResetting(false);
+    }
+  }
+
   return (
     <>
       <PageHead title="Notification configure" small="Enable email and push, and set the admin inbox address." />
@@ -55,12 +71,15 @@ export function NotificationConfig() {
                   on={form.email_enabled}
                   onChange={(v) => setForm({ ...form, email_enabled: v })}
                   label="Email notification"
-                  hint="Sends to the admin email and to the customer for shop events."
+                  hint="Sends shop alerts, scheduled reports, and database backups to this address. Customers still receive their own order and enquiry emails."
                 />
                 <div className={"input-group input-group-outline mb-4" + (form.admin_email ? " is-filled" : "")}>
                   <label className="form-label">Admin notification email</label>
                   <input className="form-control" type="email" value={form.admin_email} onChange={(e) => setForm({ ...form, admin_email: e.target.value })} required />
                 </div>
+                <p className="text-xs text-secondary mb-4">
+                  Used everywhere admin mail is sent: orders, enquiries, schedule report, and DB backup.
+                </p>
                 <Switch
                   on={form.push_enabled}
                   onChange={(v) => setForm({ ...form, push_enabled: v })}
@@ -73,7 +92,12 @@ export function NotificationConfig() {
                 </div>
                 <p className="text-xs text-secondary mb-4">Open the ntfy app and subscribe to <strong>{form.ntfy_topic || "bhr-traders"}</strong>.</p>
                 {ok ? <p className="text-success text-sm">{ok}</p> : null}
-                <button className="btn bg-gradient-info mb-0" type="submit" disabled={busy}>{busy ? "Saving…" : "Save"}</button>
+                <div className="d-flex flex-wrap gap-2">
+                  <button className="btn bg-gradient-info mb-0" type="submit" disabled={busy || resetting}>{busy ? "Saving…" : "Save"}</button>
+                  <button className="btn btn-outline-danger mb-0" type="button" disabled={busy || resetting} onClick={resetLogs}>
+                    {resetting ? "Resetting…" : "Reset"}
+                  </button>
+                </div>
               </form>
             )}
           </Card>
@@ -93,11 +117,30 @@ export function NotificationLog() {
   const [page, setPage] = useState(1);
   const [channel, setChannel] = useState("all");
   const [error, setError] = useState("");
+  const [ok, setOk] = useState("");
+  const [resetting, setResetting] = useState(false);
 
   function load(p, ch, quiet) {
     api.notificationLogs({ page: p, pageSize: 10, channel: ch, quiet }).then(setData).catch((e) => setError(e.message));
   }
   useEffect(() => { load(page, channel, false); }, [page, channel]);
+
+  async function resetLogs() {
+    if (!confirm("Delete all notification log data? This also clears the admin inbox and cannot be undone.")) return;
+    setResetting(true);
+    setError("");
+    setOk("");
+    try {
+      await api.resetNotificationLogs();
+      setPage(1);
+      await load(1, channel, false);
+      setOk("Notification log and inbox were reset.");
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setResetting(false);
+    }
+  }
 
   const pager = data
     ? { page: data.page, setPage, pages: data.pages, pageSize: data.pageSize, total: data.total, start: data.start }
@@ -105,8 +148,17 @@ export function NotificationLog() {
 
   return (
     <>
-      <PageHead title="Notification log" small="Email, push, and skipped sends for shop events." />
+      <PageHead
+        title="Notification log"
+        small="Email, push, and skipped sends for shop events."
+        action={
+          <button type="button" className="btn btn-sm btn-outline-danger mb-0" disabled={resetting} onClick={resetLogs}>
+            {resetting ? "Resetting…" : "Reset"}
+          </button>
+        }
+      />
       {error ? <div className="alert alert-warning text-white">{error}</div> : null}
+      {ok ? <div className="alert alert-success text-white">{ok}</div> : null}
       <Card title="Delivery log" bodyClass="px-0 pt-0 pb-0">
         <div className="px-3 pt-3 d-flex flex-wrap gap-2">
           {["all", "email", "push"].map((c) => (

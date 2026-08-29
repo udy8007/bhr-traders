@@ -17,6 +17,7 @@ function mapReview(row) {
     productTitle: row.product_title || "",
     name: row.name,
     city: row.city || "",
+    orderId: row.order_id || "",
     rating: Number(row.rating || 5),
     stars: stars(row.rating),
     comment: row.comment,

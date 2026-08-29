@@ -85,3 +85,41 @@ export async function PATCH(req, { params }) {
     return json({ error: err.message }, 500);
   }
 }
+
+export async function DELETE(req, { params }) {
+  try {
+    requireAdmin(req);
+    const { id } = await params;
+    const oid = String(id || "").trim().toUpperCase();
+    if (!oid) return json({ error: "Order ID is required." }, 400);
+    const supabase = getSupabase();
+    const prev = await supabase.from("orders").select("*").eq("id", oid).maybeSingle();
+    if (prev.error) return json({ error: prev.error.message }, 500);
+    if (!prev.data) return json({ error: "Order not found." }, 404);
+    const items = await supabase.from("order_items").delete().eq("order_id", oid);
+    if (items.error) return json({ error: items.error.message }, 500);
+    const { error } = await supabase.from("orders").delete().eq("id", oid);
+    if (error) return json({ error: error.message }, 500);
+    writeAudit({
+      req,
+      action: "delete",
+      entity: "order",
+      entityId: oid,
+      detail: "Order removed · " + (prev.data.name || "") + " · ₹" + (prev.data.total || 0),
+      before: snap("order", prev.data)
+    });
+    await notifyShopEvent({
+      event: "order_deleted",
+      title: "Order " + oid + " deleted",
+      body: (prev.data.name || "Customer") + " · ₹" + (prev.data.total || 0) + " · " + (prev.data.status || ""),
+      href: "/sales/orders",
+      entity: "order",
+      entityId: oid,
+      tags: "warning,bhr"
+    });
+    return json({ ok: true, id: oid });
+  } catch (err) {
+    if (err.status === 401) return unauthorized();
+    return json({ error: err.message }, 500);
+  }
+}

@@ -113,6 +113,16 @@ export function Orders() {
     }
   }
 
+  async function removeOrder(id) {
+    if (!confirm("Delete order " + id + " permanently? This cannot be undone.")) return;
+    try {
+      await api.deleteOrder(id);
+      setRows((prev) => prev.filter((o) => o.id !== id));
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
   return (
     <>
       <PageHead
@@ -198,6 +208,14 @@ export function Orders() {
                       <Link className="btn btn-sm btn-outline-secondary mb-0" to={"/sales/orders/" + o.id} title="Open detail">
                         <i className="material-symbols-rounded" style={{ fontSize: 16 }}>visibility</i>
                       </Link>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-danger mb-0"
+                        title="Delete order"
+                        onClick={() => removeOrder(o.id)}
+                      >
+                        <i className="material-symbols-rounded" style={{ fontSize: 16 }}>delete</i>
+                      </button>
                     </div>
                   </td>
                 </tr>
