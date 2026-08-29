@@ -1,0 +1,25 @@
+{
+  "name": "BHR TRADERS — Wholesale Rice Traders",
+  "short_name": "BHR TRADERS",
+  "description": "Wholesale boiled, raw, steam, idly and biryani rice from Anna Nagar West, Chennai.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#052e16",
+  "theme_color": "#052e16",
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ]
+}

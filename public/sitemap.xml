@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://www.bhrtraders.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.bhrtraders.com/images/shop-exterior.jpg</image:loc>
+      <image:title>BHR TRADERS shop front</image:title>
+      <image:caption>BHR TRADERS shop front — BHR Rice Mandi, Anna Nagar West, Chennai</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.bhrtraders.com/images/shop-storefront.jpg</image:loc>
+      <image:title>BHR TRADERS storefront</image:title>
+      <image:caption>BHR TRADERS glass storefront with wholesale rice packs</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.bhrtraders.com/images/shop-interior.jpg</image:loc>
+      <image:title>Inside BHR Rice Mandi</image:title>
+      <image:caption>Inside BHR TRADERS rice mandi, Anna Nagar West, Chennai</image:caption>
+    </image:image>
+  </url>
+</urlset>

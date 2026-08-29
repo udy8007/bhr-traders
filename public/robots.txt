@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /images/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Googlebot-Image
+Allow: /images/
+
+Sitemap: https://www.bhrtraders.com/sitemap.xml

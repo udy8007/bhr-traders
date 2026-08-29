@@ -67,20 +67,36 @@ export function Shop() {
       <div className="wrap">
         <SectionHead kicker="Our Shop" title="BHR Rice Mandi, Chennai" />
         <div className="shop-mosaic">
-          <figure className="shop-tile wide">
-            <img src="images/shop-exterior.jpg" alt="BHR Rice Mandi shop exterior at dusk" />
-            <figcaption>
-              Shop exterior<span>Anna Nagar West, Chennai</span>
+          <figure className="shop-tile wide" itemScope itemType="https://schema.org/ImageObject">
+            <img
+              src="images/shop-exterior.jpg"
+              itemProp="contentUrl"
+              width="1536"
+              height="1024"
+              alt="BHR TRADERS shop front — BHR Rice Mandi, Anna Nagar West, Chennai"
+            />
+            <figcaption itemProp="caption">
+              Shop front<span>BHR Rice Mandi, Anna Nagar West, Chennai</span>
             </figcaption>
           </figure>
           <figure className="shop-tile">
-            <img src="images/shop-storefront.jpg" alt="BHR rice shop glass storefront and product shelves" />
+            <img
+              src="images/shop-storefront.jpg"
+              width="1536"
+              height="1024"
+              alt="BHR TRADERS storefront with wholesale rice packs, Anna Nagar West, Chennai"
+            />
             <figcaption>
               Storefront<span>Wholesale and retail rice packs</span>
             </figcaption>
           </figure>
           <figure className="shop-tile">
-            <img src="images/shop-interior.jpg" alt="Inside BHR Rice Mandi with sample trays and rice bags" />
+            <img
+              src="images/shop-interior.jpg"
+              width="1536"
+              height="1024"
+              alt="Inside BHR TRADERS rice mandi with sample trays and rice bags, Chennai"
+            />
             <figcaption>
               Inside the mandi<span>Samples, bulk bags, and service counter</span>
             </figcaption>

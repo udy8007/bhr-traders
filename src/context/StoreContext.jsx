@@ -96,6 +96,10 @@ export function StoreProvider({ children }) {
 
   const openPdp = useCallback((id) => {
     setPdpId(id);
+    const next = "#product/" + id;
+    if (location.hash !== next && history.replaceState) {
+      history.replaceState(null, "", next);
+    }
   }, []);
 
   useEffect(() => {

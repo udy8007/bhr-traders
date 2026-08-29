@@ -1,3 +1,9 @@
+export const SITE_URL = "https://www.bhrtraders.com";
+export const SITE_NAME = "BHR TRADERS";
+export const SITE_TITLE = "BHR TRADERS — Wholesale Rice Traders in Chennai";
+export const SITE_DESCRIPTION =
+  "BHR TRADERS is a wholesale rice trader in Anna Nagar West, Chennai. Boiled, raw, steam, idly and biryani rice with GST billing, hygienic packing and reliable city-wide supply.";
+export const SITE_OG_IMAGE = SITE_URL + "/images/shop-exterior.jpg";
 export const GSTIN = "33BDJPB0270L2ZT";
 export const PHONE = "+91 99403 38654";
 export const PHONE_2 = "+91 99403 39654";

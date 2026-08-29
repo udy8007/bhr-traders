@@ -50,14 +50,14 @@ export function Footer() {
               <rect x="3" y="5" width="18" height="14" rx="2" />
               <path d="M3 7l9 7 9-7" />
             </svg>
-            {EMAIL}
+            <a href={"mailto:" + EMAIL}>{EMAIL}</a>
           </div>
           <div className="contact-line">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <circle cx="12" cy="12" r="9" />
               <path d="M2 12h20" />
             </svg>
-            www.bhrtraders.com
+            <a href="https://www.bhrtraders.com/">www.bhrtraders.com</a>
           </div>
           <div className="contact-line">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">

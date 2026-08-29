@@ -1,4 +1,5 @@
 import { VisitTracker } from "./components/VisitTracker.jsx";
+import { SeoHead } from "./components/SeoHead.jsx";
 import { StoreProvider } from "./context/StoreContext.jsx";
 import { Topbar, Navbar } from "./components/Header.jsx";
 import { Footer } from "./components/Footer.jsx";
@@ -15,7 +16,11 @@ import { WhyBhr } from "./sections/WhyBhr.jsx";
 export default function App() {
   return (
     <StoreProvider>
+      <SeoHead />
       <VisitTracker />
+      <a className="skip-link" href="#home">
+        Skip to content
+      </a>
       <Topbar />
       <Navbar />
       <main>
