@@ -8,8 +8,9 @@ import { CheckoutModal } from "./components/CheckoutModal.jsx";
 import { PdpModal } from "./components/PdpModal.jsx";
 import { Hero, Services } from "./sections/Hero.jsx";
 import { Products } from "./sections/Products.jsx";
-import { Guide, Packs } from "./sections/GuidePacks.jsx";
-import { About, Quality, Testimonials, CtaStats, Shop, Location, Enquiry } from "./sections/Content.jsx";
+import { Guide } from "./sections/GuidePacks.jsx";
+import { About, CtaStats, Shop, Location, Enquiry } from "./sections/Content.jsx";
+import { WhyBhr } from "./sections/WhyBhr.jsx";
 
 export default function App() {
   return (
@@ -22,10 +23,8 @@ export default function App() {
         <Services />
         <Products />
         <Guide />
-        <Packs />
         <About />
-        <Quality />
-        <Testimonials />
+        <WhyBhr />
         <CtaStats />
         <Shop />
         <Location />

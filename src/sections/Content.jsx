@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ABOUT_FEATS, ADDRESS, EMAIL, GSTIN, MAP_QUERY, PHONE, PHONE_2 } from "../data/site.js";
 import { ArrowIcon, SectionHead } from "../components/Icons.jsx";
-import { api } from "../lib/api.js";
 import { useStore } from "../context/StoreContext.jsx";
 
 export function About() {
@@ -31,87 +30,6 @@ export function About() {
             Know More About Us
           </a>
         </div>
-      </div>
-    </section>
-  );
-}
-
-export function Quality() {
-  return (
-    <section className="section" id="quality" style={{ paddingTop: 0 }}>
-      <div className="wrap info-grid">
-        <div className="info-col">
-          <div className="kicker">QUALITY ASSURANCE</div>
-          <h3>Checked at Every Stage</h3>
-          <p>
-            Each consignment is inspected for grain length, moisture, purity and packing standards before dispatch, so you receive rice that is trade-ready.
-          </p>
-          <div className="qa-icons">
-            <div className="qa">
-              <img src="images/icon-best-quality.png" alt="" />
-              <span>Purity Tested</span>
-            </div>
-            <div className="qa">
-              <img src="images/icon-wholesale-supply.png" alt="" />
-              <span>Hygienic Packaging</span>
-            </div>
-            <div className="qa">
-              <img src="images/icon-svc-satisfaction.png" alt="" />
-              <span>Quality Checked</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function Testimonials() {
-  const [reviews, setReviews] = useState(null);
-
-  useEffect(() => {
-    api
-      .reviews()
-      .then((d) => setReviews(d.reviews || []))
-      .catch(() => setReviews([]));
-  }, []);
-
-  const list = (reviews || []).slice(0, 6);
-
-  return (
-    <section className="section reviews">
-      <div className="wrap">
-        <SectionHead kicker="TESTIMONIALS" title="What Our Clients Say" chevrons ornamentAfter />
-        {!reviews ? (
-          <p className="review-empty">Loading reviews…</p>
-        ) : !list.length ? (
-          <p className="review-empty">No reviews yet. Buy a product, then share your experience from the product page.</p>
-        ) : (
-          <div className="review-grid">
-            {list.map((r) => {
-              const initials = String(r.name || "C")
-                .split(/\s+/)
-                .filter(Boolean)
-                .slice(0, 2)
-                .map((w) => w[0])
-                .join("")
-                .toUpperCase();
-              return (
-                <article className="review" key={r.id || r.name + r.comment}>
-                  <div className="stars">{r.stars}</div>
-                  <q>{r.comment}</q>
-                  <div className="who">
-                    <div className="avatar">{initials}</div>
-                    <div>
-                      <strong>{r.name}</strong>
-                      <span>{r.city || "Verified purchase"}</span>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        )}
       </div>
     </section>
   );

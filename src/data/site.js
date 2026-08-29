@@ -12,13 +12,57 @@ export const MAP_QUERY =
 export const NAV_LINKS = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About Us" },
+  { href: "#why", label: "Why BHR" },
   { href: "#products", label: "Products" },
   { href: "#guide", label: "Buying Guide" },
-  { href: "#packs", label: "Pack Sizes" },
-  { href: "#quality", label: "Quality" },
   { href: "#shop", label: "Our Shop" },
   { href: "#enquiry", label: "Enquiry" },
   { href: "#contact", label: "Contact Us" }
+];
+
+export const WHY_KPIS = [
+  { value: "10+", label: "Years experience" },
+  { value: "4.9/5", label: "Customer rating" },
+  { value: "1000+", label: "Tons delivered" }
+];
+
+export const WHY_BUY = [
+  {
+    title: "Hand-picked grain lots",
+    text: "Every sack is checked for moisture, broken percentage, aroma and cooking finish before it reaches your kitchen or shop.",
+    tag: "Quality first · Anna Nagar West",
+    icon: "grain"
+  },
+  {
+    title: "True wholesale pricing",
+    text: "Fair mandi rates for homes, hotels and retailers — without cutting corners on purity or packing.",
+    tag: "Honest rates · No compromise",
+    icon: "scale"
+  },
+  {
+    title: "On-time Chennai supply",
+    text: "Reliable restocks so canteens, messes and family kitchens never wait on empty shelves.",
+    tag: "City-wide delivery · On schedule",
+    icon: "truck"
+  },
+  {
+    title: "Hygienic sealed packing",
+    text: "Clean milling, sealed bags and careful handling from the mandi floor to your doorstep.",
+    tag: "Safe packing · Fresh stock",
+    icon: "seal"
+  },
+  {
+    title: "GST-ready invoices",
+    text: "Proper billing for trade buyers, with GSTIN 33BDJPB0270L2ZT on every wholesale invoice.",
+    tag: "Trade billing · GSTIN ready",
+    icon: "invoice"
+  },
+  {
+    title: "Long-term partnership",
+    text: "Repeat supply, honest advice on variety and pack size, and support that stays after the first order.",
+    tag: "Trusted partner · Repeat supply",
+    icon: "handshake"
+  }
 ];
 
 export const MARQUEE = [
