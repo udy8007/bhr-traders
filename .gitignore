@@ -7,5 +7,9 @@ dist
 server/.env
 server/.env.local
 server/.next
+.next
 server/data
+public/index.html
+public/admin
+public/assets
 

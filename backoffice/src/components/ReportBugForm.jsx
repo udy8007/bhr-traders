@@ -45,7 +45,7 @@ export function ReportBugForm() {
   return (
     <div className="bug-panel">
       <div className="bug-modal-head bug-panel-head">
-        <img src="/assets/img/logo.png" alt="BHR" className="bug-report-logo" />
+        <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR" className="bug-report-logo" />
         <div>
           <h5 className="mb-0 text-white">Report a Bug</h5>
           <p className="mb-0 text-white text-sm opacity-8">Tell us what went wrong. Sent instantly to the developer via <strong>ntfy</strong>.</p>

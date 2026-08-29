@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import catalog from "../data/catalog.json" with { type: "json" };
+import catalog from "../../src/data/catalog.json" with { type: "json" };
 import { createLocalClient } from "./localStore.js";
 
 export function supabaseConfigured() {

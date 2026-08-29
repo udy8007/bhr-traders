@@ -5,15 +5,21 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:api": "npm --prefix server run dev",
+    "dev:api": "next dev -p 3001",
     "dev:all": "concurrently -n web,api,admin -c cyan,magenta,green \"npm run dev\" \"npm run dev:api\" \"npm run dev:admin\"",
     "dev:admin": "npm --prefix backoffice run dev",
     "build": "vite build",
-    "build:api": "npm --prefix server run build",
     "build:admin": "npm --prefix backoffice run build",
+    "build:prod": "npm run build && npm run build:admin && node scripts/sync-static.mjs && next build",
+    "start:api": "next start -p 3001",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "next": "^15.3.2",
+    "node-cron": "^4.6.0",
+    "nodemailer": "^9.0.6",
+    "pdfkit": "^0.20.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

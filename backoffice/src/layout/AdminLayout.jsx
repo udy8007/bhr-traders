@@ -69,7 +69,7 @@ export function AdminLayout() {
         <div className="sidenav-header">
           <NavLink className="bhr-brand" to="/">
             <span className="bhr-brand-mark">
-              <img src="/assets/img/logo.png" alt="BHR Traders" />
+              <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" />
             </span>
             <span className="bhr-brand-label">Backoffice</span>
           </NavLink>

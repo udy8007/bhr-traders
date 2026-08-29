@@ -15,7 +15,7 @@ export function isAdminPath(value) {
 export function isAdminRequest(req) {
   const origin = String(req.headers.get("origin") || "");
   const referer = String(req.headers.get("referer") || "");
-  return /:5174\b|\/backoffice/i.test(origin + " " + referer);
+  return /:5174\b|\/backoffice|\/admin(\/|$)/i.test(origin + " " + referer);
 }
 
 export function isShopVisit(row) {
