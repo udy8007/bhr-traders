@@ -83,6 +83,9 @@ export function AdminLayout() {
     };
   }, [pinned]);
 
+  const trail = navTrail(location.pathname);
+  const pageTitle = trail[trail.length - 1] || "Dashboard";
+
   return (
     <>
       {pinned ? (
@@ -90,12 +93,17 @@ export function AdminLayout() {
       ) : null}
       <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl fixed-start ms-2 my-2 bhr-sidenav" id="sidenav-main">
         <div className="sidenav-header">
-          <NavLink className="bhr-brand" to="/" onClick={closeNav}>
-            <span className="bhr-brand-mark">
-              <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" />
-            </span>
-            <span className="bhr-brand-label">Backoffice</span>
-          </NavLink>
+          <div className="bhr-sidenav-head">
+            <NavLink className="bhr-brand" to="/" onClick={closeNav}>
+              <span className="bhr-brand-mark">
+                <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" />
+              </span>
+              <span className="bhr-brand-label">Backoffice</span>
+            </NavLink>
+            <button type="button" className="bhr-sidenav-close d-xl-none" aria-label="Close menu" onClick={closeNav}>
+              <i className="material-symbols-rounded">close</i>
+            </button>
+          </div>
         </div>
         <hr className="horizontal light mt-0 mb-0" />
         <div className="bhr-sidenav-scroll" id="sidenav-collapse-main">
@@ -144,9 +152,16 @@ export function AdminLayout() {
                   <i className="sidenav-toggler-line" />
                 </span>
               </button>
-              <nav aria-label="breadcrumb" className="bhr-crumb">
+              <NavLink className="bhr-topbar-brand d-xl-none" to="/" onClick={closeNav}>
+                <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" />
+                <span>
+                  <small>Backoffice</small>
+                  <strong>{pageTitle}</strong>
+                </span>
+              </NavLink>
+              <nav aria-label="breadcrumb" className="bhr-crumb d-none d-xl-block">
                 <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0">
-                  {navTrail(location.pathname).map((crumb, i, all) => (
+                  {trail.map((crumb, i, all) => (
                     <li
                       key={crumb}
                       className={"breadcrumb-item text-sm" + (i === all.length - 1 ? " text-dark font-weight-bold" : "")}

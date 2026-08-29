@@ -799,6 +799,27 @@ body.bhr-graphic .btn-outline-info:hover {
   flex: 0 0 auto;
   padding: 0;
 }
+.bhr-sidenav-head {
+  position: relative;
+}
+.bhr-sidenav-close {
+  appearance: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(246, 240, 228, 0.16);
+  color: #eadfc8;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.bhr-sidenav-close .material-symbols-rounded {
+  font-size: 20px;
+}
 .bhr-brand {
   display: flex;
   flex-direction: column;
@@ -1619,6 +1640,11 @@ body.bhr-graphic .breadcrumb-item .text-dark {
   min-width: 0;
   flex: 1 1 auto;
 }
+@media (max-width: 1199.98px) {
+  .bhr-topbar-left {
+    gap: 18px;
+  }
+}
 .bhr-crumb {
   min-width: 0;
   overflow: hidden;
@@ -1652,6 +1678,46 @@ body.bhr-graphic .breadcrumb-item .text-dark {
   padding: 0;
   flex: 0 0 40px;
 }
+.bhr-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  text-decoration: none !important;
+  color: #143524;
+}
+.bhr-topbar-brand img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid #eadfc8;
+  border-radius: 10px;
+  padding: 4px;
+  flex: 0 0 36px;
+}
+.bhr-topbar-brand span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.bhr-topbar-brand small {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c4a35a;
+}
+.bhr-topbar-brand strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #143524;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 42vw;
+}
 .bhr-sidenav-backdrop {
   position: fixed;
   inset: 0;
@@ -1674,15 +1740,30 @@ html, body.bhr-graphic {
 @media (max-width: 1199.98px) {
   .main-content {
     margin-left: 0 !important;
+    padding-top: calc(28px + env(safe-area-inset-top, 0px));
   }
   .navbar-main.bhr-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
     margin-left: 0.75rem !important;
     margin-right: 0.75rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 18px !important;
+  }
+  .bhr-topbar-inner {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+  .bhr-sidenav-backdrop {
+    top: calc(28px + env(safe-area-inset-top, 0px) + 72px);
+    z-index: 1035;
   }
   .bhr-sidenav.sidenav {
     margin: 0 !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
+    top: calc(28px + env(safe-area-inset-top, 0px) + 72px) !important;
+    height: calc(100dvh - 28px - env(safe-area-inset-top, 0px) - 72px) !important;
+    max-height: calc(100dvh - 28px - env(safe-area-inset-top, 0px) - 72px) !important;
     border-radius: 0 18px 18px 0 !important;
     z-index: 1040;
   }
