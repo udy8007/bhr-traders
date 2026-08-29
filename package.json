@@ -1,0 +1,25 @@
+{
+  "name": "bhr-traders",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "npm --prefix server run dev",
+    "dev:all": "concurrently -n web,api,admin -c cyan,magenta,green \"npm run dev\" \"npm run dev:api\" \"npm run dev:admin\"",
+    "dev:admin": "npm --prefix backoffice run dev",
+    "build": "vite build",
+    "build:api": "npm --prefix server run build",
+    "build:admin": "npm --prefix backoffice run build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.4.1",
+    "concurrently": "^9.1.2",
+    "vite": "^6.3.5"
+  }
+}

@@ -1,0 +1,3558 @@
+{
+  "products": [
+    {
+      "id": "7-star-boiled-rice",
+      "title": "7 Star",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 63.46,
+      "price_label": "₹1,650 / 26 KG",
+      "img": "images/catalog/7-star-boiled-rice.png",
+      "description": "7 Star is a boiled rice variety (Ponni BPT Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 360
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 690
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "adukku-malli-idly-rice",
+      "title": "Adukku Malli",
+      "short": "Ponmani Idly Rice",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 39.62,
+      "price_label": "₹1,030 / 26 KG",
+      "img": "images/catalog/adukku-malli-idly-rice.png",
+      "description": "Adukku Malli is a idly rice variety (Ponmani Idly Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1030
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "ameena-biriyani-rice",
+      "title": "Ameena",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 115,
+      "price_label": "₹3,450 / 30 KG",
+      "img": "images/catalog/ameena-biriyani-rice.png",
+      "description": "Ameena is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3450
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "amma-idly-rice",
+      "title": "Amma",
+      "short": "Ponmani Idly Rice",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 40,
+      "price_label": "₹1,040 / 26 KG",
+      "img": "images/catalog/amma-idly-rice.png",
+      "description": "Amma is a idly rice variety (Ponmani Idly Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1040
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "amp-gold-idly-rice",
+      "title": "AMP Gold",
+      "short": "Ponmani Idly Rice",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 40,
+      "price_label": "₹1,040 / 26 KG",
+      "img": "images/catalog/amp-gold-idly-rice.png",
+      "description": "AMP Gold is a idly rice variety (Ponmani Idly Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1040
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "apple-raw-rice",
+      "title": "Apple",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/apple-raw-rice.png",
+      "description": "Apple is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "apple-repally-raw-rice",
+      "title": "Apple (Repally)",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 63.46,
+      "price_label": "₹1,650 / 26 KG",
+      "img": "images/catalog/apple-repally-raw-rice.png",
+      "description": "Apple (Repally) is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "aruna-steam-rice",
+      "title": "Aruna",
+      "short": "Sona Steam Rice",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 61.92,
+      "price_label": "₹1,610 / 26 KG",
+      "img": "images/catalog/aruna-steam-rice.png",
+      "description": "Aruna is a steam rice variety (Sona Steam Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1610
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "avm-red-raw-rice-idly-rice",
+      "title": "AVM Red Raw Rice",
+      "short": "Puttu Rice",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 51.15,
+      "price_label": "₹1,330 / 26 KG",
+      "img": "images/catalog/avm-red-raw-rice-idly-rice.png",
+      "description": "AVM Red Raw Rice is a idly rice variety (Puttu Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1330
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "bellric-mumtaz-biriyani-rice",
+      "title": "Bellric Mumtaz",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 81.67,
+      "price_label": "₹2,450 / 30 KG",
+      "img": "images/catalog/bellric-mumtaz-biriyani-rice.png",
+      "description": "Bellric Mumtaz is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2450
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "bellric-sultan-biriyani-rice",
+      "title": "Bellric Sultan",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 91,
+      "price_label": "₹2,730 / 30 KG",
+      "img": "images/catalog/bellric-sultan-biriyani-rice.png",
+      "description": "Bellric Sultan is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2730
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "bellric-wazir-biriyani-rice",
+      "title": "Bellric Wazir",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 84.67,
+      "price_label": "₹2,540 / 30 KG",
+      "img": "images/catalog/bellric-wazir-biriyani-rice.png",
+      "description": "Bellric Wazir is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2540
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "best-brand-broken-rice",
+      "title": "Best Brand",
+      "short": "Broken Rice from wholesale supply",
+      "cat": "Broken Rice",
+      "cats": "broken",
+      "price": 30.77,
+      "price_label": "₹800 / 26 KG",
+      "img": "images/catalog/best-brand-broken-rice.png",
+      "description": "Best Brand is a broken rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Broken grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 800
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Broken grain",
+      "aroma": "Mild, clean aroma",
+      "cook": "Soft texture for porridge and mixes",
+      "use_for": "Value packs, kanji and bulk kitchens",
+      "active": true
+    },
+    {
+      "id": "bheemas-raw-rice",
+      "title": "Bheemas",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 65.38,
+      "price_label": "₹1,700 / 26 KG",
+      "img": "images/catalog/bheemas-raw-rice.png",
+      "description": "Bheemas is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1700
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "bheemas-boiled-rice",
+      "title": "Bheemas",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/bheemas-boiled-rice.png",
+      "description": "Bheemas is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "bheemas-silver-boiled-rice",
+      "title": "Bheemas Silver",
+      "short": "Boiled Rice from wholesale supply",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 57.69,
+      "price_label": "₹1,500 / 26 KG",
+      "img": "images/catalog/bheemas-silver-boiled-rice.png",
+      "description": "Bheemas Silver is a boiled rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1500
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "biriyani-plus-biriyani-rice",
+      "title": "Biriyani Plus",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 98.67,
+      "price_label": "₹2,960 / 30 KG",
+      "img": "images/catalog/biriyani-plus-biriyani-rice.png",
+      "description": "Biriyani Plus is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2960
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "captan-toor-dhall-dhall",
+      "title": "Captan Toor Dhall",
+      "short": "Dhall from wholesale supply",
+      "cat": "Dhall",
+      "cats": "dhall",
+      "price": 125.8,
+      "price_label": "₹6,290 / 50 KG",
+      "img": "images/catalog/captan-toor-dhall-dhall.png",
+      "description": "Captan Toor Dhall is a dhall variety. Available in 50 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Split pulse",
+      "moisture": "12%",
+      "pack": "50 KG packs",
+      "packs": [
+        {
+          "id": "50_kg",
+          "label": "50 KG",
+          "kg": 50,
+          "price": 6290
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Fresh dhall aroma",
+      "cook": "Cooks evenly for sambar and dals",
+      "use_for": "Kitchen packs and wholesale pulses",
+      "active": true
+    },
+    {
+      "id": "chain-orid-dhall-dhall",
+      "title": "Chain Orid Dhall",
+      "short": "Dhall from wholesale supply",
+      "cat": "Dhall",
+      "cats": "dhall",
+      "price": 122.4,
+      "price_label": "₹6,120 / 50 KG",
+      "img": "images/catalog/chain-orid-dhall-dhall.png",
+      "description": "Chain Orid Dhall is a dhall variety. Available in 50 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Split pulse",
+      "moisture": "12%",
+      "pack": "50 KG packs",
+      "packs": [
+        {
+          "id": "50_kg",
+          "label": "50 KG",
+          "kg": 50,
+          "price": 6120
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Fresh dhall aroma",
+      "cook": "Cooks evenly for sambar and dals",
+      "use_for": "Kitchen packs and wholesale pulses",
+      "active": true
+    },
+    {
+      "id": "chennai-gold-raw-rice",
+      "title": "Chennai Gold",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 68.46,
+      "price_label": "₹1,780 / 26 KG",
+      "img": "images/catalog/chennai-gold-raw-rice.png",
+      "description": "Chennai Gold is a raw rice variety (Sona Masoori Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 385
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 735
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1780
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "chola-maharaja-boiled-rice",
+      "title": "Chola Maharaja",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 62.69,
+      "price_label": "₹1,630 / 26 KG",
+      "img": "images/catalog/chola-maharaja-boiled-rice.png",
+      "description": "Chola Maharaja is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1630
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "cow-boiled-rice",
+      "title": "Cow",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/cow-boiled-rice.png",
+      "description": "Cow is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "cycle-boiled-rice",
+      "title": "Cycle",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 63.46,
+      "price_label": "₹1,650 / 26 KG",
+      "img": "images/catalog/cycle-boiled-rice.png",
+      "description": "Cycle is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "deewana-afsana-biriyani-rice",
+      "title": "Deewana Afsana",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 110,
+      "price_label": "₹3,300 / 30 KG",
+      "img": "images/catalog/deewana-afsana-biriyani-rice.png",
+      "description": "Deewana Afsana is a biriyani rice variety. Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3300
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "dora-idly-rice",
+      "title": "Dora",
+      "short": "Ponmani Idly Rice",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 40.38,
+      "price_label": "₹1,050 / 26 KG",
+      "img": "images/catalog/dora-idly-rice.png",
+      "description": "Dora is a idly rice variety (Ponmani Idly Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 240
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 450
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1050
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "gopi-krishna-asb-boiled-rice",
+      "title": "Gopi Krishna - ASB",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/gopi-krishna-asb-boiled-rice.png",
+      "description": "Gopi Krishna - ASB is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "hamsa-raw-rice",
+      "title": "Hamsa",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 67.31,
+      "price_label": "₹1,750 / 26 KG",
+      "img": "images/catalog/hamsa-raw-rice.png",
+      "description": "Hamsa is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1750
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "india-gate-brown-rice-kaikuthal-rice-millets",
+      "title": "India Gate Brown Rice - Kaikuthal Rice",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 113,
+      "price_label": "₹113 / 1 KG",
+      "img": "images/catalog/india-gate-brown-rice-kaikuthal-rice-millets.png",
+      "description": "India Gate Brown Rice - Kaikuthal Rice is a millets variety. Available in 1 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "1 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 113
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "india-gate-classic-biriyani-rice",
+      "title": "India Gate Classic",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 168.33,
+      "price_label": "₹5,050 / 30 KG",
+      "img": "images/catalog/india-gate-classic-biriyani-rice.png",
+      "description": "India Gate Classic is a biriyani rice variety. Available in 1 KG / 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1 KG / 30 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 180
+        },
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 5050
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "india-gate-dubar-biriyani-rice",
+      "title": "India Gate Dubar",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 112,
+      "price_label": "₹2,240 / 20 KG",
+      "img": "images/catalog/india-gate-dubar-biriyani-rice.png",
+      "description": "India Gate Dubar is a biriyani rice variety. Available in 1 KG / 20 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1 KG / 20 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 113
+        },
+        {
+          "id": "20_kg",
+          "label": "20 KG",
+          "kg": 20,
+          "price": 2240
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "india-gate-rozanna-only-1-kg-packets-available-biriyani-rice",
+      "title": "India Gate Rozanna - Only 1 Kg Packets Available",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 86,
+      "price_label": "₹86 / 1 KG",
+      "img": "images/catalog/india-gate-rozanna-only-1-kg-packets-available-biriyani-rice.png",
+      "description": "India Gate Rozanna - Only 1 Kg Packets Available is a biriyani rice variety. Available in 1 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 86
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "india-gate-seeraga-samba-biriyani-rice",
+      "title": "India Gate Seeraga Samba",
+      "short": "Pure Seeraga Samba rice/ Zeera rice/ Jeera rice. 2 Year Old Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 203,
+      "price_label": "₹203 / 1 KG",
+      "img": "images/catalog/india-gate-seeraga-samba-biriyani-rice.png",
+      "description": "India Gate Seeraga Samba is a biriyani rice variety (Pure Seeraga Samba rice/ Zeera rice/ Jeera rice. 2 Year Old Rice). Available in 1 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 203
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "india-gate-super-biriyani-rice",
+      "title": "India Gate Super",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 128,
+      "price_label": "₹3,200 / 25 KG",
+      "img": "images/catalog/india-gate-super-biriyani-rice.png",
+      "description": "India Gate Super is a biriyani rice variety. Available in 1.1 KG / 25 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1.1 KG / 25 KG packs",
+      "packs": [
+        {
+          "id": "1_1_kg",
+          "label": "1.1 KG",
+          "kg": 1.1,
+          "price": 153
+        },
+        {
+          "id": "25_kg",
+          "label": "25 KG",
+          "kg": 25,
+          "price": 3200
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "india-gate-tibar-only-1kg-packets-available-biriyani-rice",
+      "title": "India Gate Tibar - only 1Kg packets available.",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 117,
+      "price_label": "₹117 / 1 KG",
+      "img": "images/catalog/india-gate-tibar-only-1kg-packets-available-biriyani-rice.png",
+      "description": "India Gate Tibar - only 1Kg packets available. is a biriyani rice variety. Available in 1 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 117
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "india-gate-unity-biriyani-rice",
+      "title": "India Gate Unity",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 119,
+      "price_label": "₹3,570 / 30 KG",
+      "img": "images/catalog/india-gate-unity-biriyani-rice.png",
+      "description": "India Gate Unity is a biriyani rice variety (1121 Basmati Rice). Available in 1 KG / 5 KG / 10 KG / 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1 KG / 5 KG / 10 KG / 30 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 138
+        },
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 690
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 1340
+        },
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3570
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "iyarkai-boiled-rice",
+      "title": "Iyarkai",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 65.38,
+      "price_label": "₹1,700 / 26 KG",
+      "img": "images/catalog/iyarkai-boiled-rice.png",
+      "description": "Iyarkai is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1700
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "jantar-mantar-biriyani-rice",
+      "title": "Jantar Mantar",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 90,
+      "price_label": "₹2,340 / 26 KG",
+      "img": "images/catalog/jantar-mantar-biriyani-rice.png",
+      "description": "Jantar Mantar is a biriyani rice variety (1121 Basmati Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 2340
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "jayam-steam-rice",
+      "title": "Jayam",
+      "short": "Sona Steam Rice",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 62.69,
+      "price_label": "₹1,630 / 26 KG",
+      "img": "images/catalog/jayam-steam-rice.png",
+      "description": "Jayam is a steam rice variety (Sona Steam Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1630
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "js-kaikuthal-millets",
+      "title": "JS Kaikuthal",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 51.15,
+      "price_label": "₹1,330 / 26 KG",
+      "img": "images/catalog/js-kaikuthal-millets.png",
+      "description": "JS Kaikuthal is a millets variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1330
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "kaikuthal-millets",
+      "title": "Kaikuthal",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 80,
+      "price_label": "₹40 / 0.5 KG",
+      "img": "images/catalog/kaikuthal-millets.png",
+      "description": "Kaikuthal is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 40
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "kanishka-biriyani-rice",
+      "title": "Kanishka",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 75,
+      "price_label": "₹2,250 / 30 KG",
+      "img": "images/catalog/kanishka-biriyani-rice.png",
+      "description": "Kanishka is a biriyani rice variety. Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2250
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "karuppu-kavuni-black-gowni-millets",
+      "title": "Karuppu Kavuni/ Black Gowni",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 130,
+      "price_label": "₹65 / 0.5 KG",
+      "img": "images/catalog/karuppu-kavuni-black-gowni-millets.png",
+      "description": "Karuppu Kavuni/ Black Gowni is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 65
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "kattuyanam-millets",
+      "title": "Kattuyanam",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 116,
+      "price_label": "₹58 / 0.5 KG",
+      "img": "images/catalog/kattuyanam-millets.png",
+      "description": "Kattuyanam is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 58
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "khageshvar-steam-rice",
+      "title": "Khageshvar",
+      "short": "Sona Steam Rice",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 62.31,
+      "price_label": "₹1,620 / 26 KG",
+      "img": "images/catalog/khageshvar-steam-rice.png",
+      "description": "Khageshvar is a steam rice variety (Sona Steam Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1620
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "krish-silver-biriyani-rice",
+      "title": "Krish Silver",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 88.33,
+      "price_label": "₹2,650 / 30 KG",
+      "img": "images/catalog/krish-silver-biriyani-rice.png",
+      "description": "Krish Silver is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "krish-super-biriyani-rice",
+      "title": "Krish Super",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 88.33,
+      "price_label": "₹2,650 / 30 KG",
+      "img": "images/catalog/krish-super-biriyani-rice.png",
+      "description": "Krish Super is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "krishna-yellow-boiled-rice",
+      "title": "Krishna - Yellow",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 63.46,
+      "price_label": "₹1,650 / 26 KG",
+      "img": "images/catalog/krishna-yellow-boiled-rice.png",
+      "description": "Krishna - Yellow is a boiled rice variety (Ponni BPT Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 360
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 700
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "kuthiravali-millets",
+      "title": "Kuthiravali",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 150,
+      "price_label": "₹75 / 0.5 KG",
+      "img": "images/catalog/kuthiravali-millets.png",
+      "description": "Kuthiravali is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 75
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "lighthouse-boiled-rice",
+      "title": "Lighthouse",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 65.77,
+      "price_label": "₹1,710 / 26 KG",
+      "img": "images/catalog/lighthouse-boiled-rice.png",
+      "description": "Lighthouse is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1710
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "maharaja-boiled-rice",
+      "title": "Maharaja",
+      "short": "Ponni Sona Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 71.92,
+      "price_label": "₹1,870 / 26 KG",
+      "img": "images/catalog/maharaja-boiled-rice.png",
+      "description": "Maharaja is a boiled rice variety (Ponni Sona Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1870
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "maharani-classic-boiled-rice",
+      "title": "Maharani Classic",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 65.77,
+      "price_label": "₹1,710 / 26 KG",
+      "img": "images/catalog/maharani-classic-boiled-rice.png",
+      "description": "Maharani Classic is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1710
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "malabar-786-biriyani-rice",
+      "title": "Malabar 786",
+      "short": "Original quality - Pure Seeraga Samba rice (no mixing)/ Zeera rice/ Jeera rice. 2 Year Old",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 153.33,
+      "price_label": "₹4,600 / 30 KG",
+      "img": "images/catalog/malabar-786-biriyani-rice.png",
+      "description": "Malabar 786 is a biriyani rice variety (Original quality - Pure Seeraga Samba rice (no mixing)/ Zeera rice/ Jeera rice. 2 Year Old Rice). Available in 1 KG / 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "1 KG / 30 KG packs",
+      "packs": [
+        {
+          "id": "1_kg",
+          "label": "1 KG",
+          "kg": 1,
+          "price": 180
+        },
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 4600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "mapillai-samba-millets",
+      "title": "Mapillai Samba",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 76,
+      "price_label": "₹38 / 0.5 KG",
+      "img": "images/catalog/mapillai-samba-millets.png",
+      "description": "Mapillai Samba is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 38
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "mathaji-raw-rice",
+      "title": "Mathaji",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 66.92,
+      "price_label": "₹1,740 / 26 KG",
+      "img": "images/catalog/mathaji-raw-rice.png",
+      "description": "Mathaji is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1740
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "mayil-boiled-rice",
+      "title": "Mayil",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/mayil-boiled-rice.png",
+      "description": "Mayil is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "mk-no-1-boiled-rice",
+      "title": "MK No. 1",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 63.46,
+      "price_label": "₹1,650 / 26 KG",
+      "img": "images/catalog/mk-no-1-boiled-rice.png",
+      "description": "MK No. 1 is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "mk-royal-cook-boiled-rice",
+      "title": "MK Royal Cook",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 51.92,
+      "price_label": "₹1,350 / 26 KG",
+      "img": "images/catalog/mk-royal-cook-boiled-rice.png",
+      "description": "MK Royal Cook is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1350
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "mk-special-boiled-rice",
+      "title": "MK Special",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/mk-special-boiled-rice.png",
+      "description": "MK Special is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "mrn-steam-rice",
+      "title": "MRN",
+      "short": "Sona Steam Rice",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 65.38,
+      "price_label": "₹1,700 / 26 KG",
+      "img": "images/catalog/mrn-steam-rice.png",
+      "description": "MRN is a steam rice variety (Sona Steam Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 340
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 660
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1700
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "mrn-blue-raw-rice",
+      "title": "MRN Blue",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 66.92,
+      "price_label": "₹1,740 / 26 KG",
+      "img": "images/catalog/mrn-blue-raw-rice.png",
+      "description": "MRN Blue is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1740
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "mrn-bullet-raw-rice",
+      "title": "MRN Bullet",
+      "short": "Kolam Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 81.15,
+      "price_label": "₹2,110 / 26 KG",
+      "img": "images/catalog/mrn-bullet-raw-rice.png",
+      "description": "MRN Bullet is a raw rice variety (Kolam Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 2110
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "murugan-asb-boiled-rice",
+      "title": "Murugan - ASB",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/murugan-asb-boiled-rice.png",
+      "description": "Murugan - ASB is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "naga-s-gold-boiled-rice",
+      "title": "Naga's Gold",
+      "short": "Boiled Rice from wholesale supply",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 66.54,
+      "price_label": "₹1,730 / 26 KG",
+      "img": "images/catalog/naga-s-gold-boiled-rice.png",
+      "description": "Naga's Gold is a boiled rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1730
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "nattu-kambu-millets",
+      "title": "Nattu Kambu",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 94,
+      "price_label": "₹47 / 0.5 KG",
+      "img": "images/catalog/nattu-kambu-millets.png",
+      "description": "Nattu Kambu is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 47
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "new-krishna-asv-boiled-rice",
+      "title": "New Krishna - ASV",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 64.62,
+      "price_label": "₹1,680 / 26 KG",
+      "img": "images/catalog/new-krishna-asv-boiled-rice.png",
+      "description": "New Krishna - ASV is a boiled rice variety (Ponni BPT Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 365
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 710
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1680
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "new-krishna-red-boiled-rice",
+      "title": "New Krishna - Red",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/new-krishna-red-boiled-rice.png",
+      "description": "New Krishna - Red is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "orange-idly-rice",
+      "title": "Orange",
+      "short": "Ponmani Idly Rice",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 39.23,
+      "price_label": "₹1,020 / 26 KG",
+      "img": "images/catalog/orange-idly-rice.png",
+      "description": "Orange is a idly rice variety (Ponmani Idly Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1020
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "pc-krishna-gold-boiled-rice",
+      "title": "PC Krishna Gold",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/pc-krishna-gold-boiled-rice.png",
+      "description": "PC Krishna Gold is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "periyasamy-boiled-rice",
+      "title": "Periyasamy",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 63.46,
+      "price_label": "₹1,650 / 26 KG",
+      "img": "images/catalog/periyasamy-boiled-rice.png",
+      "description": "Periyasamy is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1650
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "perumal-boiled-rice",
+      "title": "Perumal",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/perumal-boiled-rice.png",
+      "description": "Perumal is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "poongar-millets",
+      "title": "Poongar",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 100,
+      "price_label": "₹50 / 0.5 KG",
+      "img": "images/catalog/poongar-millets.png",
+      "description": "Poongar is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 50
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "rani-chapi-biriyani-rice",
+      "title": "Rani Chapi",
+      "short": "1121 Chapi Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 69.23,
+      "price_label": "₹1,800 / 26 KG",
+      "img": "images/catalog/rani-chapi-biriyani-rice.png",
+      "description": "Rani Chapi is a biriyani rice variety (1121 Chapi Basmati Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1800
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "red-rice-millets",
+      "title": "Red Rice",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 78,
+      "price_label": "₹39 / 0.5 KG",
+      "img": "images/catalog/red-rice-millets.png",
+      "description": "Red Rice is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 39
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "rettai-malli-idly-rice",
+      "title": "Rettai Malli",
+      "short": "Idly Rice from wholesale supply",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 41.54,
+      "price_label": "₹1,080 / 26 KG",
+      "img": "images/catalog/rettai-malli-idly-rice.png",
+      "description": "Rettai Malli is a idly rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1080
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "rettai-mayil-idly-rice",
+      "title": "Rettai Mayil",
+      "short": "Idly Rice from wholesale supply",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 41.15,
+      "price_label": "₹1,070 / 26 KG",
+      "img": "images/catalog/rettai-mayil-idly-rice.png",
+      "description": "Rettai Mayil is a idly rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1070
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "rettai-seval-idly-rice",
+      "title": "Rettai Seval",
+      "short": "Ponmani Idly Rice",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 41.92,
+      "price_label": "₹1,090 / 26 KG",
+      "img": "images/catalog/rettai-seval-idly-rice.png",
+      "description": "Rettai Seval is a idly rice variety (Ponmani Idly Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1090
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "road-roller-orid-dhall-dhall",
+      "title": "Road Roller Orid Dhall",
+      "short": "Dhall from wholesale supply",
+      "cat": "Dhall",
+      "cats": "dhall",
+      "price": 131.33,
+      "price_label": "₹3,940 / 30 KG",
+      "img": "images/catalog/road-roller-orid-dhall-dhall.png",
+      "description": "Road Roller Orid Dhall is a dhall variety. Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Split pulse",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3940
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Fresh dhall aroma",
+      "cook": "Cooks evenly for sambar and dals",
+      "use_for": "Kitchen packs and wholesale pulses",
+      "active": true
+    },
+    {
+      "id": "rrr-raja-steam-rice",
+      "title": "RRR Raja",
+      "short": "Steam Rice from wholesale supply",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 62.31,
+      "price_label": "₹1,620 / 26 KG",
+      "img": "images/catalog/rrr-raja-steam-rice.png",
+      "description": "RRR Raja is a steam rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1620
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "samai-millets",
+      "title": "Samai",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 174,
+      "price_label": "₹87 / 0.5 KG",
+      "img": "images/catalog/samai-millets.png",
+      "description": "Samai is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 87
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "slm-5-star-krishna-boiled-rice",
+      "title": "SLM 5 Star Krishna",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 65.38,
+      "price_label": "₹1,700 / 26 KG",
+      "img": "images/catalog/slm-5-star-krishna-boiled-rice.png",
+      "description": "SLM 5 Star Krishna is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1700
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "slm-5-star-sivaji-boiled-rice",
+      "title": "SLM 5 Star Sivaji",
+      "short": "Ponni BPT Rice SLM 5 Star Shivaji Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 68.08,
+      "price_label": "₹1,770 / 26 KG",
+      "img": "images/catalog/slm-5-star-sivaji-boiled-rice.png",
+      "description": "SLM 5 Star Sivaji is a boiled rice variety (Ponni BPT Rice SLM 5 Star Shivaji Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 380
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 730
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1770
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "slm-blue-boiled-rice",
+      "title": "SLM Blue",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 62.69,
+      "price_label": "₹1,630 / 26 KG",
+      "img": "images/catalog/slm-blue-boiled-rice.png",
+      "description": "SLM Blue is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1630
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "slm-classic-boiled-rice",
+      "title": "SLM Classic",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 66.54,
+      "price_label": "₹1,730 / 26 KG",
+      "img": "images/catalog/slm-classic-boiled-rice.png",
+      "description": "SLM Classic is a boiled rice variety (Ponni BPT Rice). Available in 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 675
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1730
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "slm-five-star-gold-5-star-boiled-rice",
+      "title": "SLM Five Star Gold (5 Star)",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 68.46,
+      "price_label": "₹1,780 / 26 KG",
+      "img": "images/catalog/slm-five-star-gold-5-star-boiled-rice.png",
+      "description": "SLM Five Star Gold (5 Star) is a boiled rice variety (Ponni BPT Rice). Available in 5 KG / 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 380
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 730
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1780
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "slm-green-boiled-rice",
+      "title": "SLM Green",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 63.85,
+      "price_label": "₹1,660 / 26 KG",
+      "img": "images/catalog/slm-green-boiled-rice.png",
+      "description": "SLM Green is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1660
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "slm-queen-boiled-rice",
+      "title": "SLM Queen",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 66.54,
+      "price_label": "₹1,730 / 26 KG",
+      "img": "images/catalog/slm-queen-boiled-rice.png",
+      "description": "SLM Queen is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1730
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "slm-red-boiled-rice",
+      "title": "SLM Red",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 62.69,
+      "price_label": "₹1,630 / 26 KG",
+      "img": "images/catalog/slm-red-boiled-rice.png",
+      "description": "SLM Red is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1630
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "snd-orid-dhall-dhall",
+      "title": "SND Orid Dhall",
+      "short": "Dhall from wholesale supply",
+      "cat": "Dhall",
+      "cats": "dhall",
+      "price": 122.3,
+      "price_label": "₹6,115 / 50 KG",
+      "img": "images/catalog/snd-orid-dhall-dhall.png",
+      "description": "SND Orid Dhall is a dhall variety. Available in 5 KG / 30 KG / 50 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Split pulse",
+      "moisture": "12%",
+      "pack": "5 KG / 30 KG / 50 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 660
+        },
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3670
+        },
+        {
+          "id": "50_kg",
+          "label": "50 KG",
+          "kg": 50,
+          "price": 6115
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Fresh dhall aroma",
+      "cook": "Cooks evenly for sambar and dals",
+      "use_for": "Kitchen packs and wholesale pulses",
+      "active": true
+    },
+    {
+      "id": "snd-toor-dhall-dhall",
+      "title": "SND Toor Dhall",
+      "short": "Dhall from wholesale supply",
+      "cat": "Dhall",
+      "cats": "dhall",
+      "price": 124,
+      "price_label": "₹6,200 / 50 KG",
+      "img": "images/catalog/snd-toor-dhall-dhall.png",
+      "description": "SND Toor Dhall is a dhall variety. Available in 5 KG / 30 KG / 50 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Split pulse",
+      "moisture": "12%",
+      "pack": "5 KG / 30 KG / 50 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 680
+        },
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3720
+        },
+        {
+          "id": "50_kg",
+          "label": "50 KG",
+          "kg": 50,
+          "price": 6200
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Fresh dhall aroma",
+      "cook": "Cooks evenly for sambar and dals",
+      "use_for": "Kitchen packs and wholesale pulses",
+      "active": true
+    },
+    {
+      "id": "ss-gold-steam-rice",
+      "title": "SS Gold",
+      "short": "Sona Steam Rice",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/ss-gold-steam-rice.png",
+      "description": "SS Gold is a steam rice variety (Sona Steam Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "subhas-leader-moong-dhall-dhall",
+      "title": "Subhas Leader - Moong Dhall",
+      "short": "Dhall from wholesale supply",
+      "cat": "Dhall",
+      "cats": "dhall",
+      "price": 96,
+      "price_label": "₹4,800 / 50 KG",
+      "img": "images/catalog/subhas-leader-moong-dhall-dhall.png",
+      "description": "Subhas Leader - Moong Dhall is a dhall variety. Available in 50 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Split pulse",
+      "moisture": "12%",
+      "pack": "50 KG packs",
+      "packs": [
+        {
+          "id": "50_kg",
+          "label": "50 KG",
+          "kg": 50,
+          "price": 4800
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Fresh dhall aroma",
+      "cook": "Cooks evenly for sambar and dals",
+      "use_for": "Kitchen packs and wholesale pulses",
+      "active": true
+    },
+    {
+      "id": "swarnam-idly-rice",
+      "title": "Swarnam",
+      "short": "Idly Rice from wholesale supply",
+      "cat": "Idly Rice",
+      "cats": "idly",
+      "price": 39.62,
+      "price_label": "₹1,030 / 26 KG",
+      "img": "images/catalog/swarnam-idly-rice.png",
+      "description": "Swarnam is a idly rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Short to medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1030
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Clean milling aroma",
+      "cook": "Ferments well for batter",
+      "use_for": "Idly, dosa and hotel batter programs",
+      "active": true
+    },
+    {
+      "id": "swarnamukhi-raw-rice",
+      "title": "Swarnamukhi",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 67.31,
+      "price_label": "₹1,750 / 26 KG",
+      "img": "images/catalog/swarnamukhi-raw-rice.png",
+      "description": "Swarnamukhi is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1750
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "taj-mahal-maavu-pachai-raw-rice",
+      "title": "Taj Mahal - Maavu Pachai",
+      "short": "Raw Rice from wholesale supply",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 34.62,
+      "price_label": "₹900 / 26 KG",
+      "img": "images/catalog/taj-mahal-maavu-pachai-raw-rice.png",
+      "description": "Taj Mahal - Maavu Pachai is a raw rice variety. Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 900
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "thai-boiled-rice",
+      "title": "Thai",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 62.31,
+      "price_label": "₹1,620 / 26 KG",
+      "img": "images/catalog/thai-boiled-rice.png",
+      "description": "Thai is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1620
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "thamizhan-boiled-rice",
+      "title": "Thamizhan",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 56.54,
+      "price_label": "₹1,470 / 26 KG",
+      "img": "images/catalog/thamizhan-boiled-rice.png",
+      "description": "Thamizhan is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1470
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "thinai-millets",
+      "title": "Thinai",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 94,
+      "price_label": "₹47 / 0.5 KG",
+      "img": "images/catalog/thinai-millets.png",
+      "description": "Thinai is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 47
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "three-star-3-star-boiled-rice",
+      "title": "Three Star (3 Star)",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/three-star-3-star-boiled-rice.png",
+      "description": "Three Star (3 Star) is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "thuya-malli-millets",
+      "title": "Thuya Malli",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 110,
+      "price_label": "₹55 / 0.5 KG",
+      "img": "images/catalog/thuya-malli-millets.png",
+      "description": "Thuya Malli is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 55
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "uk-balaji-steam-rice",
+      "title": "UK Balaji",
+      "short": "Sona Steam Rice",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 62.31,
+      "price_label": "₹1,620 / 26 KG",
+      "img": "images/catalog/uk-balaji-steam-rice.png",
+      "description": "UK Balaji is a steam rice variety (Sona Steam Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1620
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "unicorn-boiled-rice",
+      "title": "Unicorn",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 61.54,
+      "price_label": "₹1,600 / 26 KG",
+      "img": "images/catalog/unicorn-boiled-rice.png",
+      "description": "Unicorn is a boiled rice variety (Ponni BPT Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1600
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "vagai-boiled-rice",
+      "title": "Vagai",
+      "short": "Sourced from Kangayam",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 64.62,
+      "price_label": "₹1,680 / 26 KG",
+      "img": "images/catalog/vagai-boiled-rice.png",
+      "description": "Vagai is a boiled rice variety (Sourced from Kangayam). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1680
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "varagu-millets",
+      "title": "Varagu",
+      "short": "Millets from wholesale supply",
+      "cat": "Millets",
+      "cats": "millets",
+      "price": 96,
+      "price_label": "₹48 / 0.5 KG",
+      "img": "images/catalog/varagu-millets.png",
+      "description": "Varagu is a millets variety. Available in 0.5 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Whole millet grain",
+      "moisture": "12–13%",
+      "pack": "0.5 KG packs",
+      "packs": [
+        {
+          "id": "half_kg",
+          "label": "0.5 KG",
+          "kg": 0.5,
+          "price": 48
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Earthy millet aroma",
+      "cook": "Nutty, wholesome texture",
+      "use_for": "Health meals and millet mixes",
+      "active": true
+    },
+    {
+      "id": "varalakshmi-muthyam-steam-rice",
+      "title": "Varalakshmi Muthyam",
+      "short": "Sona Steam Rice",
+      "cat": "Steam Rice",
+      "cats": "steam",
+      "price": 64.23,
+      "price_label": "₹1,670 / 26 KG",
+      "img": "images/catalog/varalakshmi-muthyam-steam-rice.png",
+      "description": "Varalakshmi Muthyam is a steam rice variety (Sona Steam Rice). Available in 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Long grain",
+      "moisture": "12–13%",
+      "pack": "10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 710
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1670
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild steam-rice aroma",
+      "cook": "Non-sticky with good elongation",
+      "use_for": "Catering, packing and wholesale supply",
+      "active": true
+    },
+    {
+      "id": "varalakshmi-muthyam-raw-rice",
+      "title": "Varalakshmi Muthyam",
+      "short": "Sona Masoori Rice",
+      "cat": "Raw Rice",
+      "cats": "raw",
+      "price": 67.31,
+      "price_label": "₹1,750 / 26 KG",
+      "img": "images/catalog/varalakshmi-muthyam-raw-rice.png",
+      "description": "Varalakshmi Muthyam is a raw rice variety (Sona Masoori Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1750
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Softer bite, quicker cooking",
+      "use_for": "Tiffin meals, mixed rice and home kitchens",
+      "active": true
+    },
+    {
+      "id": "varsha-pink-biriyani-rice",
+      "title": "Varsha Pink",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 102.67,
+      "price_label": "₹3,080 / 30 KG",
+      "img": "images/catalog/varsha-pink-biriyani-rice.png",
+      "description": "Varsha Pink is a biriyani rice variety. Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3080
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "varsha-red-biriyani-rice",
+      "title": "Varsha Red",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 99.67,
+      "price_label": "₹2,990 / 30 KG",
+      "img": "images/catalog/varsha-red-biriyani-rice.png",
+      "description": "Varsha Red is a biriyani rice variety. Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 2990
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "veera-sivaji-boiled-rice",
+      "title": "Veera Sivaji",
+      "short": "Ponni BPT Rice Veera Shivaji Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 63.08,
+      "price_label": "₹1,640 / 26 KG",
+      "img": "images/catalog/veera-sivaji-boiled-rice.png",
+      "description": "Veera Sivaji is a boiled rice variety (Ponni BPT Rice Veera Shivaji Rice). Available in 5 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 360
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1640
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "veeramangai-boiled-rice",
+      "title": "Veeramangai",
+      "short": "Ponni BPT Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 71.15,
+      "price_label": "₹1,850 / 26 KG",
+      "img": "images/catalog/veeramangai-boiled-rice.png",
+      "description": "Veeramangai is a boiled rice variety (Ponni BPT Rice). Available in 10 KG / 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "10 KG / 26 KG packs",
+      "packs": [
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 750
+        },
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1850
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "veppa-maram-boiled-rice",
+      "title": "Veppa Maram",
+      "short": "Ponni RNR Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 57.69,
+      "price_label": "₹1,500 / 26 KG",
+      "img": "images/catalog/veppa-maram-boiled-rice.png",
+      "description": "Veppa Maram is a boiled rice variety (Ponni RNR Rice). Available in 26 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "26 KG packs",
+      "packs": [
+        {
+          "id": "26_kg",
+          "label": "26 KG",
+          "kg": 26,
+          "price": 1500
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "vkr-sivaji-boiled-rice",
+      "title": "VKR Sivaji",
+      "short": "Ponni Sona Rice VKR Shivaji Rice",
+      "cat": "Boiled Rice",
+      "cats": "boiled",
+      "price": 80,
+      "price_label": "₹2,000 / 25 KG",
+      "img": "images/catalog/vkr-sivaji-boiled-rice.png",
+      "description": "VKR Sivaji is a boiled rice variety (Ponni Sona Rice VKR Shivaji Rice). Available in 5 KG / 10 KG / 25 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Medium grain",
+      "moisture": "13–14%",
+      "pack": "5 KG / 10 KG / 25 KG packs",
+      "packs": [
+        {
+          "id": "5_kg",
+          "label": "5 KG",
+          "kg": 5,
+          "price": 425
+        },
+        {
+          "id": "10_kg",
+          "label": "10 KG",
+          "kg": 10,
+          "price": 830
+        },
+        {
+          "id": "25_kg",
+          "label": "25 KG",
+          "kg": 25,
+          "price": 2000
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Mild, clean aroma",
+      "cook": "Firm, separate grains after cooking",
+      "use_for": "Everyday meals, hotels and canteens",
+      "active": true
+    },
+    {
+      "id": "wagah-royale-biriyani-rice",
+      "title": "Wagah Royale",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 119,
+      "price_label": "₹3,570 / 30 KG",
+      "img": "images/catalog/wagah-royale-biriyani-rice.png",
+      "description": "Wagah Royale is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3570
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "wagah-supreme-biriyani-rice",
+      "title": "Wagah Supreme",
+      "short": "1121 Basmati Rice",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 107,
+      "price_label": "₹3,210 / 30 KG",
+      "img": "images/catalog/wagah-supreme-biriyani-rice.png",
+      "description": "Wagah Supreme is a biriyani rice variety (1121 Basmati Rice). Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3210
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    },
+    {
+      "id": "zabreen-biriyani-rice",
+      "title": "Zabreen",
+      "short": "Biriyani Rice from wholesale supply",
+      "cat": "Biriyani Rice",
+      "cats": "biriyani",
+      "price": 103.33,
+      "price_label": "₹3,100 / 30 KG",
+      "img": "images/catalog/zabreen-biriyani-rice.png",
+      "description": "Zabreen is a biriyani rice variety. Available in 30 KG. Sourced for wholesale and retail supply in Chennai.",
+      "grain": "Extra long grain",
+      "moisture": "12%",
+      "pack": "30 KG packs",
+      "packs": [
+        {
+          "id": "30_kg",
+          "label": "30 KG",
+          "kg": 30,
+          "price": 3100
+        }
+      ],
+      "origin": "India",
+      "moq": "1 bag",
+      "broken": "Max 2%",
+      "aroma": "Rich biryani aroma",
+      "cook": "Extra elongation, separate grains",
+      "use_for": "Biryani, fried rice and hotel kitchens",
+      "active": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "boiled",
+      "name": "Boiled Rice",
+      "slug": "boiled",
+      "sort": 1
+    },
+    {
+      "id": "raw",
+      "name": "Raw Rice",
+      "slug": "raw",
+      "sort": 2
+    },
+    {
+      "id": "steam",
+      "name": "Steam Rice",
+      "slug": "steam",
+      "sort": 3
+    },
+    {
+      "id": "idly",
+      "name": "Idly Rice",
+      "slug": "idly",
+      "sort": 4
+    },
+    {
+      "id": "biriyani",
+      "name": "Biriyani Rice",
+      "slug": "biriyani",
+      "sort": 5
+    },
+    {
+      "id": "broken",
+      "name": "Broken Rice",
+      "slug": "broken",
+      "sort": 6
+    },
+    {
+      "id": "millets",
+      "name": "Millets",
+      "slug": "millets",
+      "sort": 7
+    },
+    {
+      "id": "dhall",
+      "name": "Dhall",
+      "slug": "dhall",
+      "sort": 8
+    }
+  ]
+}
