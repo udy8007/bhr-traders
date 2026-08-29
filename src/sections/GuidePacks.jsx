@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { GUIDE, GSTIN, PACK_SCALE, PACKS } from "../data/site.js";
+import { useMemo, useState } from "react";
+import { GUIDE, GSTIN } from "../data/site.js";
 import { GrainIcon, SackArt, SectionHead } from "../components/Icons.jsx";
 import { useStore } from "../context/StoreContext.jsx";
+import { mapDbPack, packScaleFrom } from "../lib/packs.js";
 
 function GuideIcon({ name }) {
   const common = { width: 22, height: 22, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round" };
@@ -106,9 +107,24 @@ export function Guide() {
 }
 
 export function Packs() {
-  const { pickPack } = useStore();
-  const [active, setActive] = useState("25 – 26 kg");
-  const chosen = PACKS.find((p) => p.size === active) || PACKS[3];
+  const { pickPack, packs: packRows } = useStore();
+  const PACKS = useMemo(() => (packRows || []).map(mapDbPack), [packRows]);
+  const PACK_SCALE = useMemo(() => packScaleFrom(PACKS), [PACKS]);
+  const [active, setActive] = useState("");
+  const current = PACKS.find((p) => p.size === active) || PACKS[0];
+
+  if (!PACKS.length) {
+    return (
+      <section className="packs packs-graphic" id="packs">
+        <div className="wrap">
+          <SectionHead kicker="Rice bag guide" title="Which bag fits your kitchen?" text="Pack sizes load from the database." />
+          <p className="pack-note">No pack sizes in the database yet. Add them in backoffice Master → Pack sizes.</p>
+        </div>
+      </section>
+    );
+  }
+
+  const chosen = current;
 
   function select(pack) {
     setActive(pack.size);

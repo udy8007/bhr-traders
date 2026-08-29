@@ -1,23 +1,54 @@
 import { createClient } from "@supabase/supabase-js";
 import catalog from "../../src/data/catalog.json" with { type: "json" };
-import { createLocalClient } from "./localStore.js";
+import { applySchema, isMissingTableError } from "./applySchema.js";
+
+function isRealSupabaseKey(key) {
+  const k = String(key || "").trim();
+  if (!k || k.includes("paste-")) return false;
+  if (k.startsWith("sb_secret_") || k.startsWith("sb_publishable_") || k.startsWith("eyJ")) return true;
+  return k.length > 40;
+}
 
 export function supabaseConfigured() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
-  return Boolean(process.env.SUPABASE_URL && key && !String(key).includes("paste-"));
+  return Boolean(process.env.SUPABASE_URL && isRealSupabaseKey(key));
 }
 
 export function getSupabase() {
-  if (supabaseConfigured()) {
-    return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY, {
-      auth: { persistSession: false }
+  if (process.env.USE_FILE_STORE === "1") {
+    return createLocalClient({
+      products: SEED_PRODUCTS,
+      categories: SEED_CATEGORIES,
+      pack_sizes: SEED_PACKS
     });
   }
-  return createLocalClient({
-    products: SEED_PRODUCTS,
-    categories: SEED_CATEGORIES,
-    pack_sizes: SEED_PACKS
+  if (!supabaseConfigured()) {
+    throw new Error(
+      "Supabase keys are missing. Open .env.local and paste SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY from Supabase → Project Settings → API. Local JSON (store.json) is not used unless USE_FILE_STORE=1."
+    );
+  }
+  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY, {
+    auth: { persistSession: false }
   });
+}
+
+export async function seedIfEmpty(supabase, table, rows, orderCol) {
+  async function load() {
+    let query = supabase.from(table).select("*");
+    if (orderCol) query = query.order(orderCol);
+    return query;
+  }
+  let { data, error } = await load();
+  if (error && isMissingTableError(error)) {
+    await applySchema();
+    ({ data, error } = await load());
+  }
+  if (error) throw new Error(error.message);
+  if ((data || []).length) return data;
+  if (!rows?.length) return [];
+  const inserted = await supabase.from(table).insert(rows).select();
+  if (inserted.error) throw new Error(inserted.error.message);
+  return inserted.data || [];
 }
 
 export function json(data, status = 200) {

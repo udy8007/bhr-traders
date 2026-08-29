@@ -1,29 +1,18 @@
 import { requireAdmin, unauthorized } from "../../../server/lib/auth.js";
 import { snap, writeAudit } from "../../../server/lib/logs.js";
-import { getSupabase, json, options, SEED_CATEGORIES, slugId } from "../../../server/lib/supabase.js";
+import { getSupabase, json, options, seedIfEmpty, SEED_CATEGORIES, slugId } from "../../../server/lib/supabase.js";
 
 export function OPTIONS() {
   return options();
 }
 
-async function loadCategories(supabase) {
-  const { data, error } = await supabase.from("categories").select("*").order("sort");
-  if (error || !data?.length) {
-    if (!error) {
-      await supabase.from("categories").upsert(SEED_CATEGORIES, { onConflict: "id" });
-    }
-    return SEED_CATEGORIES;
-  }
-  return data;
-}
-
 export async function GET() {
   try {
     const supabase = getSupabase();
-    const categories = await loadCategories(supabase);
+    const categories = await seedIfEmpty(supabase, "categories", SEED_CATEGORIES, "sort");
     return json({ categories });
   } catch (err) {
-    return json({ categories: SEED_CATEGORIES, warning: err.message });
+    return json({ error: err.message }, 500);
   }
 }
 

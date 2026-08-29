@@ -2,7 +2,7 @@ import { existsSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import PDFDocument from "pdfkit";
-import { getSupabase, mapProduct, SEED_PRODUCTS } from "./supabase.js";
+import { getSupabase, mapProduct, seedIfEmpty, SEED_PRODUCTS } from "./supabase.js";
 import { istParts, pdfResponse } from "./reports.js";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -48,14 +48,7 @@ function groupByCategory(products) {
 
 async function loadCatalog() {
   const supabase = getSupabase();
-  const { data, error } = await supabase.from("products").select("*").order("title");
-  if (error) throw new Error(error.message);
-  let rows = data;
-  if (!rows?.length) {
-    const seeded = await supabase.from("products").upsert(SEED_PRODUCTS, { onConflict: "id" }).select();
-    if (seeded.error) throw new Error(seeded.error.message);
-    rows = seeded.data || [];
-  }
+  const rows = await seedIfEmpty(supabase, "products", SEED_PRODUCTS, "title");
   return rows.map(mapProduct).filter((p) => p.active);
 }
 

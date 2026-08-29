@@ -1,5 +1,4 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { PRODUCTS } from "./../data/products.js";
 import { api } from "../lib/api.js";
 import { logCheckoutComplete } from "../lib/visits.js";
 
@@ -15,7 +14,10 @@ function loadCart() {
 }
 
 export function StoreProvider({ children }) {
-  const [catalog, setCatalog] = useState(PRODUCTS);
+  const [catalog, setCatalog] = useState([]);
+  const [categories, setCategories] = useState([{ id: "all", label: "All Varieties" }]);
+  const [packs, setPacks] = useState([]);
+  const [catalogStatus, setCatalogStatus] = useState("loading");
   const [cart, setCart] = useState(loadCart);
   const [cartOpen, setCartOpen] = useState(false);
   const [trackOpen, setTrackOpen] = useState(false);
@@ -40,13 +42,32 @@ export function StoreProvider({ children }) {
   );
 
   useEffect(() => {
-    api
-      .products()
-      .then((res) => {
-        if (res.products?.length) setCatalog(res.products);
+    let live = true;
+    setCatalogStatus("loading");
+    Promise.all([api.products(), api.categories().catch(() => ({ categories: [] })), api.packs().catch(() => ({ packs: [] }))])
+      .then(([prodRes, catRes, packRes]) => {
+        if (!live) return;
+        setCatalog(prodRes.products || []);
+        const cats = (catRes.categories || [])
+          .map((c) => ({
+            id: String(c.slug || c.id || "").toLowerCase(),
+            label: c.name || c.label || c.id
+          }))
+          .filter((c) => c.id);
+        setCategories([{ id: "all", label: "All Varieties" }, ...cats]);
+        setPacks(packRes.packs || []);
+        setCatalogStatus("ready");
       })
-      .catch(() => {});
-  }, []);
+      .catch((err) => {
+        if (!live) return;
+        setCatalog([]);
+        setCatalogStatus("error");
+        ping(err.message || "Could not load products from the database.");
+      });
+    return () => {
+      live = false;
+    };
+  }, [ping]);
 
   useEffect(() => {
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
@@ -220,6 +241,9 @@ export function StoreProvider({ children }) {
 
   const value = {
     catalog,
+    categories,
+    packs,
+    catalogStatus,
     productMap,
     cart,
     cartCount,

@@ -1,6 +1,6 @@
 import { requireAdmin, unauthorized } from "../../../server/lib/auth.js";
 import { snap, writeAudit } from "../../../server/lib/logs.js";
-import { getSupabase, json, options, SEED_PACKS } from "../../../server/lib/supabase.js";
+import { getSupabase, json, options, seedIfEmpty, SEED_PACKS } from "../../../server/lib/supabase.js";
 
 export function OPTIONS() {
   return options();
@@ -9,14 +9,10 @@ export function OPTIONS() {
 export async function GET() {
   try {
     const supabase = getSupabase();
-    const { data, error } = await supabase.from("pack_sizes").select("*").order("sort");
-    if (error || !data?.length) {
-      if (!error) await supabase.from("pack_sizes").upsert(SEED_PACKS, { onConflict: "id" });
-      return json({ packs: data?.length ? data : SEED_PACKS });
-    }
-    return json({ packs: data });
+    const packs = await seedIfEmpty(supabase, "pack_sizes", SEED_PACKS, "sort");
+    return json({ packs });
   } catch (err) {
-    return json({ packs: SEED_PACKS, warning: err.message });
+    return json({ error: err.message }, 500);
   }
 }
 

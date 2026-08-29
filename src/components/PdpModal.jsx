@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { PRODUCT_MAP } from "../data/products.js";
 import { api } from "../lib/api.js";
 import { cartLineId, defaultPack, formatInr, productPacks } from "../lib/packs.js";
 import { useStore } from "../context/StoreContext.jsx";
@@ -65,7 +64,7 @@ export function PdpModal() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [policyOpen, setPolicyOpen] = useState(false);
-  const p = pdpId ? productMap[pdpId] || PRODUCT_MAP[pdpId] : null;
+  const p = pdpId ? productMap[pdpId] : null;
 
   useEffect(() => {
     setQty(1);

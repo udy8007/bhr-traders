@@ -32,6 +32,8 @@ async function downloadBlob(path, fallback) {
 
 export const api = {
   products: () => request("/api/products"),
+  categories: () => request("/api/categories"),
+  packs: () => request("/api/packs"),
   product: (id) => request("/api/products/" + encodeURIComponent(id)),
   createEnquiry: (body) => request("/api/enquiries", { method: "POST", body: JSON.stringify(body) }),
   createOrder: (body) => request("/api/orders", { method: "POST", body: JSON.stringify(body) }),

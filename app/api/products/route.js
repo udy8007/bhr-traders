@@ -1,6 +1,6 @@
 import { getToken, requireAdmin, unauthorized, verifyToken } from "../../../server/lib/auth.js";
 import { snap, writeAudit } from "../../../server/lib/logs.js";
-import { getSupabase, json, mapProduct, options, SEED_PRODUCTS, slugId, toProductRow } from "../../../server/lib/supabase.js";
+import { getSupabase, json, mapProduct, options, seedIfEmpty, SEED_PRODUCTS, slugId, toProductRow } from "../../../server/lib/supabase.js";
 
 export function OPTIONS() {
   return options();
@@ -9,14 +9,7 @@ export function OPTIONS() {
 export async function GET(req) {
   try {
     const supabase = getSupabase();
-    const { data, error } = await supabase.from("products").select("*").order("title");
-    if (error) return json({ error: error.message }, 500);
-    let rows = data;
-    if (!rows?.length) {
-      const seeded = await supabase.from("products").upsert(SEED_PRODUCTS, { onConflict: "id" }).select();
-      if (seeded.error) return json({ error: seeded.error.message }, 500);
-      rows = seeded.data || [];
-    }
+    const rows = await seedIfEmpty(supabase, "products", SEED_PRODUCTS, "title");
     const admin = Boolean(verifyToken(getToken(req))?.email);
     const products = rows.map(mapProduct).filter((p) => admin || p.active);
     return json({ products });

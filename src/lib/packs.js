@@ -45,3 +45,41 @@ export function catalogPriceBounds(catalog) {
 export function cartLineId(productId, packId) {
   return String(productId) + "::" + String(packId || "pack");
 }
+
+export function mapDbPack(row) {
+  const size = String(row.size || "");
+  const nums = size.match(/[\d.]+/g) || ["1"];
+  const kg = Number(nums[nums.length - 1]) || 1;
+  let bag = "pack-s4";
+  if (kg <= 1) bag = "pack-s1";
+  else if (kg <= 5) bag = "pack-s2";
+  else if (kg <= 10) bag = "pack-s3";
+  else if (kg <= 26) bag = "pack-s4";
+  else if (kg <= 30) bag = "pack-s5";
+  else bag = "pack-s6";
+  const use = row.typical_use || row.typicalUse || "";
+  const tip = row.buying_tip || row.buyingTip || "";
+  return {
+    id: row.id,
+    size,
+    best: row.best_for || row.bestFor || "",
+    use,
+    uses: [use, tip].filter(Boolean),
+    tip,
+    suggest: "Enquire this size",
+    qty: size,
+    bag,
+    kg,
+    who: row.best_for || row.bestFor || "",
+    featured: /25|26/.test(size)
+  };
+}
+
+export function packScaleFrom(packs) {
+  return packs.map((p) => ({
+    cls: p.kg >= 30 ? "pack-bag-xl" : p.kg >= 20 ? "pack-bag-lg" : p.kg >= 10 ? "pack-bag-md" : "pack-bag-sm",
+    label: String(p.kg) + " kg",
+    pack: p.size,
+    kg: p.kg
+  }));
+}

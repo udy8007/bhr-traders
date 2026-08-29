@@ -12,7 +12,11 @@
     "build:admin": "npm --prefix backoffice run build",
     "build:prod": "npm run build && npm run build:admin && node scripts/sync-static.mjs && next build",
     "start:api": "next start -p 3001",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:start": "npx supabase start",
+    "db:stop": "npx supabase stop",
+    "db:schema": "node scripts/apply-schema.mjs",
+    "db:status": "npx supabase status"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
@@ -20,6 +24,7 @@
     "node-cron": "^4.6.0",
     "nodemailer": "^9.0.6",
     "pdfkit": "^0.20.1",
+    "pg": "^8.23.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

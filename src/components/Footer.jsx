@@ -1,16 +1,9 @@
 import { ADDRESS, EMAIL, GSTIN, NAV_LINKS, PHONE, PHONE_2 } from "../data/site.js";
-import { PRODUCTS } from "../data/products.js";
-
-const FOOTER_IDS = [
-  "iyarkai-boiled-rice",
-  "mayil-boiled-rice",
-  "dora-idly-rice",
-  "aruna-steam-rice",
-  "india-gate-super-biriyani-rice"
-];
-const FOOTER_PRODUCTS = FOOTER_IDS.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean);
+import { useStore } from "../context/StoreContext.jsx";
 
 export function Footer() {
+  const { catalog } = useStore();
+  const footerProducts = catalog.filter((p) => p.active !== false).slice(0, 5);
   return (
     <footer>
       <div className="wrap foot-grid">
@@ -35,7 +28,7 @@ export function Footer() {
         <div>
           <h4>Our Products</h4>
           <ul>
-            {FOOTER_PRODUCTS.map((p) => (
+            {footerProducts.map((p) => (
               <li key={p.id}>
                 <a href={"#product/" + p.id}>{p.title}</a>
               </li>

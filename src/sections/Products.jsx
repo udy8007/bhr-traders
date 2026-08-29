@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { CATEGORIES } from "../data/site.js";
 import { catalogPriceBounds, cartLineId, defaultPack, formatInr, listingPrice } from "../lib/packs.js";
 import { useStore } from "../context/StoreContext.jsx";
 
 export function Products() {
-  const { addToCart, openPdp, ping, catalog } = useStore();
+  const { addToCart, openPdp, ping, catalog, categories, catalogStatus } = useStore();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("all");
   const { min: sliderMin, max: sliderMax, step: sliderStep } = useMemo(
@@ -73,7 +72,7 @@ export function Products() {
             <div className="side-block">
               <h4>Categories</h4>
               <div className="cat-list">
-                {CATEGORIES.map((c) => (
+                {categories.map((c) => (
                   <button
                     type="button"
                     key={c.id}
@@ -116,7 +115,13 @@ export function Products() {
               <span>
                 {shown.length
                   ? "Showing 1–" + shown.length + " of " + shown.length + " results"
-                  : "No products match your filters"}
+                  : catalogStatus === "loading"
+                    ? "Loading products from database…"
+                    : catalogStatus === "error"
+                      ? "Could not load products from the database"
+                      : catalog.length
+                        ? "No products match your filters"
+                        : "No products in the database yet"}
               </span>
               <div className="shop-tools">
                 <label>
