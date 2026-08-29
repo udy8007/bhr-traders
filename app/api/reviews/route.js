@@ -1,3 +1,4 @@
+import { notifyShopEvent } from "../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../server/lib/supabase.js";
 
 export function OPTIONS() {
@@ -95,7 +96,18 @@ export async function POST(req) {
     };
     const { data, error } = await supabase.from("product_reviews").insert(row).select().single();
     if (error) return json({ error: error.message }, 500);
-    return json({ review: mapReview(data || row) }, 201);
+    const saved = data || row;
+    await notifyShopEvent({
+      event: "review_placed",
+      title: "New review " + stars(rating),
+      body: (saved.name || "Customer") + " · " + (productTitle || productId) + " · order " + order.id + "\n" + comment,
+      href: "/sales/reviews?id=" + encodeURIComponent(saved.id),
+      entity: "review",
+      entityId: saved.id,
+      tags: "star,bhr",
+      priority: "default"
+    });
+    return json({ review: mapReview(saved) }, 201);
   } catch (err) {
     return json({ error: err.message }, 500);
   }

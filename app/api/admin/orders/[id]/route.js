@@ -1,6 +1,6 @@
 import { requireAdmin, unauthorized } from "../../../../../server/lib/auth.js";
 import { snap, writeAudit } from "../../../../../server/lib/logs.js";
-import { wrapHtml } from "../../../../../server/lib/mail.js";
+import { escapeHtml, mailFacts, wrapHtml } from "../../../../../server/lib/mail.js";
 import { notifyShopEvent } from "../../../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../../../server/lib/supabase.js";
 
@@ -75,7 +75,18 @@ export async function PATCH(req, { params }) {
       customerText: "Hello " + (data.name || "") + ", your order " + oid + " is now: " + status + ".",
       customerHtml: wrapHtml(
         cancelled ? "Order cancelled" : "Order update",
-        "<p>Hello " + (data.name || "") + ",</p><p>Your order <strong>" + oid + "</strong> is now: <strong>" + status + "</strong>.</p>"
+        "<p style=\"margin:0 0 16px\">Hello " +
+          escapeHtml(data.name || "") +
+          ",</p>" +
+          mailFacts([
+            { label: "Order ID", value: oid },
+            { label: "Status", value: status },
+            { label: "Total", value: data.total != null ? "₹" + data.total : "" }
+          ]),
+        {
+          kicker: cancelled ? "Order cancelled" : "Order status",
+          preheader: "Order " + oid + " is now " + status
+        }
       ),
       tags: cancelled ? "warning,bhr" : "package,bhr"
     });

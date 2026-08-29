@@ -43,7 +43,7 @@ export function Pager({ page, setPage, pages, pageSize, total, start }) {
   const nums = pageWindow(page, pages);
 
   return (
-    <div className="d-flex flex-wrap align-items-center justify-content-between px-3 py-3">
+    <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 px-3 py-3 bhr-pager">
       <p className="text-xs text-secondary mb-0">
         Showing {from} to {to} of {total} entries
       </p>
@@ -129,7 +129,7 @@ export function Card({ title, action, children, bodyClass = "p-3" }) {
   return (
     <div className="card">
       {(title || action) ? (
-        <div className="card-header pb-0 d-flex justify-content-between align-items-center">
+        <div className="card-header pb-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
           {title ? <h6 className="mb-0 bhr-card-title">{title}</h6> : <span />}
           {action}
         </div>

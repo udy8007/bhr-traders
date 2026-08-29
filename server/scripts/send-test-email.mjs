@@ -2,6 +2,8 @@ import { readFileSync } from "fs";
 import { createTransport } from "nodemailer";
 import path from "path";
 import { fileURLToPath } from "url";
+import { MAIL_LOGO_CID, wrapHtml } from "../lib/mail.js";
+import { findPdfLogo } from "../lib/pdfAssets.js";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const envFile = path.join(root, ".env.local");
@@ -49,24 +51,27 @@ if (!ok) {
 }
 
 const tx = createTransport({ ...ok, auth: { user, pass } });
+const logoFile = findPdfLogo();
+const attachments = logoFile
+  ? [{ filename: "bhr-logo.png", path: logoFile, cid: MAIL_LOGO_CID, contentType: "image/png", contentDisposition: "inline" }]
+  : [];
 const info = await tx.sendMail({
   from: env.SMTP_FROM || user,
   to,
   subject: "BHR Traders — SMTP test",
   text: "This is a test email from BHR Traders (" + user + ").",
-  html:
-    "<div style='font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#1f2a1a'>" +
-    "<h2 style='color:#1f4d32;margin:0 0 8px'>BHR Traders</h2>" +
-    "<p>This is a test email from the backoffice SMTP setup.</p>" +
-    "<p>Sent from <strong>" +
-    user +
-    "</strong> via " +
-    ok.host +
-    ":" +
-    ok.port +
-    ".</p>" +
-    "<p style='color:#5e6b57;font-size:13px'>No. 66 Kannagi Nagar, Anna Nagar West, Chennai 600040</p>" +
-    "</div>"
+  html: wrapHtml(
+    "SMTP test",
+    "<p style=\"margin:0 0 12px\">This is a branded test email from the backoffice SMTP setup.</p><p style=\"margin:0\">Sent from <strong>" +
+      user +
+      "</strong> via " +
+      ok.host +
+      ":" +
+      ok.port +
+      ".</p>",
+    { kicker: "System check", preheader: "SMTP test from BHR Traders" }
+  ),
+  attachments
 });
 
 console.log("SENT to " + to);

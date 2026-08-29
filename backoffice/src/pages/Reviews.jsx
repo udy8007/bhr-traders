@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { api } from "../lib/api.js";
 import { Card, PageHead, Pager, usePager } from "../components/Template.jsx";
 
@@ -26,6 +27,8 @@ function StarBar({ dist, total }) {
 }
 
 export function CustomerReviews() {
+  const [params] = useSearchParams();
+  const jumpId = String(params.get("id") || "").trim();
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("all");
@@ -35,6 +38,12 @@ export function CustomerReviews() {
     api.reviewsAdmin().then(setData).catch((e) => setError(e.message));
   }
   useEffect(load, []);
+
+  useEffect(() => {
+    if (!jumpId) return;
+    const el = document.getElementById("review-" + jumpId);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [jumpId, data]);
 
   const rows = useMemo(() => {
     let list = data?.reviews || [];
@@ -135,8 +144,8 @@ export function CustomerReviews() {
         </div>
         <div className="row">
           {pager.slice.map((r) => (
-            <div className="col-md-6 mb-3" key={r.id}>
-              <div className="rev-card">
+            <div className="col-md-6 mb-3" key={r.id} id={"review-" + r.id}>
+              <div className="rev-card" style={jumpId && r.id === jumpId ? { outline: "2px solid #fb8c00" } : undefined}>
                 <div className="d-flex justify-content-between align-items-start">
                   <div>
                     <p className="rev-stars mb-1">{r.stars}</p>

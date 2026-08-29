@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api.js";
 import { Card, PageHead, Pager } from "../components/Template.jsx";
 
-function Switch({ on, onChange, label, hint }) {
+function Toggle({ on, onChange, label }) {
   return (
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <p className="text-sm font-weight-bold mb-0">{label}</p>
-        {hint ? <p className="text-xs text-secondary mb-0">{hint}</p> : null}
-      </div>
-      <button type="button" className={"btn btn-sm mb-0 " + (on ? "bg-gradient-success" : "btn-outline-secondary")} onClick={() => onChange(!on)}>
-        {on ? "Enabled" : "Disabled"}
-      </button>
-    </div>
+    <button
+      type="button"
+      className={"ncfg-toggle" + (on ? " is-on" : "")}
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+    >
+      <span className="ncfg-toggle-knob" />
+      <span className="ncfg-toggle-text">{on ? "On" : "Off"}</span>
+    </button>
   );
 }
 
@@ -59,51 +61,88 @@ export function NotificationConfig() {
   }
 
   return (
-    <>
+    <div className="ncfg">
       <PageHead title="Notification configure" small="Enable email and push, and set the admin inbox address." />
       {error ? <div className="alert alert-warning text-white">{error}</div> : null}
-      <div className="row">
-        <div className="col-lg-6">
-          <Card title="Channels">
-            {!form ? <p className="text-sm text-secondary mb-0">Loading…</p> : (
-              <form onSubmit={save}>
-                <Switch
+      {!form ? (
+        <div className="ncfg-shell">
+          <p className="text-sm text-secondary mb-0">Loading…</p>
+        </div>
+      ) : (
+        <form className="ncfg-shell" onSubmit={save}>
+          <p className="ncfg-kicker">Channels</p>
+          <div className="ncfg-grid">
+            <section className={"ncfg-channel" + (form.email_enabled ? " is-live" : "")}>
+              <div className="ncfg-channel-head">
+                <span className="ncfg-icon" aria-hidden="true">
+                  <i className="material-symbols-rounded">mail</i>
+                </span>
+                <div className="ncfg-channel-copy">
+                  <h6>Email notification</h6>
+                  <p>Shop alerts, scheduled reports, and database backups. Customers still get their own order and enquiry emails.</p>
+                </div>
+                <Toggle
                   on={form.email_enabled}
                   onChange={(v) => setForm({ ...form, email_enabled: v })}
                   label="Email notification"
-                  hint="Sends shop alerts, scheduled reports, and database backups to this address. Customers still receive their own order and enquiry emails."
                 />
-                <div className={"input-group input-group-outline mb-4" + (form.admin_email ? " is-filled" : "")}>
-                  <label className="form-label">Admin notification email</label>
-                  <input className="form-control" type="email" value={form.admin_email} onChange={(e) => setForm({ ...form, admin_email: e.target.value })} required />
+              </div>
+              <label className="ncfg-field">
+                <span>Admin notification email</span>
+                <input
+                  type="email"
+                  value={form.admin_email}
+                  onChange={(e) => setForm({ ...form, admin_email: e.target.value })}
+                  required
+                  autoComplete="email"
+                  placeholder="admin@example.com"
+                />
+              </label>
+              <p className="ncfg-help">Used for orders, enquiries, scheduled reports, and DB backups.</p>
+            </section>
+
+            <section className={"ncfg-channel" + (form.push_enabled ? " is-live" : "")}>
+              <div className="ncfg-channel-head">
+                <span className="ncfg-icon is-gold" aria-hidden="true">
+                  <i className="material-symbols-rounded">notifications_active</i>
+                </span>
+                <div className="ncfg-channel-copy">
+                  <h6>Push notification</h6>
+                  <p>Sends to an ntfy.sh topic. Subscribe on your phone at ntfy.sh.</p>
                 </div>
-                <p className="text-xs text-secondary mb-4">
-                  Used everywhere admin mail is sent: orders, enquiries, schedule report, and DB backup.
-                </p>
-                <Switch
+                <Toggle
                   on={form.push_enabled}
                   onChange={(v) => setForm({ ...form, push_enabled: v })}
                   label="Push notification"
-                  hint="Sends to ntfy.sh topic bhr-traders. Subscribe on your phone at ntfy.sh."
                 />
-                <div className={"input-group input-group-outline mb-3" + (form.ntfy_topic ? " is-filled" : "")}>
-                  <label className="form-label">ntfy topic</label>
-                  <input className="form-control" value={form.ntfy_topic} onChange={(e) => setForm({ ...form, ntfy_topic: e.target.value })} />
-                </div>
-                <p className="text-xs text-secondary mb-4">Open the ntfy app and subscribe to <strong>{form.ntfy_topic || "bhr-traders"}</strong>.</p>
-                {ok ? <p className="text-success text-sm">{ok}</p> : null}
-                <div className="d-flex flex-wrap gap-2">
-                  <button className="btn bg-gradient-info mb-0" type="submit" disabled={busy || resetting}>{busy ? "Saving…" : "Save"}</button>
-                  <button className="btn btn-outline-danger mb-0" type="button" disabled={busy || resetting} onClick={resetLogs}>
-                    {resetting ? "Resetting…" : "Reset"}
-                  </button>
-                </div>
-              </form>
-            )}
-          </Card>
-        </div>
-      </div>
-    </>
+              </div>
+              <label className="ncfg-field">
+                <span>ntfy topic</span>
+                <input
+                  type="text"
+                  value={form.ntfy_topic}
+                  onChange={(e) => setForm({ ...form, ntfy_topic: e.target.value })}
+                  placeholder="bhr-traders"
+                />
+              </label>
+              <p className="ncfg-help">
+                Open the ntfy app and subscribe to <strong>{form.ntfy_topic || "bhr-traders"}</strong>.
+              </p>
+            </section>
+          </div>
+
+          {ok ? <p className="ncfg-ok">{ok}</p> : null}
+          <div className="ncfg-actions">
+            <button className="ncfg-save" type="submit" disabled={busy || resetting}>
+              {busy ? "Saving…" : "Save settings"}
+            </button>
+            <button className="ncfg-reset" type="button" disabled={busy || resetting} onClick={resetLogs}>
+              {resetting ? "Resetting…" : "Reset logs"}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 }
 

@@ -190,6 +190,7 @@ export function Enquiry() {
   const [message, setMessage] = useState("");
   const [product, setProduct] = useState("");
   const [otherProduct, setOtherProduct] = useState("");
+  const [busy, setBusy] = useState(false);
   const otherSelected = product === "others";
 
   useEffect(() => {
@@ -209,7 +210,9 @@ export function Enquiry() {
           className="enq-card"
           onSubmit={async (e) => {
             e.preventDefault();
+            if (busy) return;
             const fd = new FormData(e.target);
+            setBusy(true);
             try {
               let chosen = product;
               if (product === "mixed") chosen = "Mixed varieties";
@@ -231,6 +234,8 @@ export function Enquiry() {
               setEnquiryDraft({ qty: "", message: "" });
             } catch {
               /* toast already shown */
+            } finally {
+              setBusy(false);
             }
           }}
         >
@@ -276,8 +281,8 @@ export function Enquiry() {
               />
             </label>
           </div>
-          <button className="btn btn-green" type="submit" style={{ marginTop: 4 }}>
-            Submit enquiry
+          <button className="btn btn-green" type="submit" style={{ marginTop: 4 }} disabled={busy}>
+            {busy ? "Submitting…" : "Submit enquiry"}
           </button>
         </form>
       </div>

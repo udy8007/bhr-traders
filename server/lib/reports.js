@@ -521,7 +521,10 @@ export async function sendReportEmail(kind, category, to) {
     to,
     subject: "BHR Traders · " + title,
     text: title + " is attached as a PDF.",
-    html: wrapHtml(title, "<p>The scheduled / requested report is attached as a PDF.</p>"),
+    html: wrapHtml(title, "<p style=\"margin:0\">The scheduled / requested report is attached as a PDF.</p>", {
+      kicker: "Admin report",
+      preheader: title + " is attached"
+    }),
     attachments: [{ filename, content: buffer, contentType: "application/pdf" }]
   });
   return { filename, to };

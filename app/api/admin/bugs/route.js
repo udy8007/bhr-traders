@@ -60,7 +60,10 @@ function bugEmail(to, { reporter, area, severity, pageUrl, what, steps }) {
     to,
     subject: "BHR bug · " + area + " · " + severity,
     text: what,
-    html: wrapHtml("Bug report (ntfy unreachable)", lines)
+    html: wrapHtml("Bug report (ntfy unreachable)", lines, {
+      kicker: "Admin alert",
+      preheader: "Bug report · " + area + " · " + severity
+    })
   });
 }
 

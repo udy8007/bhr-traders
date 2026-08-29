@@ -1,5 +1,5 @@
 import { requireAdmin, unauthorized } from "../../../../../server/lib/auth.js";
-import { clearAdminInbox, ingestNtfyMessage, markAdminInboxRead, syncNtfyInbox } from "../../../../../server/lib/notify.js";
+import { clearAdminInbox, dedupeInboxRows, ingestNtfyMessage, markAdminInboxRead, pruneMirroredNtfyInbox } from "../../../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../../../server/lib/supabase.js";
 
 export function OPTIONS() {
@@ -9,11 +9,11 @@ export function OPTIONS() {
 export async function GET(req) {
   try {
     requireAdmin(req);
-    await syncNtfyInbox().catch(() => {});
+    await pruneMirroredNtfyInbox().catch(() => {});
     const supabase = getSupabase();
     const { data, error } = await supabase.from("admin_inbox").select("*").order("created_at", { ascending: false });
     if (error) return json({ error: error.message }, 500);
-    const rows = (data || []).sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+    const rows = dedupeInboxRows(data || []);
     return json({
       unread: rows.filter((r) => r.read !== true && r.read !== "true").length,
       rows: rows.slice(0, 40)

@@ -197,9 +197,10 @@ export async function sendDbBackup() {
     text: "Database dump attached.\n\n" + summary,
     html: wrapHtml(
       "Database backup",
-      "<p>A gzipped JSON dump of the BHR Traders database is attached.</p><pre style=\"font-size:12px\">" +
+      "<p style=\"margin:0 0 16px\">A gzipped JSON dump and SQL export of the BHR Traders database are attached.</p><pre style=\"margin:0;padding:14px;background:#f9f8f3;border:1px solid #eadfc8;font-size:12px;line-height:1.5;color:#1a2418\">" +
         summary.replace(/</g, "") +
-        "</pre>"
+        "</pre>",
+      { kicker: "Admin backup", preheader: "Database dump " + dump.stamp }
     ),
     attachments: [
       { filename: dump.filename, content: dump.gzip, contentType: "application/gzip" },

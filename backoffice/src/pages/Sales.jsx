@@ -231,18 +231,36 @@ export function Orders() {
 }
 
 export function Enquiries() {
+  const [params] = useSearchParams();
+  const jumpId = String(params.get("id") || "").trim();
   const [rows, setRows] = useState([]);
   const [tab, setTab] = useState("all");
   const [error, setError] = useState("");
+  const [ok, setOk] = useState("");
 
   useEffect(() => {
     api.enquiries().then((r) => setRows(r.enquiries || [])).catch((e) => setError(e.message));
   }, []);
 
+  useEffect(() => {
+    if (jumpId) setTab("all");
+  }, [jumpId]);
+
+  useEffect(() => {
+    if (!jumpId) return;
+    const el = document.getElementById("enquiry-" + jumpId);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [jumpId, rows]);
+
   async function changeStatus(id, status) {
+    setError("");
+    setOk("");
     try {
-      await api.updateEnquiry(id, status);
+      const res = await api.updateEnquiry(id, status);
       setRows((prev) => prev.map((e) => (e.id === id ? { ...e, status } : e)));
+      if (status === "Resolved") {
+        setOk(res?.mailed ? "Resolved. A confirmation email was sent to the customer." : "Marked resolved. No customer email on this enquiry.");
+      }
     } catch (e) {
       setError(e.message);
     }
@@ -262,6 +280,7 @@ export function Enquiries() {
     <>
       <PageHead title="Enquiries" small="Wholesale enquiries from the storefront." />
       {error ? <div className="alert alert-danger text-white">{error}</div> : null}
+      {ok ? <div className="alert alert-success text-white">{ok}</div> : null}
       <div className="row">
         <div className="col-md-4 mb-4">
           <div className="card">
@@ -337,7 +356,11 @@ export function Enquiries() {
             </thead>
             <tbody>
               {shown.map((e) => (
-                <tr key={e.id || e.created_at}>
+                <tr
+                  key={e.id || e.created_at}
+                  id={e.id ? "enquiry-" + e.id : undefined}
+                  style={jumpId && e.id === jumpId ? { background: "#fff6e5" } : undefined}
+                >
                   <td className="ps-3"><p className="text-xs mb-0">{new Date(e.created_at).toLocaleString()}</p></td>
                   <td>
                     <div className="d-flex align-items-center">

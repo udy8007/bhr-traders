@@ -1,5 +1,5 @@
 import { snap, writeAudit } from "../../../server/lib/logs.js";
-import { wrapHtml } from "../../../server/lib/mail.js";
+import { escapeHtml, mailFacts, wrapHtml } from "../../../server/lib/mail.js";
 import { notifyShopEvent } from "../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../server/lib/supabase.js";
 
@@ -129,21 +129,23 @@ export async function POST(req) {
       customerText: "Thank you, " + name + ". Your order " + id + " has been placed. Total ₹" + total + ". Status: " + status + ".",
       customerHtml: wrapHtml(
         "Order placed",
-        "<p>Thank you, " +
-          name +
-          ".</p><p>Your order <strong>" +
-          id +
-          "</strong> has been placed.</p><p>Total: <strong>₹" +
-          total +
-          "</strong><br/>Payment: " +
-          (PAY_LABELS[pay] || pay) +
-          "<br/>Status: " +
-          status +
-          "</p><p>" +
-          itemLines +
-          "</p>"
+        "<p style=\"margin:0 0 16px\">Thank you, " +
+          escapeHtml(name) +
+          ". Your order has been received and our team will process it shortly.</p>" +
+          mailFacts([
+            { label: "Order ID", value: id },
+            { label: "Total", value: "₹" + total },
+            { label: "Payment", value: PAY_LABELS[pay] || pay },
+            { label: "Status", value: status }
+          ]) +
+          "<p style=\"margin:0 0 4px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#b08d3e\">Items</p>" +
+          "<p style=\"margin:0\">" +
+          escapeHtml(itemLines) +
+          "</p>",
+        { kicker: "Order confirmation", preheader: "Order " + id + " · ₹" + total }
       ),
-      tags: "shopping_cart,bhr"
+      tags: "shopping_cart,bhr",
+      priority: "high"
     });
     return json({ order: { id, total, status, pay: PAY_LABELS[pay] || pay } }, 201);
   } catch (err) {

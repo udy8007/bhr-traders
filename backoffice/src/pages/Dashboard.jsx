@@ -91,7 +91,7 @@ function DonutChart({ live, hidden }) {
   const c = 2 * Math.PI * r;
   const liveLen = c * livePct;
   return (
-    <div className="d-flex align-items-center">
+    <div className="d-flex align-items-center dash-donut">
       <svg className="dash-svg dash-donut-svg" viewBox="0 0 100 100" aria-label="Catalog health">
         <circle cx="50" cy="50" r={r} fill="none" stroke="#eadfc8" strokeWidth="12" />
         <circle
@@ -216,15 +216,17 @@ export function Dashboard() {
   return (
     <>
       <div className="bhr-hero mb-4">
-        <div>
+        <div className="bhr-hero-copy">
           <p className="bhr-hero-kicker mb-1">Wholesale rice · Chennai</p>
           <h3 className="text-white mb-1">Command centre</h3>
           <p className="text-white text-sm mb-0 opacity-8">Live snapshot of orders, traffic, and catalog health.</p>
         </div>
-        <div className="text-end">
-          <Link className="btn btn-sm bg-gradient-warning mb-0 me-1" to="/sales/orders">Review pending ({s.needsAttention ?? 0})</Link>
-          <Link className="btn btn-sm btn-outline-light mb-0 me-1" to="/reports">Full analytics</Link>
-          <Link className="btn btn-sm btn-outline-light mb-0" to="/master/products">Products</Link>
+        <div className="bhr-hero-actions">
+          <div className="bhr-hero-btns">
+            <Link className="btn btn-sm bg-gradient-warning mb-0" to="/sales/orders">Review pending ({s.needsAttention ?? 0})</Link>
+            <Link className="btn btn-sm btn-outline-light mb-0" to="/reports">Full analytics</Link>
+            <Link className="btn btn-sm btn-outline-light mb-0" to="/master/products">Products</Link>
+          </div>
           <p className="text-xs text-white mb-0 mt-2 opacity-8">
             <span className="analytics-pulse me-1" /> Live · every 5s · {tick.toLocaleTimeString()}
           </p>
@@ -275,7 +277,7 @@ export function Dashboard() {
         </div>
         <div className="col-lg-8 mb-4">
           <Card title="Recent orders" bodyClass="px-0 pt-0 pb-2">
-            <div className="table-responsive p-0">
+            <div className="table-responsive p-0 d-none d-md-block">
               <table className="table align-items-center mb-0">
                 <thead>
                   <tr>
@@ -296,7 +298,7 @@ export function Dashboard() {
                         <p className="text-xs text-secondary mb-0">{[o.city, o.pincode].filter(Boolean).join(" · ")}</p>
                       </td>
                       <td><p className="text-xs mb-0">{rupee(o.total)}</p></td>
-                      <td className="pe-3" style={{ minWidth: 200 }}>
+                      <td className="pe-3 dash-status-cell">
                         <StatusSelect value={o.status} onChange={(status) => changeStatus(o.id, status)} />
                       </td>
                       <td><p className="text-xs mb-0">{when(o.created_at)}</p></td>
@@ -310,6 +312,30 @@ export function Dashboard() {
                 </tbody>
               </table>
             </div>
+            <div className="d-md-none px-3 pb-2">
+              {(data?.recentOrders || []).map((o) => (
+                <div className="dash-order-card" key={o.id}>
+                  <div className="d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                      <p className="text-xs font-weight-bold mb-0">{o.id}</p>
+                      <p className="text-sm font-weight-bold mb-0">{o.name}</p>
+                      <p className="text-xs text-secondary mb-0">{o.phone}{o.email ? " · " + o.email : ""}</p>
+                      <p className="text-xs text-secondary mb-0">{[o.city, o.pincode].filter(Boolean).join(" · ")}</p>
+                    </div>
+                    <div className="text-end">
+                      <p className="text-sm font-weight-bold mb-0">{rupee(o.total)}</p>
+                      <p className="text-xs text-secondary mb-0">{when(o.created_at)}</p>
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <StatusSelect value={o.status} onChange={(status) => changeStatus(o.id, status)} />
+                  </div>
+                </div>
+              ))}
+              {!data?.recentOrders?.length ? (
+                <p className="text-sm text-secondary mb-0">No live orders yet. Place one from the shop.</p>
+              ) : null}
+            </div>
           </Card>
         </div>
       </div>
@@ -319,7 +345,7 @@ export function Dashboard() {
             {(data?.customers || []).map((c) => (
               <div className="cust-row" key={c.id}>
                 <div className="cust-avatar">{initials(c.name)}</div>
-                <div className="flex-grow-1">
+                <div className="cust-row-body">
                   <p className="text-sm font-weight-bold mb-0">{c.name || "Unknown"}</p>
                   <p className="text-xs text-secondary mb-0">
                     {c.phone || "—"}
@@ -333,7 +359,7 @@ export function Dashboard() {
                     {c.lastAt ? " · " + when(c.lastAt) : ""}
                   </p>
                 </div>
-                <div className="text-end">
+                <div className="cust-row-spend">
                   <p className="text-sm font-weight-bold mb-0">{rupee(c.spend)}</p>
                   <p className="text-xs text-secondary mb-0">{c.orders} order{c.orders === 1 ? "" : "s"} · {c.enquiries} enq</p>
                 </div>

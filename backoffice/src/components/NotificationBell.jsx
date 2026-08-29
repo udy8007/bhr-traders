@@ -22,6 +22,9 @@ function targetFor(row) {
   if (row.entity === "enquiry" && row.entity_id) {
     return "/sales/enquiries?id=" + encodeURIComponent(row.entity_id);
   }
+  if (row.entity === "review" && row.entity_id) {
+    return "/sales/reviews?id=" + encodeURIComponent(row.entity_id);
+  }
   const href = String(row.href || "");
   if (href.startsWith("/")) return href;
   return "/sales/orders";
@@ -56,23 +59,7 @@ export function NotificationBell() {
   useEffect(() => {
     load();
     const t = setInterval(load, 4000);
-    const es = new EventSource("https://ntfy.sh/bhr-traders/sse");
-    function onMsg(ev) {
-      try {
-        const msg = JSON.parse(ev.data);
-        if (msg.event && msg.event !== "message") return;
-        api.ingestNtfy(msg, { quiet: true }).finally(load);
-      } catch {
-        load();
-      }
-    }
-    es.addEventListener("message", onMsg);
-    es.onmessage = onMsg;
-    return () => {
-      clearInterval(t);
-      es.removeEventListener("message", onMsg);
-      es.close();
-    };
+    return () => clearInterval(t);
   }, []);
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/auth.jsx";
-import { NotificationBell } from "../components/NotificationBell.jsx";
 import { Icon } from "../components/Template.jsx";
 
 const MENU = [
@@ -59,15 +58,39 @@ export function AdminLayout() {
   const location = useLocation();
   const [pinned, setPinned] = useState(false);
 
+  function closeNav() {
+    setPinned(false);
+  }
+
+  useEffect(() => {
+    closeNav();
+  }, [location.pathname]);
+
+  useEffect(() => {
+    function onResize() {
+      if (window.innerWidth >= 1200) closeNav();
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   useEffect(() => {
     document.body.className = "g-sidenav-show bhr-graphic" + (pinned ? " g-sidenav-pinned" : "");
+    const lock = pinned && window.innerWidth < 1200;
+    document.body.style.overflow = lock ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [pinned]);
 
   return (
     <>
+      {pinned ? (
+        <button type="button" className="bhr-sidenav-backdrop d-xl-none" aria-label="Close menu" onClick={closeNav} />
+      ) : null}
       <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl fixed-start ms-2 my-2 bhr-sidenav" id="sidenav-main">
         <div className="sidenav-header">
-          <NavLink className="bhr-brand" to="/">
+          <NavLink className="bhr-brand" to="/" onClick={closeNav}>
             <span className="bhr-brand-mark">
               <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" />
             </span>
@@ -90,6 +113,7 @@ export function AdminLayout() {
                   <NavLink
                     to={item.to}
                     end={item.end}
+                    onClick={closeNav}
                     className={({ isActive }) =>
                       "nav-link " + (isActive ? "active bhr-nav-active" : "bhr-nav-link")
                     }
@@ -105,43 +129,41 @@ export function AdminLayout() {
       </aside>
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <nav className="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl bhr-topbar" id="navbarBlur">
-          <div className="container-fluid py-1 px-3">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                {navTrail(location.pathname).map((crumb, i, all) => (
-                  <li
-                    key={crumb}
-                    className={"breadcrumb-item text-sm" + (i === all.length - 1 ? " text-dark font-weight-bold" : "")}
-                    aria-current={i === all.length - 1 ? "page" : undefined}
-                  >
-                    {i === all.length - 1 ? crumb : <span className="opacity-5 text-dark">{crumb}</span>}
-                  </li>
-                ))}
-              </ol>
-            </nav>
-            <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 show">
-              <ul className="navbar-nav ms-md-auto d-flex align-items-center justify-content-end">
-                <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
-                  <a
-                    href="#"
-                    className="nav-link text-body p-0"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPinned((v) => !v);
-                    }}
-                  >
-                    <div className="sidenav-toggler-inner">
-                      <i className="sidenav-toggler-line" />
-                      <i className="sidenav-toggler-line" />
-                      <i className="sidenav-toggler-line" />
-                    </div>
-                  </a>
+          <div className="container-fluid py-1 px-2 px-sm-3 bhr-topbar-inner">
+            <div className="bhr-topbar-left">
+              <button
+                type="button"
+                className="bhr-menu-btn d-xl-none"
+                aria-label={pinned ? "Close menu" : "Open menu"}
+                aria-expanded={pinned}
+                onClick={() => setPinned((v) => !v)}
+              >
+                <span className="sidenav-toggler-inner">
+                  <i className="sidenav-toggler-line" />
+                  <i className="sidenav-toggler-line" />
+                  <i className="sidenav-toggler-line" />
+                </span>
+              </button>
+              <nav aria-label="breadcrumb" className="bhr-crumb">
+                <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0">
+                  {navTrail(location.pathname).map((crumb, i, all) => (
+                    <li
+                      key={crumb}
+                      className={"breadcrumb-item text-sm" + (i === all.length - 1 ? " text-dark font-weight-bold" : "")}
+                      aria-current={i === all.length - 1 ? "page" : undefined}
+                    >
+                      {i === all.length - 1 ? crumb : <span className="opacity-5 text-dark">{crumb}</span>}
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </div>
+            <div className="bhr-topbar-actions">
+              <ul className="navbar-nav d-flex flex-row align-items-center mb-0">
+                <li className="nav-item d-none d-md-flex align-items-center">
+                  <span className="text-sm text-secondary bhr-topbar-email">{user?.email || ""}</span>
                 </li>
-                <NotificationBell />
-                <li className="nav-item d-flex align-items-center ms-3">
-                  <span className="text-sm text-secondary">{user?.email || ""}</span>
-                </li>
-                <li className="nav-item d-flex align-items-center ms-3">
+                <li className="nav-item d-flex align-items-center ms-2 ms-sm-3">
                   <button
                     type="button"
                     className="btn btn-sm mb-0 bhr-logout"
@@ -157,7 +179,7 @@ export function AdminLayout() {
             </div>
           </div>
         </nav>
-        <div className="container-fluid py-2">
+        <div className="container-fluid py-2 px-2 px-sm-3 bhr-page">
           <Outlet />
         </div>
       </main>
