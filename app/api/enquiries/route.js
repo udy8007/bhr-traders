@@ -1,6 +1,6 @@
 import { snap, writeAudit } from "../../../server/lib/logs.js";
 import { escapeHtml, mailFacts, wrapHtml } from "../../../server/lib/mail.js";
-import { notifyShopEvent } from "../../../server/lib/notify.js";
+import { queueShopEvent } from "../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../server/lib/supabase.js";
 
 export function OPTIONS() {
@@ -43,7 +43,7 @@ export async function POST(req) {
     adminLines.push("Product: " + product);
     if (qty) adminLines.push("Quantity: " + qty);
     adminLines.push("", "Message:", message);
-    await notifyShopEvent({
+    queueShopEvent({
       event: "enquiry_placed",
       title: "New enquiry from " + name,
       body: adminLines.join("\n"),

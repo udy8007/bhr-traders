@@ -83,9 +83,10 @@ export function TrackModal() {
   if (!trackOpen) return null;
 
   const cancelled = /cancelled/i.test(order?.status || "");
+  const pending = /pending/i.test(order?.status || "");
   const step = order ? orderStepIndex(order.status) : -1;
   const items = order?.items || [];
-  const progress = cancelled || step < 0 ? 0 : ((step + 0.5) / TRACK_STEPS.length) * 100;
+  const progress = cancelled || pending || step < 0 ? 0 : ((step + 0.5) / TRACK_STEPS.length) * 100;
 
   return (
     <div
@@ -181,6 +182,8 @@ export function TrackModal() {
 
             {cancelled ? (
               <p className="track-cancelled">This order was cancelled. Call {PHONE} if you need help.</p>
+            ) : pending ? (
+              <p className="track-cancelled">Payment is pending. Complete UPI or wait for BHR Traders to confirm this order.</p>
             ) : (
               <div className="track-journey live" role="list" aria-label="Order progress">
                 <div className="track-rail">

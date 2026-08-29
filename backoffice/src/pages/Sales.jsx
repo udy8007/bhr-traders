@@ -106,8 +106,19 @@ export function Orders() {
 
   async function changeStatus(id, next) {
     try {
-      await api.updateOrder(id, next);
-      setRows((prev) => prev.map((o) => (o.id === id ? { ...o, status: next } : o)));
+      const extra = {};
+      if (/cancel/i.test(next)) {
+        const remark = window.prompt("Cancel remark for the customer (required):", "");
+        if (remark == null) return;
+        const t = remark.trim();
+        if (!t) {
+          setError("Please add a cancel remark for the customer.");
+          return;
+        }
+        extra.remark = t;
+      }
+      await api.updateOrder(id, next, extra);
+      setRows((prev) => prev.map((o) => (o.id === id ? { ...o, status: next, ...(extra.remark ? { cancel_remark: extra.remark } : {}) } : o)));
     } catch (e) {
       setError(e.message);
     }

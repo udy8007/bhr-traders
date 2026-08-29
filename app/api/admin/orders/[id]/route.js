@@ -1,10 +1,21 @@
 import { requireAdmin, unauthorized } from "../../../../../server/lib/auth.js";
 import { snap, writeAudit } from "../../../../../server/lib/logs.js";
-import { escapeHtml, mailFacts, wrapHtml } from "../../../../../server/lib/mail.js";
-import { notifyShopEvent } from "../../../../../server/lib/notify.js";
+import {
+  escapeHtml,
+  mailFacts,
+  mailItemsTable,
+  mailMoney,
+  mailOrderCopy,
+  mailOrderTrack,
+  mailSectionLabel,
+  mailStatStrip,
+  wrapHtml
+} from "../../../../../server/lib/mail.js";
+import { queueShopEvent } from "../../../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../../../server/lib/supabase.js";
 
 const STATUSES = [
+  "Pending",
   "Confirmed — cash on delivery",
   "Confirmed — awaiting payment",
   "Confirmed — payment received",
@@ -54,42 +65,102 @@ export async function PATCH(req, { params }) {
     const supabase = getSupabase();
     const oid = String(id).toUpperCase();
     const prev = await supabase.from("orders").select("*").eq("id", oid).maybeSingle();
-    const { data, error } = await supabase
-      .from("orders")
-      .update({ status })
-      .eq("id", oid)
-      .select()
-      .single();
+    const cancelled = /cancel/i.test(status);
+    const remark = String(body.remark || body.cancel_remark || "").trim().slice(0, 800);
+    if (cancelled && !remark) {
+      return json({ error: "Please add a cancel remark for the customer." }, 400);
+    }
+    const patch = cancelled ? { status, cancel_remark: remark } : { status };
+    let { data, error } = await supabase.from("orders").update(patch).eq("id", oid).select().single();
+    if (error && cancelled && /cancel_remark|schema cache/i.test(error.message || "")) {
+      const retry = await supabase.from("orders").update({ status }).eq("id", oid).select().single();
+      data = retry.data;
+      error = retry.error;
+      if (!error && data) data = { ...data, cancel_remark: remark };
+    }
     if (error) return json({ error: error.message }, 500);
     if (!data) return json({ error: "Order not found." }, 404);
-    writeAudit({ req, action: "status", entity: "order", entityId: oid, detail: status, before: snap("order", prev.data), after: snap("order", data) });
-    const cancelled = status.toLowerCase().includes("cancel");
-    await notifyShopEvent({
-      event: cancelled ? "order_cancelled" : "order_status",
-      title: cancelled ? "Order " + oid + " cancelled" : "Order " + oid + " updated",
-      body: "Status is now " + status + " · " + (data.name || "") + " · ₹" + (data.total || 0),
-      href: "/sales/orders/" + encodeURIComponent(oid),
+    writeAudit({
+      req,
+      action: "status",
       entity: "order",
       entityId: oid,
-      customerEmail: data.email,
-      customerText: "Hello " + (data.name || "") + ", your order " + oid + " is now: " + status + ".",
-      customerHtml: wrapHtml(
-        cancelled ? "Order cancelled" : "Order update",
-        "<p style=\"margin:0 0 16px\">Hello " +
-          escapeHtml(data.name || "") +
-          ",</p>" +
-          mailFacts([
-            { label: "Order ID", value: oid },
-            { label: "Status", value: status },
-            { label: "Total", value: data.total != null ? "₹" + data.total : "" }
-          ]),
-        {
-          kicker: cancelled ? "Order cancelled" : "Order status",
-          preheader: "Order " + oid + " is now " + status
-        }
-      ),
-      tags: cancelled ? "warning,bhr" : "package,bhr"
+      detail: cancelled ? status + " · " + remark : status,
+      before: snap("order", prev.data),
+      after: snap("order", data)
     });
+    const prevStatus = String(prev.data?.status || "");
+    if (data.email && prevStatus !== status) {
+      const copy = mailOrderCopy(status);
+      const remarkText = cancelled ? remark : "";
+      const { data: itemRows } = await supabase.from("order_items").select("*").eq("order_id", oid);
+      const items = itemRows || [];
+      const money = mailMoney(data.total);
+      const name = String(data.name || "there").trim() || "there";
+      const customerText = [
+        "Hello " + name + ",",
+        "",
+        copy.lead,
+        remarkText ? "Remark: " + remarkText : "",
+        "",
+        "Order: " + oid,
+        "Status: " + status,
+        "Total: " + money,
+        "",
+        "Warm regards,",
+        "BHR Traders"
+      ]
+        .filter((line, i, all) => line !== "" || (all[i + 1] && all[i + 1] !== ""))
+        .join("\n");
+      queueShopEvent({
+        event: cancelled ? "order_cancelled" : "order_status",
+        title: copy.title + " · " + oid,
+        body: customerText,
+        skipAdmin: true,
+        href: "/sales/orders/" + encodeURIComponent(oid),
+        entity: "order",
+        entityId: oid,
+        customerEmail: data.email,
+        customerText,
+        customerHtml: wrapHtml(
+          copy.title,
+          "<p style=\"margin:0 0 14px\">Hello " +
+            escapeHtml(name) +
+            ",</p>" +
+            "<p style=\"margin:0 0 16px\">" +
+            escapeHtml(copy.lead) +
+            "</p>" +
+            (remarkText
+              ? '<p style="margin:0 0 16px;padding:12px 14px;background:#fdecea;border:1px solid #f5c2c0;color:#7f1d1d;font-family:Arial,Helvetica,sans-serif;font-size:14px"><strong>Remark:</strong> ' +
+                escapeHtml(remarkText) +
+                "</p>"
+              : "") +
+            mailStatStrip([
+              { label: "Order", value: oid },
+              { label: "Total", value: money },
+              { label: "Status", value: cancelled ? "Cancelled" : copy.kicker }
+            ]) +
+            mailSectionLabel("Live tracking") +
+            mailOrderTrack(status) +
+            (items.length ? mailSectionLabel("Items") + mailItemsTable(items) : "") +
+            mailSectionLabel("Delivery") +
+            mailFacts([
+              { label: "Name", value: data.name },
+              { label: "Phone", value: data.phone },
+              { label: "Address", value: [data.address, data.city, data.pincode].filter(Boolean).join(", ") },
+              { label: "Payment", value: data.pay },
+              { label: "Detail", value: status },
+              { label: "Remark", value: remarkText }
+            ]) +
+            "<p style=\"margin:18px 0 0\">Warm regards,<br/>BHR Traders<br/>Wholesale rice · Chennai</p>",
+          {
+            kicker: copy.kicker,
+            preheader: "Order " + oid + " — " + copy.title
+          }
+        ),
+        tags: cancelled ? "warning,bhr" : "package,bhr"
+      });
+    }
     return json({ order: data });
   } catch (err) {
     if (err.status === 401) return unauthorized();
@@ -119,7 +190,7 @@ export async function DELETE(req, { params }) {
       detail: "Order removed · " + (prev.data.name || "") + " · ₹" + (prev.data.total || 0),
       before: snap("order", prev.data)
     });
-    await notifyShopEvent({
+    queueShopEvent({
       event: "order_deleted",
       title: "Order " + oid + " deleted",
       body: (prev.data.name || "Customer") + " · ₹" + (prev.data.total || 0) + " · " + (prev.data.status || ""),

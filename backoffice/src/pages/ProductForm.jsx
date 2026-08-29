@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../lib/api.js";
-import { PageHead, Card } from "../components/Template.jsx";
+import { ProductPreviewModal, productImgSrc, shopProductHref } from "../components/ProductPreview.jsx";
+import { PageHead } from "../components/Template.jsx";
 
 const EMPTY = {
   title: "",
@@ -24,24 +25,21 @@ const EMPTY = {
 };
 
 const SPECS = [
-  { key: "grain", label: "Grain", hint: "e.g. Extra long" },
-  { key: "moisture", label: "Moisture", hint: "e.g. 12–13%" },
-  { key: "pack", label: "Pack", hint: "e.g. 25 kg / 50 kg bags" },
-  { key: "origin", label: "Origin", hint: "e.g. India" },
-  { key: "moq", label: "MOQ", hint: "e.g. 1 ton" },
-  { key: "broken", label: "Broken", hint: "e.g. < 5%" },
-  { key: "aroma", label: "Aroma", hint: "e.g. Strong basmati" },
-  { key: "cook", label: "Cook", hint: "e.g. Elongates well" },
-  { key: "use", label: "Best use", hint: "e.g. Biryani, hotels" }
+  { key: "grain", label: "Grain", hint: "e.g. Extra long", icon: "spa" },
+  { key: "moisture", label: "Moisture", hint: "e.g. 12–13%", icon: "water_drop" },
+  { key: "pack", label: "Pack copy", hint: "e.g. 25 kg / 50 kg bags", icon: "inventory_2" },
+  { key: "origin", label: "Origin", hint: "e.g. India", icon: "public" },
+  { key: "moq", label: "MOQ", hint: "e.g. 1 ton", icon: "shopping_bag" },
+  { key: "broken", label: "Broken", hint: "e.g. < 5%", icon: "percent" },
+  { key: "aroma", label: "Aroma", hint: "e.g. Strong basmati", icon: "air" },
+  { key: "cook", label: "Cook", hint: "e.g. Elongates well", icon: "skillet" },
+  { key: "use", label: "Best use", hint: "e.g. Biryani, hotels", icon: "restaurant" }
 ];
 
-function Field({ label, filled, children }) {
-  return (
-    <div className={"input-group input-group-outline mb-3" + (filled ? " is-filled focused" : "")}>
-      <label className="form-label">{label}</label>
-      {children}
-    </div>
-  );
+function patchPack(packs, idx, next) {
+  const list = [...packs];
+  list[idx] = { ...list[idx], ...next };
+  return list;
 }
 
 export function ProductForm() {
@@ -52,6 +50,7 @@ export function ProductForm() {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     api.categories().then((r) => setCategories(r.categories || [])).catch(() => {});
@@ -87,6 +86,10 @@ export function ProductForm() {
 
   async function onSubmit(e) {
     e.preventDefault();
+    if (!form.cat) {
+      setError("Pick a rice category.");
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -101,125 +104,218 @@ export function ProductForm() {
     }
   }
 
+  const preview = productImgSrc(form.img);
+  const previewProduct = {
+    ...form,
+    id: isNew ? "" : id,
+    priceLabel: form.price !== "" && form.price != null ? "₹" + Number(form.price).toLocaleString("en-IN") + " / kg" : ""
+  };
+
   return (
-    <>
-      <PageHead title={isNew ? "Add product" : "Edit product"} small="Master catalog" />
+    <div className="gform is-wide">
+      <PageHead
+        title={isNew ? "Add product" : "Edit product"}
+        small="Master catalog · Wholesale rice"
+        action={
+          <button type="button" className="gform-btn-gold mb-0" onClick={() => navigate("/master/products")}>
+            <i className="material-symbols-rounded">arrow_back</i>
+            Back to products
+          </button>
+        }
+      />
       {error ? <div className="alert alert-danger text-white">{error}</div> : null}
-      <form className="product-form" onSubmit={onSubmit}>
-        <Card title="Basic details">
-          <div className="row">
-            <div className="col-md-6">
-              <Field label="Product title" filled={!!form.title}>
-                <input className="form-control" value={form.title} onChange={(e) => set("title", e.target.value)} required placeholder=" " />
-              </Field>
-            </div>
-            <div className="col-md-3">
-              <Field label="Base ₹ / kg (filter)" filled={form.price !== "" && form.price != null}>
-                <input className="form-control" type="number" step="0.01" min="0" value={form.price} onChange={(e) => set("price", e.target.value)} required placeholder=" " />
-              </Field>
-            </div>
-            <div className="col-md-3">
-              <div className="input-group input-group-static mb-3">
-                <label>Category</label>
-                <select
-                  className="form-control"
-                  value={form.cat}
-                  required
-                  onChange={(e) => {
-                    const name = e.target.value;
-                    const found = categories.find((c) => c.name === name || c.id === name);
-                    set("cat", found?.name || name);
-                    set("cats", found?.id || name.toLowerCase());
-                  }}
-                >
-                  <option value="">Select category</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.name}>{c.name}</option>
-                  ))}
-                </select>
+      <form className="gform-layout" onSubmit={onSubmit}>
+        <div>
+          <section className="gform-shell">
+            <div className="gform-head">
+              <div>
+                <p className="gform-kicker">Basic details</p>
+                <h4>{form.title || "New rice SKU"}</h4>
               </div>
+              <span className="gform-badge">
+                <i className="material-symbols-rounded">grocery</i>
+                {isNew ? "New" : "Edit"}
+              </span>
             </div>
-            <div className="col-md-12">
-              <Field label="Short description" filled={!!form.short}>
-                <input className="form-control" value={form.short} onChange={(e) => set("short", e.target.value)} placeholder=" " />
-              </Field>
+
+            <div className="gform-split">
+              <label className="gform-field">
+                <span>Product title</span>
+                <input value={form.title} onChange={(e) => set("title", e.target.value)} required placeholder="e.g. 1121 Steam Basmati" />
+              </label>
+              <label className="gform-field">
+                <span>Base ₹ / kg</span>
+                <input type="number" step="0.01" min="0" value={form.price} onChange={(e) => set("price", e.target.value)} required placeholder="0.00" />
+              </label>
             </div>
-            <div className="col-md-12">
-              <Field label="Full description" filled={!!form.desc}>
-                <textarea className="form-control" rows="4" value={form.desc} onChange={(e) => set("desc", e.target.value)} placeholder=" " />
-              </Field>
+
+            <div className="gform-block">
+              <p className="gform-label">Category</p>
+              <div className="gform-tiles gform-tiles-3">
+                {categories.map((c) => {
+                  const on = form.cat === c.name || form.cats === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      className={"gform-tile" + (on ? " is-on" : "")}
+                      onClick={() => {
+                        set("cat", c.name);
+                        set("cats", c.id);
+                      }}
+                    >
+                      <i className="material-symbols-rounded">grain</i>
+                      <strong>{c.name}</strong>
+                    </button>
+                  );
+                })}
+              </div>
+              {!form.cat ? <p className="gform-hint">Pick a rice category.</p> : null}
             </div>
-            <div className="col-md-12">
-              <Field label="Image path" filled={!!form.img}>
-                <input className="form-control" value={form.img} onChange={(e) => set("img", e.target.value)} placeholder=" " />
-              </Field>
-            </div>
-            <div className="col-md-12">
-              <p className="text-sm text-bold mb-2">Pack sizes</p>
+
+            <label className="gform-field">
+              <span>Short description</span>
+              <input value={form.short} onChange={(e) => set("short", e.target.value)} placeholder="One line for the shop card" />
+            </label>
+            <label className="gform-field">
+              <span>Full description</span>
+              <textarea rows={4} value={form.desc} onChange={(e) => set("desc", e.target.value)} placeholder="Trade notes, cooking, who it is for…" />
+            </label>
+            <label className="gform-field">
+              <span>Image path</span>
+              <input value={form.img} onChange={(e) => set("img", e.target.value)} placeholder="images/product-hero.jpg" />
+            </label>
+            <p className="gform-help">File under public/, e.g. images/1121-steam.jpg</p>
+
+            <div className="gform-block">
+              <p className="gform-label">Pack sizes</p>
               {(form.packs || []).map((pack, idx) => (
-                <div className="row" key={idx}>
-                  <div className="col-md-3">
-                    <Field label="Label" filled={!!pack.label}>
-                      <input className="form-control" value={pack.label} placeholder=" " onChange={(e) => {
-                        const packs = [...form.packs];
-                        packs[idx] = { ...pack, label: e.target.value };
-                        set("packs", packs);
-                      }} />
-                    </Field>
-                  </div>
-                  <div className="col-md-3">
-                    <Field label="Kg" filled={pack.kg !== "" && pack.kg != null}>
-                      <input className="form-control" type="number" step="0.1" min="0" value={pack.kg} placeholder=" " onChange={(e) => {
+                <div className="gform-pack" key={idx}>
+                  <label className="gform-field">
+                    <span>Label</span>
+                    <input
+                      value={pack.label}
+                      placeholder="26 KG"
+                      onChange={(e) => set("packs", patchPack(form.packs, idx, { label: e.target.value }))}
+                    />
+                  </label>
+                  <label className="gform-field">
+                    <span>Kg</span>
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      value={pack.kg}
+                      onChange={(e) => {
                         const kg = e.target.value;
-                        const packs = [...form.packs];
-                        packs[idx] = { ...pack, kg, id: String(kg).replace(".", "_") + "_kg", label: pack.label || (kg + " KG") };
-                        set("packs", packs);
-                      }} />
-                    </Field>
-                  </div>
-                  <div className="col-md-3">
-                    <Field label="Bag price (₹)" filled={pack.price !== "" && pack.price != null}>
-                      <input className="form-control" type="number" step="0.01" min="0" value={pack.price} placeholder=" " onChange={(e) => {
-                        const packs = [...form.packs];
-                        packs[idx] = { ...pack, price: e.target.value };
-                        set("packs", packs);
-                      }} />
-                    </Field>
-                  </div>
-                  <div className="col-md-3 d-flex align-items-center">
-                    <button className="btn btn-outline-secondary btn-sm mb-3" type="button" onClick={() => set("packs", form.packs.filter((_, i) => i !== idx))}>Remove</button>
-                  </div>
+                        set("packs", patchPack(form.packs, idx, {
+                          kg,
+                          id: String(kg).replace(".", "_") + "_kg",
+                          label: pack.label || (kg + " KG")
+                        }));
+                      }}
+                    />
+                  </label>
+                  <label className="gform-field">
+                    <span>Bag price (₹)</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={pack.price}
+                      onChange={(e) => set("packs", patchPack(form.packs, idx, { price: e.target.value }))}
+                    />
+                  </label>
+                  <button
+                    className="gform-pack-remove"
+                    type="button"
+                    onClick={() => set("packs", form.packs.filter((_, i) => i !== idx))}
+                  >
+                    <i className="material-symbols-rounded">close</i>
+                    Remove
+                  </button>
                 </div>
               ))}
               <button
-                className="btn btn-outline-info btn-sm mb-3"
+                className="gform-btn-gold"
                 type="button"
                 onClick={() => set("packs", [...(form.packs || []), { id: "pack-" + Date.now(), label: "", kg: "", price: "" }])}
               >
+                <i className="material-symbols-rounded">add</i>
                 Add pack size
               </button>
             </div>
-          </div>
-        </Card>
-        <div className="mt-4">
-          <Card title="Trade specs">
-            <div className="row">
+          </section>
+
+          <section className="gform-shell mt-3">
+            <div className="gform-head">
+              <div>
+                <p className="gform-kicker">Trade specs</p>
+                <h4>Grain, cook, and trade notes</h4>
+              </div>
+            </div>
+            <div className="gform-spec-grid">
               {SPECS.map((s) => (
-                <div className="col-md-4" key={s.key}>
-                  <Field label={s.label} filled={!!form[s.key]}>
-                    <input className="form-control" value={form[s.key]} onChange={(e) => set(s.key, e.target.value)} placeholder=" " title={s.hint} />
-                  </Field>
-                  <p className="text-xs text-secondary mt-n2 mb-3">{s.hint}</p>
-                </div>
+                <label className="gform-field" key={s.key}>
+                  <span>{s.label}</span>
+                  <input value={form[s.key]} onChange={(e) => set(s.key, e.target.value)} placeholder={s.hint} title={s.hint} />
+                  <em className="gform-hint">{s.hint}</em>
+                </label>
               ))}
             </div>
-          </Card>
+          </section>
+
+          <div className="gform-actions">
+            <button className="gform-btn-primary" type="submit" disabled={busy}>
+              <i className="material-symbols-rounded">save</i>
+              {busy ? "Saving…" : "Save product"}
+            </button>
+            <button className="gform-btn-gold" type="button" onClick={() => setShowPreview(true)}>
+              <i className="material-symbols-rounded">visibility</i>
+              Preview
+            </button>
+            <button className="gform-btn-gold" type="button" onClick={() => navigate("/master/products")}>
+              Cancel
+            </button>
+          </div>
         </div>
-        <div className="mt-3 mb-4">
-          <button className="btn bg-gradient-info mb-0" type="submit" disabled={busy}>{busy ? "Saving…" : "Save product"}</button>{" "}
-          <button className="btn btn-outline-secondary mb-0" type="button" onClick={() => navigate("/master/products")}>Cancel</button>
-        </div>
+
+        <aside className="gform-aside pform-aside">
+          <div className="pform-shot">
+            {preview ? <img src={preview} alt="" onError={(e) => { e.currentTarget.style.display = "none"; }} /> : (
+              <span className="ncfg-icon" aria-hidden="true">
+                <i className="material-symbols-rounded">image</i>
+              </span>
+            )}
+          </div>
+          <p className="gform-kicker">Preview</p>
+          <h5 className="pform-title">{form.title || "Untitled rice"}</h5>
+          <p className="gform-help">{form.short || "Short description shows on the shop card."}</p>
+          <ul className="gform-steps">
+            <li>
+              <strong>{form.cat || "No category"}</strong>
+              <span>₹ {form.price || "0"} / kg · {(form.packs || []).length} pack{(form.packs || []).length === 1 ? "" : "s"}</span>
+            </li>
+            <li>
+              <strong>Origin {form.origin || "—"}</strong>
+              <span>MOQ {form.moq || "—"}</span>
+            </li>
+          </ul>
+          <div className="gform-actions" style={{ marginTop: 12, paddingTop: 12 }}>
+            <button className="gform-btn-gold" type="button" onClick={() => setShowPreview(true)}>
+              <i className="material-symbols-rounded">visibility</i>
+              Preview
+            </button>
+            {!isNew ? (
+              <a className="gform-btn-primary" href={shopProductHref(id)} target="_blank" rel="noreferrer">
+                <i className="material-symbols-rounded">open_in_new</i>
+                View on shop
+              </a>
+            ) : null}
+          </div>
+        </aside>
       </form>
-    </>
+      <ProductPreviewModal product={showPreview ? previewProduct : null} onClose={() => setShowPreview(false)} showEdit={false} />
+    </div>
   );
 }

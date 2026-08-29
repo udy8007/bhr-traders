@@ -1,4 +1,5 @@
 export const ORDER_STATUSES = [
+  "Pending",
   "Confirmed — cash on delivery",
   "Confirmed — awaiting payment",
   "Confirmed — payment received",
@@ -19,7 +20,7 @@ export const FLOW_STEPS = [
 
 export function flowIndex(status) {
   const s = String(status || "");
-  if (/cancelled/i.test(s)) return -1;
+  if (/cancelled|pending/i.test(s)) return -1;
   if (/delivered/i.test(s) && !/delivering/i.test(s)) return 3;
   if (/dispatch|delivering/i.test(s)) return 2;
   if (/pack/i.test(s)) return 1;
@@ -30,6 +31,7 @@ export function statusForFlow(stepId, order) {
   if (stepId === "packing") return "Packing";
   if (stepId === "delivering") return "Delivering";
   if (stepId === "delivered") return "Delivered";
+  if (/pending/i.test(order?.status || "")) return "Confirmed — awaiting payment";
   if (/cod|cash/i.test(order?.pay || "")) return "Confirmed — cash on delivery";
   if (/awaiting/i.test(order?.status || "")) return "Confirmed — awaiting payment";
   return "Confirmed — payment received";
@@ -41,7 +43,7 @@ export function statusTone(status) {
   if (/delivered/i.test(s) && !/delivering/i.test(s)) return "success";
   if (/dispatch|delivering/i.test(s)) return "info";
   if (/pack/i.test(s)) return "warning";
-  if (/awaiting/i.test(s)) return "warning";
+  if (/pending|awaiting/i.test(s)) return "warning";
   return "primary";
 }
 
@@ -75,5 +77,5 @@ export function waNumber(phone) {
 }
 
 export function isPendingPay(status) {
-  return /awaiting payment/i.test(String(status || ""));
+  return /pending|awaiting payment/i.test(String(status || ""));
 }

@@ -27,6 +27,7 @@ const MENU = [
   { type: "label", label: "Settings" },
   { type: "link", to: "/settings/password", icon: "lock", label: "Change password" },
   { type: "link", to: "/settings/backup", icon: "database", label: "DB backup" },
+  { type: "link", to: "/settings/endpoints", icon: "hub", label: "Endpoints" },
   { type: "link", to: "/report-bug", icon: "bug_report", label: "Report a bug" }
 ];
 

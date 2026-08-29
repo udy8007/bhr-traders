@@ -63,6 +63,22 @@ export function normalizeBackup(row) {
   };
 }
 
+function rowForDb(schedule) {
+  const row = {
+    id: schedule.id,
+    enabled: schedule.enabled,
+    email_enabled: schedule.email_enabled,
+    email: schedule.email,
+    cron: schedule.cron,
+    last_run_key: schedule.last_run_key || "",
+    last_attempt_key: schedule.last_attempt_key || "",
+    last_error: schedule.last_error || ""
+  };
+  const stamp = String(schedule.last_sent_at || "").trim();
+  if (stamp && !Number.isNaN(new Date(stamp).getTime())) row.last_sent_at = stamp;
+  return row;
+}
+
 async function withNotifyEmail(schedule) {
   return { ...schedule, email: await adminNotifyEmail() };
 }
@@ -88,13 +104,14 @@ export async function saveBackupSchedule(input) {
   const prev = normalizeBackup(loaded.data);
   const rest = { ...(input || {}) };
   delete rest.email;
+  if (!String(rest.last_sent_at || "").trim()) delete rest.last_sent_at;
   const next = normalizeBackup({ ...prev, ...rest, email: prev.email, id: SCHEDULE_ID });
   if (!validCron(next.cron)) {
     const err = new Error("Enter a valid 5-field cron expression, e.g. 0 2 * * *");
     err.status = 400;
     throw err;
   }
-  const { error } = await supabase.from("backup_schedules").upsert(next);
+  const { error } = await supabase.from("backup_schedules").upsert(rowForDb(next));
   if (error) {
     if (/does not exist|schema cache|Could not find/i.test(error.message || "")) {
       const err = new Error("Create the backup_schedules table in Supabase (server/supabase/schema.sql), then save again.");

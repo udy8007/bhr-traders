@@ -22,6 +22,8 @@ export function OrderDetail() {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState("");
   const [busy, setBusy] = useState(false);
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const [cancelRemark, setCancelRemark] = useState("");
 
   function load() {
     api.order(id).then((r) => setOrder(r.order)).catch((e) => setError(e.message));
@@ -33,13 +35,29 @@ export function OrderDetail() {
     setTimeout(() => setCopied(""), 1600);
   }
 
-  async function changeStatus(status) {
+  async function changeStatus(status, extra = {}) {
     try {
-      await api.updateOrder(order.id, status);
-      setOrder((prev) => ({ ...prev, status }));
+      await api.updateOrder(order.id, status, extra);
+      setOrder((prev) => ({ ...prev, status, ...(extra.remark ? { cancel_remark: extra.remark } : {}) }));
+      setCancelOpen(false);
+      setCancelRemark("");
     } catch (e) {
       setError(e.message);
     }
+  }
+
+  function requestCancel() {
+    setError("");
+    setCancelOpen(true);
+  }
+
+  async function confirmCancel() {
+    const remark = cancelRemark.trim();
+    if (!remark) {
+      setError("Please add a cancel remark for the customer.");
+      return;
+    }
+    await changeStatus("Cancelled", { remark });
   }
 
   async function invoice() {
@@ -92,6 +110,7 @@ export function OrderDetail() {
   );
   const cur = flowIndex(order.status);
   const cancelled = /cancelled/i.test(order.status || "");
+  const pending = /pending/i.test(order.status || "");
   const qty = itemCount(order);
 
   return (
@@ -103,7 +122,7 @@ export function OrderDetail() {
           <p className="od-meta">
             {formatWhen(order.created_at)} · {order.pay || "UPI"} · {qty} item{qty === 1 ? "" : "s"}
           </p>
-          <span className={"od-status-pill" + (cancelled ? " is-cancel" : "")}>{order.status}</span>
+          <span className={"od-status-pill" + (cancelled ? " is-cancel" : pending ? " is-pending" : "")}>{order.status}</span>
         </div>
         <div className="od-hero-total">
           <span>Order value</span>
@@ -183,15 +202,14 @@ export function OrderDetail() {
           })}
         </div>
         <div className="od-status-row">
-          <StatusSelect value={order.status} onChange={changeStatus} />
-          <button
-            type="button"
-            className="od-act danger"
-            disabled={cancelled}
-            onClick={() => {
-              if (confirm("Cancel order " + order.id + "?")) changeStatus("Cancelled");
+          <StatusSelect
+            value={order.status}
+            onChange={(status) => {
+              if (/cancel/i.test(status)) requestCancel();
+              else changeStatus(status);
             }}
-          >
+          />
+          <button type="button" className="od-act danger" disabled={cancelled} onClick={requestCancel}>
             Cancel order
           </button>
           <button type="button" className="od-act danger solid" disabled={busy} onClick={deleteOrder}>
@@ -199,6 +217,25 @@ export function OrderDetail() {
             {busy ? "Deleting…" : "Delete order"}
           </button>
         </div>
+        {cancelOpen ? (
+          <div className="od-cancel">
+            <p>Cancel remark</p>
+            <textarea
+              value={cancelRemark}
+              onChange={(e) => setCancelRemark(e.target.value)}
+              rows={3}
+              placeholder="Reason shown to the customer, e.g. payment not received / duplicate order"
+            />
+            <div className="od-cancel-actions">
+              <button type="button" className="od-act danger solid" onClick={confirmCancel}>
+                Confirm cancel
+              </button>
+              <button type="button" className="od-act" onClick={() => { setCancelOpen(false); setCancelRemark(""); }}>
+                Keep order
+              </button>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <div className="od-grid">
@@ -234,6 +271,12 @@ export function OrderDetail() {
             <div className="od-notes">
               <p>Customer notes</p>
               <span>{order.notes}</span>
+            </div>
+          ) : null}
+          {order.cancel_remark ? (
+            <div className="od-notes od-notes-cancel">
+              <p>Cancel remark</p>
+              <span>{order.cancel_remark}</span>
             </div>
           ) : null}
         </section>

@@ -68,7 +68,8 @@ export const api = {
   deletePack: (id) => request("/api/packs/" + encodeURIComponent(id), { method: "DELETE" }),
   orders: () => request("/api/admin/orders"),
   order: (id) => request("/api/admin/orders/" + encodeURIComponent(id)),
-  updateOrder: (id, status) => request("/api/admin/orders/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ status }) }),
+  updateOrder: (id, status, extra = {}) =>
+    request("/api/admin/orders/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ status, ...extra }) }),
   deleteOrder: (id) => request("/api/admin/orders/" + encodeURIComponent(id), { method: "DELETE" }),
   downloadOrderInvoice: async (id) => {
     showLoader();

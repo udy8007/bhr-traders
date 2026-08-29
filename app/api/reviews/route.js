@@ -1,4 +1,4 @@
-import { notifyShopEvent } from "../../../server/lib/notify.js";
+import { queueShopEvent } from "../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../server/lib/supabase.js";
 
 export function OPTIONS() {
@@ -97,7 +97,7 @@ export async function POST(req) {
     const { data, error } = await supabase.from("product_reviews").insert(row).select().single();
     if (error) return json({ error: error.message }, 500);
     const saved = data || row;
-    await notifyShopEvent({
+    queueShopEvent({
       event: "review_placed",
       title: "New review " + stars(rating),
       body: (saved.name || "Customer") + " · " + (productTitle || productId) + " · order " + order.id + "\n" + comment,

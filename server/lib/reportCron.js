@@ -5,6 +5,9 @@ export function startReportCron() {
     const cron = cronMod.default || cronMod;
     globalThis.__bhrReportCron = cron.schedule("* * * * *", () => {
       reports.tickScheduledReports().catch(() => {});
+      import("./orderAlerts.js")
+        .then((a) => a.tickPendingOrderAlerts())
+        .catch(() => {});
       import("./backup.js")
         .then((b) => b.tickScheduledBackup())
         .catch(() => {});

@@ -59,7 +59,7 @@ export function CheckoutModal() {
     checkoutStep === 1
       ? "Tell us where to deliver. Notes are optional."
       : checkoutStep === 2
-        ? "Scan the QR or pay to the UPI ID, then attach your payment screenshot."
+        ? "Scan the QR or pay to the UPI ID, then attach your screenshot — or skip payment to save the order as pending."
         : "Your invoice PDF is downloading. Keep the order ID for tracking.";
 
   async function onProof(file) {
@@ -268,6 +268,23 @@ export function CheckoutModal() {
               {busy ? "Placing order…" : "Place order"}
             </button>
             <button
+              className="btn btn-green"
+              type="button"
+              style={{ width: "100%", marginTop: 8 }}
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  const ok = await placeOrder({ pay: "upi", skipPayment: true });
+                  if (ok) setInvoiceReady(true);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {busy ? "Saving order…" : "Skip payment — save as pending"}
+            </button>
+            <button
               className="btn btn-outline"
               type="button"
               style={{ width: "100%", marginTop: 8 }}
@@ -282,7 +299,11 @@ export function CheckoutModal() {
         {checkoutStep === 3 ? (
           <div className="chk-success">
             <div className="success-mark" aria-hidden="true">✓</div>
-            <p>Thank you. Your order is confirmed and the invoice PDF is downloading.</p>
+            <p>
+              {/pending/i.test(orderStatus || "")
+                ? "Thank you. Your order is saved as pending because payment was skipped. Keep the order ID — we will confirm it after payment or our team follows up."
+                : "Thank you. Your order is confirmed and the invoice PDF is downloading."}
+            </p>
             <div className="oid-card">
               <small>Transaction / Order ID — use this to track</small>
               <div className="oid">{orderId}</div>

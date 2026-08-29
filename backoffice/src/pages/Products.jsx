@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../lib/api.js";
-import { Card, PageHead, Pager, usePager } from "../components/Template.jsx";
+import { ProductPreviewModal, productImgSrc } from "../components/ProductPreview.jsx";
+import { PageHead, Pager, usePager } from "../components/Template.jsx";
 
 export function Products() {
   const [rows, setRows] = useState([]);
   const [q, setQ] = useState("");
   const [tab, setTab] = useState("all");
   const [error, setError] = useState("");
+  const [preview, setPreview] = useState(null);
 
   function load() {
     api.products().then((r) => setRows(r.products || [])).catch((e) => setError(e.message));
@@ -22,6 +24,8 @@ export function Products() {
     return true;
   });
   const pager = usePager(filtered, 10);
+  const activeCount = rows.filter((p) => p.active !== false).length;
+  const inactiveCount = rows.filter((p) => p.active === false).length;
 
   async function remove(id) {
     if (!confirm("Delete this product?")) return;
@@ -43,78 +47,96 @@ export function Products() {
   }
 
   return (
-    <>
-      <PageHead title="Products" small="Catalog items shown on the storefront." />
+    <div className="gform is-wide">
+      <PageHead
+        title="Products"
+        small="Catalog items shown on the storefront."
+        action={
+          <Link className="gform-btn-primary mb-0" to="/master/products/new">
+            <i className="material-symbols-rounded">add</i>
+            Add product
+          </Link>
+        }
+      />
       {error ? <div className="alert alert-danger text-white">{error}</div> : null}
-      <Card
-        title="Product list"
-        action={<Link className="btn bg-gradient-info btn-sm mb-0" to="/master/products/new">Add product</Link>}
-      >
-        <div className="d-flex flex-wrap gap-2 mb-3">
-          {[
-            { id: "all", label: "All (" + rows.length + ")" },
-            { id: "active", label: "Active (" + rows.filter((p) => p.active !== false).length + ")" },
-            { id: "inactive", label: "Inactive (" + rows.filter((p) => p.active === false).length + ")" }
-          ].map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              className={"btn btn-sm mb-0 " + (tab === t.id ? "bg-gradient-info" : "btn-outline-info")}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
+
+      <section className="gform-shell">
+        <div className="gform-head">
+          <div>
+            <p className="gform-kicker">Master catalog</p>
+            <h4>{rows.length} rice SKUs</h4>
+          </div>
+          <span className="gform-badge">
+            <i className="material-symbols-rounded">grocery</i>
+            Wholesale
+          </span>
         </div>
-        <div className={"input-group input-group-outline mb-3" + (q ? " is-filled" : "")}>
-          <label className="form-label">Search products</label>
-          <input className="form-control" value={q} onChange={(e) => setQ(e.target.value)} />
+
+        <div className="gform-block">
+          <p className="gform-label">Status</p>
+          <div className="gform-tiles gform-tiles-3">
+            {[
+              { id: "all", label: "All", count: rows.length, icon: "inventory_2" },
+              { id: "active", label: "Active", count: activeCount, icon: "check_circle" },
+              { id: "inactive", label: "Inactive", count: inactiveCount, icon: "pause_circle" }
+            ].map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                className={"gform-tile" + (tab === t.id ? " is-on" : "")}
+                onClick={() => setTab(t.id)}
+              >
+                <i className="material-symbols-rounded">{t.icon}</i>
+                <strong>{t.label}</strong>
+                <span className="ep-count">{t.count}</span>
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="table-responsive">
-          <table className="table align-items-center mb-0">
-            <thead>
-              <tr>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                <th className="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pager.slice.map((p) => {
-                const on = p.active !== false;
-                return (
-                  <tr key={p.id} className={on ? "" : "opacity-6"}>
-                    <td className="ps-3">
-                      <h6 className="mb-0 text-sm">{p.title}</h6>
-                      <p className="text-xs text-secondary mb-0">{p.short}</p>
-                    </td>
-                    <td><p className="text-xs mb-0">{p.cat}</p></td>
-                    <td><p className="text-xs mb-0">{p.priceLabel}</p></td>
-                    <td>
-                      <span className={"badge badge-sm bg-gradient-" + (on ? "success" : "secondary")}>{on ? "Active" : "Inactive"}</span>
-                    </td>
-                    <td className="text-end pe-3">
-                      <Link className="btn btn-sm bg-gradient-info mb-0" to={"/master/products/" + p.id}>Edit</Link>{" "}
-                      <button className={"btn btn-sm mb-0 " + (on ? "bg-gradient-warning" : "bg-gradient-success")} type="button" onClick={() => toggle(p)}>
-                        {on ? "Deactivate" : "Activate"}
-                      </button>{" "}
-                      <button className="btn btn-sm bg-gradient-danger mb-0" type="button" onClick={() => remove(p.id)}>Delete</button>
-                    </td>
-                  </tr>
-                );
-              })}
-              {!filtered.length ? (
-                <tr>
-                  <td colSpan="5" className="ps-3 text-sm">No products in this list. Use Add product.</td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
+
+        <label className="gform-field">
+          <span>Search</span>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Title or category" />
+        </label>
+
+        <div className="ep-list plist">
+          {pager.slice.map((p) => {
+            const on = p.active !== false;
+            const src = productImgSrc(p.img);
+            return (
+              <article className={"plist-row" + (on ? "" : " is-off")} key={p.id}>
+                <div className="plist-thumb">
+                  {src ? <img src={src} alt="" /> : <i className="material-symbols-rounded">image</i>}
+                </div>
+                <div className="ep-copy">
+                  <strong className="plist-title">{p.title}</strong>
+                  <p>{p.short || p.desc || "No description yet."}</p>
+                </div>
+                <span className="ep-auth is-public">{p.cat || "Uncategorised"}</span>
+                <span className="plist-price">{p.priceLabel || "—"}</span>
+                <span className={"ep-auth " + (on ? "is-admin" : "is-cron")}>{on ? "Active" : "Inactive"}</span>
+                <div className="plist-actions">
+                  <button className="gform-btn-gold gform-btn-sm" type="button" onClick={() => setPreview(p)}>
+                    Preview
+                  </button>
+                  <Link className="gform-btn-primary gform-btn-sm" to={"/master/products/" + p.id}>
+                    Edit
+                  </Link>
+                  <button className="gform-btn-gold gform-btn-sm" type="button" onClick={() => toggle(p)}>
+                    {on ? "Deactivate" : "Activate"}
+                  </button>
+                  <button className="gform-btn-danger gform-btn-sm" type="button" onClick={() => remove(p.id)}>
+                    Delete
+                  </button>
+                </div>
+              </article>
+            );
+          })}
         </div>
+        {!filtered.length ? <p className="gform-help">No products in this list. Use Add product.</p> : null}
         <Pager {...pager} />
-      </Card>
-    </>
+      </section>
+      <ProductPreviewModal product={preview} onClose={() => setPreview(null)} />
+    </div>
   );
 }

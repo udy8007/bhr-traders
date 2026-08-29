@@ -192,7 +192,18 @@ export function Dashboard() {
 
   async function changeStatus(id, status) {
     try {
-      await api.updateOrder(id, status);
+      const extra = {};
+      if (/cancel/i.test(status)) {
+        const remark = window.prompt("Cancel remark for the customer (required):", "");
+        if (remark == null) return;
+        const t = remark.trim();
+        if (!t) {
+          setError("Please add a cancel remark for the customer.");
+          return;
+        }
+        extra.remark = t;
+      }
+      await api.updateOrder(id, status, extra);
       load(true);
     } catch (e) {
       setError(e.message);
@@ -203,7 +214,7 @@ export function Dashboard() {
   const health = data?.catalogHealth || { live: 0, hidden: 0, visitsToday: 0 };
   const cards = [
     { label: "Orders today", value: s.ordersToday ?? 0, hint: "Placed today", icon: "shopping_bag", tone: "forest", to: "/sales/orders" },
-    { label: "Needs attention", value: s.needsAttention ?? 0, hint: "Awaiting payment", icon: "priority_high", tone: "gold", to: "/sales/orders" },
+    { label: "Needs attention", value: s.needsAttention ?? 0, hint: "Pending or not packed yet", icon: "priority_high", tone: "gold", to: "/sales/orders" },
     { label: "Incomplete checkouts", value: s.incompleteCheckouts ?? 0, hint: "Started, not finished", icon: "shopping_cart", tone: "forest", to: "/sales/orders" },
     { label: "Net revenue", value: rupee(s.netRevenue), hint: "Excl. cancelled / pending", icon: "payments", tone: "gold", to: "/reports" },
     { label: "Visits today", value: s.visitsToday ?? 0, hint: "of " + (s.visitsTotal ?? 0) + " total", icon: "visibility", tone: "forest", to: "/reports" },

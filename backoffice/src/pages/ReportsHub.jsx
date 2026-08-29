@@ -1,66 +1,71 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../lib/api.js";
-import { AdminNotifyEmailField, Card, PageHead } from "../components/Template.jsx";
+import { PageHead } from "../components/Template.jsx";
 
 const KINDS = [
-  { id: "overall", label: "Overall", hint: "Catalog, orders, value, top products, shop visits" },
-  { id: "orders", label: "Orders", hint: "Every order with customer and total" },
-  { id: "products", label: "Products", hint: "Full catalog with category and price" },
-  { id: "category", label: "Category", hint: "One rice category, products and sales" },
-  { id: "visits", label: "Visits", hint: "Shop website visits, cities, countries, and times" }
+  { id: "overall", label: "Overall", hint: "Catalog, orders, value, top products, visits", icon: "analytics" },
+  { id: "orders", label: "Orders", hint: "Every order with customer and total", icon: "shopping_bag" },
+  { id: "products", label: "Products", hint: "Full catalog with category and price", icon: "inventory_2" },
+  { id: "category", label: "Category", hint: "One rice category, products and sales", icon: "grain" },
+  { id: "visits", label: "Visits", hint: "Shop visits, cities, countries, times", icon: "travel_explore" }
 ];
 
-function KindPicker({ kind, onKind, category, onCategory, categories }) {
+function cronPreview(hour, minute, frequency) {
+  const m = String(minute).padStart(2, "0");
+  const h = String(hour).padStart(2, "0");
+  if (frequency === "weekdays") return m + " " + h + " * * 1-5";
+  if (frequency === "monthly") return m + " " + h + " 1 * *";
+  return m + " " + h + " * * *";
+}
+
+function Toggle({ on, onChange, label }) {
   return (
-    <>
-      <p className="text-xs text-uppercase text-secondary font-weight-bold mb-2">Report type</p>
-      <div className="bug-chips mb-3">
+    <button
+      type="button"
+      className={"gform-toggle" + (on ? " is-on" : "")}
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+    >
+      <span className="gform-toggle-knob" />
+      <span className="gform-toggle-text">{on ? "Enabled" : "Disabled"}</span>
+    </button>
+  );
+}
+
+function KindTiles({ kind, onKind, category, onCategory, categories }) {
+  return (
+    <div className="gform-block">
+      <p className="gform-label">Report type</p>
+      <div className="gform-tiles">
         {KINDS.map((k) => (
-          <button key={k.id} type="button" className={"bug-chip" + (kind === k.id ? " on" : "")} onClick={() => onKind(k.id)}>
-            {k.label}
+          <button
+            key={k.id}
+            type="button"
+            className={"gform-tile" + (kind === k.id ? " is-on" : "")}
+            onClick={() => onKind(k.id)}
+          >
+            <i className="material-symbols-rounded">{k.icon}</i>
+            <strong>{k.label}</strong>
           </button>
         ))}
       </div>
-      <p className="text-xs text-secondary mb-3">{KINDS.find((k) => k.id === kind)?.hint}</p>
+      <p className="gform-hint">{KINDS.find((k) => k.id === kind)?.hint}</p>
       {kind === "category" ? (
-        <div className="report-select-wrap mb-3">
-          <label className="report-select-label" htmlFor="report-category">Category</label>
-          <select
-            id="report-category"
-            className="report-select"
-            value={category}
-            onChange={(e) => onCategory(e.target.value)}
-          >
+        <label className="gform-field">
+          <span>Category</span>
+          <select value={category} onChange={(e) => onCategory(e.target.value)}>
             <option value="">Select category</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
-        </div>
+        </label>
       ) : null}
-    </>
-  );
-}
-
-function Switch({ on, onChange, label, hint }) {
-  return (
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <p className="text-sm font-weight-bold mb-0">{label}</p>
-        {hint ? <p className="text-xs text-secondary mb-0">{hint}</p> : null}
-      </div>
-      <button type="button" className={"btn btn-sm mb-0 " + (on ? "bg-gradient-success" : "btn-outline-secondary")} onClick={() => onChange(!on)}>
-        {on ? "Enabled" : "Disabled"}
-      </button>
     </div>
   );
-}
-
-function cronPreview(hour, minute, frequency) {
-  const m = String(minute).padStart(2, "0");
-  const h = String(hour).padStart(2, "0");
-  const dow = frequency === "weekdays" ? "1-5" : "*";
-  return m + " " + h + " * * " + dow;
 }
 
 export function DownloadReport() {
@@ -89,33 +94,53 @@ export function DownloadReport() {
     }
   }
 
+  const active = KINDS.find((k) => k.id === kind);
+
   return (
-    <>
+    <div className="gform">
       <PageHead title="Download report" small="Pick overall, orders, products, or a category and save as PDF." />
       {error ? <div className="alert alert-warning text-white">{error}</div> : null}
-      <div className="row">
-        <div className="col-lg-6">
-          <Card title="Export PDF">
-            <KindPicker kind={kind} onKind={setKind} category={category} onCategory={setCategory} categories={categories} />
-            {ok ? <p className="text-success text-sm">{ok}</p> : null}
-            <button className="btn bg-gradient-info mb-0" type="button" disabled={busy || (kind === "category" && !category)} onClick={download}>
+      <div className="gform-layout">
+        <section className="gform-shell">
+          <div className="gform-head">
+            <div>
+              <p className="gform-kicker">Export PDF</p>
+              <h4>Choose a report</h4>
+            </div>
+            <span className="gform-badge">
+              <i className="material-symbols-rounded">picture_as_pdf</i>
+              Instant
+            </span>
+          </div>
+          <KindTiles kind={kind} onKind={setKind} category={category} onCategory={setCategory} categories={categories} />
+          {ok ? <p className="gform-ok">{ok}</p> : null}
+          <div className="gform-actions">
+            <button
+              className="gform-btn-primary"
+              type="button"
+              disabled={busy || (kind === "category" && !category)}
+              onClick={download}
+            >
+              <i className="material-symbols-rounded">download</i>
               {busy ? "Preparing…" : "Download PDF"}
             </button>
-          </Card>
-        </div>
-        <div className="col-lg-6">
-          <Card title="What you get">
-            <ul className="text-sm mb-0 ps-3">
-              <li className="mb-2"><strong>Overall</strong> — counts, order value, status mix, top products, recent orders, and shop visits.</li>
-              <li className="mb-2"><strong>Orders</strong> — full order list with customer, city, status and total.</li>
-              <li className="mb-2"><strong>Products</strong> — catalog with category, pack, price and active/hidden.</li>
-              <li className="mb-2"><strong>Category</strong> — products in that group and matching order lines.</li>
-              <li className="mb-0"><strong>Visits</strong> — shop visits, last 14 days, cities, countries, and times.</li>
-            </ul>
-          </Card>
-        </div>
+          </div>
+        </section>
+        <aside className="gform-aside">
+          <div className="gform-aside-art" aria-hidden="true">
+            <i className="material-symbols-rounded">{active?.icon || "analytics"}</i>
+          </div>
+          <p className="gform-kicker">What you get</p>
+          <ul>
+            <li><strong>Overall</strong> — counts, order value, status mix, top products, visits.</li>
+            <li><strong>Orders</strong> — full list with customer, city, status and total.</li>
+            <li><strong>Products</strong> — catalog with category, pack, price.</li>
+            <li><strong>Category</strong> — one rice group and matching sales.</li>
+            <li><strong>Visits</strong> — cities, countries, and times.</li>
+          </ul>
+        </aside>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -145,7 +170,14 @@ export function ScheduleReport() {
     setError("");
     setOk("");
     try {
-      const res = await api.saveReportSchedule(form);
+      const res = await api.saveReportSchedule({
+        enabled: form.enabled,
+        kind: form.kind,
+        category: form.category,
+        hour: form.hour,
+        minute: form.minute,
+        frequency: form.frequency
+      });
       setForm(res.schedule);
       setOk("Schedule saved. When enabled, the PDF is emailed at this time (India).");
     } catch (err) {
@@ -160,7 +192,14 @@ export function ScheduleReport() {
     setError("");
     setOk("");
     try {
-      const res = await api.sendReportNow(form);
+      const res = await api.sendReportNow({
+        enabled: form.enabled,
+        kind: form.kind,
+        category: form.category,
+        hour: form.hour,
+        minute: form.minute,
+        frequency: form.frequency
+      });
       setForm(res.schedule);
       setOk("Report emailed to " + (res.sent?.to || form.email) + ".");
     } catch (err) {
@@ -173,71 +212,121 @@ export function ScheduleReport() {
   const timeVal = form ? String(form.hour).padStart(2, "0") + ":" + String(form.minute).padStart(2, "0") : "09:00";
 
   return (
-    <>
-      <PageHead title="Schedule report" small="Enable a daily or weekday send. The PDF is emailed at the time you set (IST)." />
+    <div className="gform">
+      <PageHead title="Schedule report" small="Enable a daily, weekday, or monthly send. The PDF is emailed at the time you set (IST)." />
       {error ? <div className="alert alert-warning text-white">{error}</div> : null}
-      <div className="row">
-        <div className="col-lg-7">
-          <Card title="Cron schedule">
-            {!form ? <p className="text-sm text-secondary mb-0">Loading…</p> : (
-              <form onSubmit={save}>
-                <Switch
-                  on={form.enabled}
-                  onChange={(v) => patch({ enabled: v })}
-                  label="Scheduled send"
-                  hint="When enabled, the report is emailed at the time below. Disable to pause."
-                />
-                <KindPicker
-                  kind={form.kind}
-                  onKind={(kind) => patch({ kind })}
-                  category={form.category}
-                  onCategory={(category) => patch({ category })}
-                  categories={categories}
-                />
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="input-group input-group-outline mb-3 is-filled">
-                      <label className="form-label">Time (IST)</label>
-                      <input
-                        className="form-control"
-                        type="time"
-                        value={timeVal}
-                        onChange={(e) => {
-                          const [h, m] = (e.target.value || "09:00").split(":");
-                          patch({ hour: Number(h), minute: Number(m) });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <p className="text-xs text-uppercase text-secondary font-weight-bold mb-2">Repeat</p>
-                    <div className="bug-chips mb-3">
-                      <button type="button" className={"bug-chip" + (form.frequency === "daily" ? " on" : "")} onClick={() => patch({ frequency: "daily" })}>Daily</button>
-                      <button type="button" className={"bug-chip" + (form.frequency === "weekdays" ? " on" : "")} onClick={() => patch({ frequency: "weekdays" })}>Weekdays</button>
-                    </div>
-                  </div>
+      {!form ? (
+        <div className="gform-shell gform-loading">Loading schedule…</div>
+      ) : (
+        <div className="gform-layout">
+          <form className="gform-shell" onSubmit={save}>
+            <div className="gform-head">
+              <div>
+                <p className="gform-kicker">Cron schedule</p>
+                <h4>Automatic PDF email</h4>
+              </div>
+              <Toggle on={form.enabled} onChange={(v) => patch({ enabled: v })} label="Scheduled send" />
+            </div>
+
+            <KindTiles
+              kind={form.kind}
+              onKind={(kind) => patch({ kind })}
+              category={form.category}
+              onCategory={(category) => patch({ category })}
+              categories={categories}
+            />
+
+            <div className="gform-split">
+              <label className="gform-field gform-time">
+                <span>Time (IST)</span>
+                <div className="gform-time-wrap">
+                  <input
+                    type="time"
+                    value={timeVal}
+                    onChange={(e) => {
+                      const [h, m] = (e.target.value || "09:00").split(":");
+                      patch({ hour: Number(h), minute: Number(m) });
+                    }}
+                  />
+                  <i className="material-symbols-rounded">schedule</i>
                 </div>
-                <AdminNotifyEmailField value={form.email} />
-                <p className="report-cron-line text-xs mb-3">
-                  Cron: <code>{cronPreview(form.hour, form.minute, form.frequency)}</code>
-                  <span className="text-secondary"> · Asia/Kolkata</span>
-                </p>
-                {form.last_sent_at ? <p className="text-xs text-secondary">Last sent {new Date(form.last_sent_at).toLocaleString("en-GB")}</p> : null}
-                {form.last_error ? <p className="text-xs text-danger">Last error: {form.last_error}</p> : null}
-                {ok ? <p className="text-success text-sm">{ok}</p> : null}
-                <button className="btn bg-gradient-info mb-0 me-2" type="submit" disabled={busy}>{busy ? "Saving…" : "Save schedule"}</button>
-                <button className="btn btn-outline-info mb-0" type="button" disabled={busy} onClick={sendNow}>Send now</button>
-              </form>
-            )}
-          </Card>
+              </label>
+            </div>
+            <div className="gform-block">
+              <p className="gform-label">Repeat</p>
+              <div className="gform-tiles gform-tiles-3">
+                <button type="button" className={"gform-tile" + (form.frequency === "daily" ? " is-on" : "")} onClick={() => patch({ frequency: "daily" })}>
+                  <i className="material-symbols-rounded">today</i>
+                  <strong>Daily</strong>
+                </button>
+                <button type="button" className={"gform-tile" + (form.frequency === "weekdays" ? " is-on" : "")} onClick={() => patch({ frequency: "weekdays" })}>
+                  <i className="material-symbols-rounded">date_range</i>
+                  <strong>Weekdays</strong>
+                </button>
+                <button type="button" className={"gform-tile" + (form.frequency === "monthly" ? " is-on" : "")} onClick={() => patch({ frequency: "monthly" })}>
+                  <i className="material-symbols-rounded">calendar_month</i>
+                  <strong>Monthly</strong>
+                </button>
+              </div>
+              {form.frequency === "monthly" ? (
+                <p className="gform-hint">Once a month — 1st of the month at this time (IST).</p>
+              ) : null}
+            </div>
+
+            <label className="gform-field">
+              <span>Send to email</span>
+              <input type="email" value={form.email || ""} readOnly tabIndex={-1} />
+            </label>
+            <p className="gform-help">
+              This is the admin email from <Link to="/notifications/config">Notification configure</Link>. Change it there.
+            </p>
+
+            <div className="gform-cron">
+              <span>Cron</span>
+              <code>{cronPreview(form.hour, form.minute, form.frequency)}</code>
+              <em>Asia/Kolkata</em>
+            </div>
+            {form.last_sent_at ? (
+              <p className="gform-meta">Last sent {new Date(form.last_sent_at).toLocaleString("en-GB")}</p>
+            ) : null}
+            {form.last_error ? <p className="gform-err">Last error: {form.last_error}</p> : null}
+            {ok ? <p className="gform-ok">{ok}</p> : null}
+
+            <div className="gform-actions">
+              <button className="gform-btn-primary" type="submit" disabled={busy}>
+                <i className="material-symbols-rounded">save</i>
+                {busy ? "Saving…" : "Save schedule"}
+              </button>
+              <button className="gform-btn-gold" type="button" disabled={busy} onClick={sendNow}>
+                <i className="material-symbols-rounded">send</i>
+                Send now
+              </button>
+            </div>
+          </form>
+
+          <aside className="gform-aside">
+            <div className="gform-aside-art is-gold" aria-hidden="true">
+              <i className="material-symbols-rounded">schedule_send</i>
+            </div>
+            <p className="gform-kicker">How it runs</p>
+            <ol className="gform-steps">
+              <li>
+                <strong>Enable</strong>
+                <span>Turn the schedule on. Disabled means no automatic send.</span>
+              </li>
+              <li>
+                <strong>Match IST</strong>
+                <span>Checks every minute. Daily, weekdays (Mon–Fri), or once on the 1st of each month.</span>
+              </li>
+              <li>
+                <strong>Email PDF</strong>
+                <span>Same file as Download report, sent to the admin inbox address.</span>
+              </li>
+            </ol>
+            <p className="gform-help mb-0">Keep SMTP set on the server. Use Send now to test without waiting.</p>
+          </aside>
         </div>
-        <div className="col-lg-5">
-          <Card title="How it runs">
-            <p className="text-sm">The API checks the clock every minute. If the schedule is <strong>enabled</strong> and the IST time matches, it builds the same PDF as Download report and emails it.</p>
-            <p className="text-sm mb-0">Keep SMTP configured in the server env. Use Send now to test without waiting for the clock.</p>
-          </Card>
-        </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }

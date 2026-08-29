@@ -1,4 +1,5 @@
 import { isShopVisit } from "./shopVisits.js";
+import { needsAdminAction } from "./orderAlerts.js";
 
 function dayKey(value) {
   const d = value instanceof Date ? value : new Date(value || Date.now());
@@ -129,12 +130,12 @@ export function buildDashboard(products, orders, enquiries, items, visits) {
   const live = Math.max(0, productRows.length - hidden);
 
   const cancelled = (s) => /cancelled/i.test(s || "");
-  const awaiting = (s) => /awaiting/i.test(s || "");
+  const unpaid = (s) => /pending|awaiting/i.test(s || "");
 
   const ordersToday = orderRows.filter((o) => isToday(o.created_at)).length;
-  const needsAttention = orderRows.filter((o) => awaiting(o.status)).length;
+  const needsAttention = orderRows.filter((o) => needsAdminAction(o.status)).length;
   const netRevenue = orderRows
-    .filter((o) => !cancelled(o.status) && !awaiting(o.status))
+    .filter((o) => !cancelled(o.status) && !unpaid(o.status))
     .reduce((n, o) => n + Number(o.total || 0), 0);
   const sales = orderRows.reduce((n, o) => n + Number(o.total || 0), 0);
   const bags = (items || []).reduce((n, i) => n + Number(i.qty || 0), 0);

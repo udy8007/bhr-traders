@@ -1,0 +1,71 @@
+export const AUTH = {
+  public: { id: "public", label: "Public", hint: "No login. Shop and tracking use these." },
+  mixed: { id: "mixed", label: "Public + admin", hint: "Open to shop; extra fields if Bearer JWT is sent." },
+  admin: { id: "admin", label: "Admin JWT", hint: "Authorization: Bearer <admin token> from POST /api/auth/login." },
+  cron: { id: "cron", label: "Cron secret", hint: "Authorization: Bearer CRON_SECRET, or Vercel Cron header." }
+};
+
+export const API_ENDPOINTS = [
+  { group: "Auth", path: "/api/auth/login", method: "POST", auth: "public", note: "Returns admin JWT. Body: email, password." },
+  { group: "Auth", path: "/api/auth/me", method: "GET", auth: "admin", note: "Current admin session." },
+  { group: "Auth", path: "/api/auth/password", method: "POST", auth: "admin", note: "Change admin password." },
+
+  { group: "Shop catalog", path: "/api/health", method: "GET", auth: "public", note: "API health check." },
+  { group: "Shop catalog", path: "/api/categories", method: "GET", auth: "public", note: "Rice categories for the storefront." },
+  { group: "Shop catalog", path: "/api/categories", method: "POST", auth: "admin", note: "Create category." },
+  { group: "Shop catalog", path: "/api/categories/:id", method: "PUT", auth: "admin", note: "Update category." },
+  { group: "Shop catalog", path: "/api/categories/:id", method: "DELETE", auth: "admin", note: "Delete category." },
+  { group: "Shop catalog", path: "/api/packs", method: "GET", auth: "public", note: "Pack sizes." },
+  { group: "Shop catalog", path: "/api/packs", method: "POST", auth: "admin", note: "Create pack size." },
+  { group: "Shop catalog", path: "/api/packs/:id", method: "PUT", auth: "admin", note: "Update pack size." },
+  { group: "Shop catalog", path: "/api/packs/:id", method: "DELETE", auth: "admin", note: "Delete pack size." },
+  { group: "Shop catalog", path: "/api/products", method: "GET", auth: "mixed", note: "Shop sees active only. Admin JWT also sees inactive." },
+  { group: "Shop catalog", path: "/api/products", method: "POST", auth: "admin", note: "Create product." },
+  { group: "Shop catalog", path: "/api/products/:id", method: "GET", auth: "public", note: "Single product for PDP." },
+  { group: "Shop catalog", path: "/api/products/:id", method: "PUT", auth: "admin", note: "Replace product." },
+  { group: "Shop catalog", path: "/api/products/:id", method: "PATCH", auth: "admin", note: "Activate / deactivate." },
+  { group: "Shop catalog", path: "/api/products/:id", method: "DELETE", auth: "admin", note: "Delete product." },
+  { group: "Shop catalog", path: "/api/price-list", method: "GET", auth: "public", note: "Wholesale price list PDF." },
+
+  { group: "Shop sales", path: "/api/orders", method: "POST", auth: "public", note: "Place order. Skip payment → Pending." },
+  { group: "Shop sales", path: "/api/orders/:id", method: "GET", auth: "public", note: "Track order by ID." },
+  { group: "Shop sales", path: "/api/orders/:id/invoice", method: "GET", auth: "public", note: "Invoice PDF. Admin may send Bearer for download in backoffice." },
+  { group: "Shop sales", path: "/api/enquiries", method: "POST", auth: "public", note: "Submit enquiry form." },
+  { group: "Shop sales", path: "/api/reviews", method: "GET", auth: "public", note: "Reviews for a product." },
+  { group: "Shop sales", path: "/api/reviews", method: "POST", auth: "public", note: "Post review with order ID." },
+  { group: "Shop sales", path: "/api/visits", method: "POST", auth: "public", note: "Shop visit / checkout tracking." },
+
+  { group: "Admin sales", path: "/api/admin/stats", method: "GET", auth: "admin", note: "Dashboard snapshot." },
+  { group: "Admin sales", path: "/api/admin/orders", method: "GET", auth: "admin", note: "All orders." },
+  { group: "Admin sales", path: "/api/admin/orders/:id", method: "GET", auth: "admin", note: "Order detail." },
+  { group: "Admin sales", path: "/api/admin/orders/:id", method: "PATCH", auth: "admin", note: "Status update. Cancel requires remark." },
+  { group: "Admin sales", path: "/api/admin/orders/:id", method: "DELETE", auth: "admin", note: "Delete order." },
+  { group: "Admin sales", path: "/api/admin/enquiries", method: "GET", auth: "admin", note: "Enquiry list." },
+  { group: "Admin sales", path: "/api/admin/enquiries/:id", method: "PATCH", auth: "admin", note: "Enquiry status." },
+  { group: "Admin sales", path: "/api/admin/customers", method: "GET", auth: "admin", note: "Customers from orders and enquiries." },
+  { group: "Admin sales", path: "/api/admin/reviews", method: "GET", auth: "admin", note: "Moderate reviews." },
+  { group: "Admin sales", path: "/api/admin/reviews/:id", method: "DELETE", auth: "admin", note: "Delete review." },
+
+  { group: "Admin reports", path: "/api/admin/reports/pdf", method: "GET", auth: "admin", note: "Download report PDF." },
+  { group: "Admin reports", path: "/api/admin/reports/schedule", method: "GET", auth: "admin", note: "Read PDF email schedule." },
+  { group: "Admin reports", path: "/api/admin/reports/schedule", method: "PUT", auth: "admin", note: "Save schedule (daily / weekdays / monthly)." },
+  { group: "Admin reports", path: "/api/admin/reports/schedule", method: "POST", auth: "admin", note: "Send report now, or tick=1 to run scheduler." },
+
+  { group: "Admin ops", path: "/api/admin/backup", method: "GET", auth: "admin", note: "Backup schedule." },
+  { group: "Admin ops", path: "/api/admin/backup", method: "PUT", auth: "admin", note: "Save backup cron." },
+  { group: "Admin ops", path: "/api/admin/backup", method: "POST", auth: "admin", note: "Email dump now." },
+  { group: "Admin ops", path: "/api/admin/logs", method: "GET", auth: "admin", note: "Error and audit logs." },
+  { group: "Admin ops", path: "/api/admin/bugs", method: "POST", auth: "admin", note: "Report a bug from backoffice." },
+  { group: "Admin ops", path: "/api/cron/orders", method: "GET", auth: "cron", note: "Pending/confirmed order alerts every 2 hours." },
+  { group: "Admin ops", path: "/api/cron/orders", method: "POST", auth: "cron", note: "Same as GET. Used by Vercel Cron." },
+
+  { group: "Notifications", path: "/api/admin/notifications/config", method: "GET", auth: "admin", note: "Email and ntfy settings." },
+  { group: "Notifications", path: "/api/admin/notifications/config", method: "PUT", auth: "admin", note: "Save notification config." },
+  { group: "Notifications", path: "/api/admin/notifications/logs", method: "GET", auth: "admin", note: "Notification send log." },
+  { group: "Notifications", path: "/api/admin/notifications/logs", method: "DELETE", auth: "admin", note: "Reset logs and inbox." },
+  { group: "Notifications", path: "/api/admin/notifications/inbox", method: "GET", auth: "admin", note: "Admin inbox." },
+  { group: "Notifications", path: "/api/admin/notifications/inbox", method: "POST", auth: "admin", note: "Ingest ntfy message." },
+  { group: "Notifications", path: "/api/admin/notifications/inbox", method: "PATCH", auth: "admin", note: "Mark all read." },
+  { group: "Notifications", path: "/api/admin/notifications/inbox", method: "DELETE", auth: "admin", note: "Clear inbox." },
+  { group: "Notifications", path: "/api/admin/notifications/inbox/:id", method: "PATCH", auth: "admin", note: "Mark one read." }
+];

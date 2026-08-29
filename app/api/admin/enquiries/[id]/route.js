@@ -1,7 +1,7 @@
 import { requireAdmin, unauthorized } from "../../../../../server/lib/auth.js";
 import { snap, writeAudit } from "../../../../../server/lib/logs.js";
 import { escapeHtml, mailFacts, wrapHtml } from "../../../../../server/lib/mail.js";
-import { notifyShopEvent } from "../../../../../server/lib/notify.js";
+import { queueShopEvent } from "../../../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../../../server/lib/supabase.js";
 
 const STATUSES = ["Pending", "Resolved"];
@@ -53,7 +53,7 @@ export async function PATCH(req, { params }) {
       ]
         .filter((line, i, all) => line !== "" || (all[i + 1] && all[i + 1] !== ""))
         .join("\n");
-      await notifyShopEvent({
+      queueShopEvent({
         event: "enquiry_resolved",
         title: "Your enquiry has been resolved",
         body: customerText,

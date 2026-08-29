@@ -185,11 +185,13 @@ export function StoreProvider({ children }) {
     }
     const pay = typeof opts === "string" ? opts : opts.pay || "upi";
     const paymentProof = typeof opts === "string" ? "" : opts.paymentProof || "";
+    const skipPayment = Boolean(opts.skipPayment);
     try {
       const res = await api.createOrder({
         ...checkoutInfo,
         pay,
         paymentProof,
+        skipPayment,
         items: cart.map((i) => ({
           id: i.productId || i.id,
           title: i.packLabel ? i.title + " — " + i.packLabel : i.title,
@@ -202,7 +204,7 @@ export function StoreProvider({ children }) {
       setOrderStatus(res.order.status || "");
       setCheckoutStep(3);
       logCheckoutComplete();
-      ping("Order placed. Invoice downloading…");
+      ping(skipPayment ? "Order saved as pending. Invoice downloading…" : "Order placed. Invoice downloading…");
       try {
         await api.downloadInvoice(res.order.id);
       } catch (err) {

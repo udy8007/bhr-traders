@@ -1,7 +1,48 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../lib/api.js";
 import { useAuth } from "../lib/auth.jsx";
-import { AdminNotifyEmailField, Card, PageHead } from "../components/Template.jsx";
+import { PageHead } from "../components/Template.jsx";
+
+const CRON_PRESETS = [
+  { id: "0 2 1 * *", label: "Monthly once", icon: "calendar_month" },
+  { id: "0 2 * * *", label: "Daily 2:00 AM", icon: "nights_stay" },
+  { id: "0 9 * * *", label: "Daily 9:00 AM", icon: "wb_sunny" },
+  { id: "0 2 * * 0", label: "Sunday 2:00 AM", icon: "event" },
+  { id: "0 */6 * * *", label: "Every 6 hours", icon: "update" }
+];
+
+function cronParts(expr) {
+  const p = String(expr || "0 2 * * *").trim().split(/\s+/);
+  return {
+    minute: p[0] || "0",
+    hour: p[1] || "2",
+    day: p[2] || "*",
+    month: p[3] || "*",
+    weekday: p[4] || "*"
+  };
+}
+
+function isMonthlyOnce(expr) {
+  const p = cronParts(expr);
+  return p.day === "1" && p.month === "*" && (p.weekday === "*" || p.weekday === "?");
+}
+
+function Toggle({ on, onChange, label }) {
+  return (
+    <button
+      type="button"
+      className={"gform-toggle" + (on ? " is-on" : "")}
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+    >
+      <span className="gform-toggle-knob" />
+      <span className="gform-toggle-text">{on ? "Enabled" : "Disabled"}</span>
+    </button>
+  );
+}
 
 export function ChangePassword() {
   const { user } = useAuth();
@@ -35,58 +76,43 @@ export function ChangePassword() {
   }
 
   return (
-    <>
+    <div className="gform">
       <PageHead
         title="Change password"
         small="Update the backoffice sign-in password for this admin account."
       />
-      <div className="row">
-        <div className="col-lg-6 col-xl-5">
-          <Card title="Account">
-            <p className="text-sm mb-4">{user?.email || "admin@bhrtraders.com"}</p>
-            <form onSubmit={save}>
-              <div className={"input-group input-group-outline mb-3" + (currentPassword ? " is-filled" : "")}>
-                <label className="form-label">Current password</label>
-                <input className="form-control" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required autoComplete="current-password" />
-              </div>
-              <div className={"input-group input-group-outline mb-3" + (newPassword ? " is-filled" : "")}>
-                <label className="form-label">New password</label>
-                <input className="form-control" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={8} autoComplete="new-password" />
-              </div>
-              <div className={"input-group input-group-outline mb-3" + (confirmPassword ? " is-filled" : "")}>
-                <label className="form-label">Confirm new password</label>
-                <input className="form-control" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required minLength={8} autoComplete="new-password" />
-              </div>
-              {error ? <p className="text-danger text-sm">{error}</p> : null}
-              {ok ? <p className="text-success text-sm">{ok}</p> : null}
-              <button type="submit" className="btn bg-gradient-info mb-0" disabled={busy}>
-                {busy ? "Saving…" : "Update password"}
-              </button>
-            </form>
-          </Card>
+      <form className="gform-shell" onSubmit={save} style={{ maxWidth: 520 }}>
+        <div className="gform-head">
+          <div>
+            <p className="gform-kicker">Account</p>
+            <h4>{user?.email || "admin@bhrtraders.com"}</h4>
+          </div>
+          <span className="gform-badge">
+            <i className="material-symbols-rounded">lock</i>
+            Admin
+          </span>
         </div>
-      </div>
-    </>
-  );
-}
-
-const CRON_PRESETS = [
-  { id: "0 2 * * *", label: "Daily 2:00 AM" },
-  { id: "0 9 * * *", label: "Daily 9:00 AM" },
-  { id: "0 2 * * 0", label: "Sunday 2:00 AM" },
-  { id: "0 */6 * * *", label: "Every 6 hours" }
-];
-
-function Switch({ on, onChange, label, hint }) {
-  return (
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <p className="text-sm font-weight-bold mb-0">{label}</p>
-        {hint ? <p className="text-xs text-secondary mb-0">{hint}</p> : null}
-      </div>
-      <button type="button" className={"btn btn-sm mb-0 " + (on ? "bg-gradient-success" : "btn-outline-secondary")} onClick={() => onChange(!on)}>
-        {on ? "Enabled" : "Disabled"}
-      </button>
+        <label className="gform-field">
+          <span>Current password</span>
+          <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required autoComplete="current-password" />
+        </label>
+        <label className="gform-field">
+          <span>New password</span>
+          <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={8} autoComplete="new-password" />
+        </label>
+        <label className="gform-field">
+          <span>Confirm new password</span>
+          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required minLength={8} autoComplete="new-password" />
+        </label>
+        {error ? <p className="gform-err">{error}</p> : null}
+        {ok ? <p className="gform-ok">{ok}</p> : null}
+        <div className="gform-actions">
+          <button type="submit" className="gform-btn-primary" disabled={busy}>
+            <i className="material-symbols-rounded">save</i>
+            {busy ? "Saving…" : "Update password"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
@@ -111,7 +137,11 @@ export function DbBackup() {
     setError("");
     setOk("");
     try {
-      const res = await api.saveBackupSchedule(form);
+      const res = await api.saveBackupSchedule({
+        enabled: form.enabled,
+        email_enabled: form.email_enabled,
+        cron: form.cron
+      });
       setForm(res.schedule);
       setOk("Backup schedule saved.");
     } catch (err) {
@@ -126,7 +156,11 @@ export function DbBackup() {
     setError("");
     setOk("");
     try {
-      const res = await api.sendBackupNow(form);
+      const res = await api.sendBackupNow({
+        enabled: form.enabled,
+        email_enabled: form.email_enabled,
+        cron: form.cron
+      });
       setForm(res.schedule);
       setOk("Dump emailed to " + (res.sent?.to || form.email) + " (" + (res.sent?.rows || 0) + " rows).");
     } catch (err) {
@@ -136,64 +170,171 @@ export function DbBackup() {
     }
   }
 
+  const parts = form ? cronParts(form.cron) : cronParts("0 2 * * *");
+  const monthly = form ? isMonthlyOnce(form.cron) : false;
+  const sunday = parts.weekday === "0";
+  const everyN = String(form?.cron || "").includes("/");
+  const daily = Boolean(form) && !monthly && !sunday && !everyN && parts.day === "*";
+  const known = CRON_PRESETS.some((p) => p.id === form?.cron);
+
   return (
-    <>
+    <div className="gform">
       <PageHead title="DB backup" small="Dump the database and email it now, or on a cron schedule (IST)." />
       {error ? <div className="alert alert-warning text-white">{error}</div> : null}
-      <div className="row">
-        <div className="col-lg-7">
-          <Card title="Backup & schedule">
-            {!form ? <p className="text-sm text-secondary mb-0">Loading…</p> : (
-              <form onSubmit={save}>
-                <Switch
-                  on={form.enabled}
-                  onChange={(v) => patch({ enabled: v })}
-                  label="Scheduled backup"
-                  hint="When enabled, a dump is emailed when the cron matches (India time)."
-                />
-                <Switch
-                  on={form.email_enabled}
-                  onChange={(v) => patch({ email_enabled: v })}
-                  label="Email dump"
-                  hint="Required for Backup now and for the schedule. Disable to pause sending."
-                />
-                <AdminNotifyEmailField value={form.email} />
-                <p className="text-xs text-uppercase text-secondary font-weight-bold mb-2">Cron presets</p>
-                <div className="bug-chips mb-3">
-                  {CRON_PRESETS.map((p) => (
-                    <button key={p.id} type="button" className={"bug-chip" + (form.cron === p.id ? " on" : "")} onClick={() => patch({ cron: p.id })}>
-                      {p.label}
-                    </button>
-                  ))}
+      {!form ? (
+        <div className="gform-shell gform-loading">Loading backup schedule…</div>
+      ) : (
+        <div className="gform-layout">
+          <form className="gform-shell" onSubmit={save}>
+            <div className="gform-head">
+              <div>
+                <p className="gform-kicker">Backup & schedule</p>
+                <h4>Automatic database dump</h4>
+              </div>
+              <Toggle on={form.enabled} onChange={(v) => patch({ enabled: v })} label="Scheduled backup" />
+            </div>
+
+            <div className="gform-channels">
+              <section className={"gform-channel" + (form.enabled ? " is-on" : "")}>
+                <span className="ncfg-icon" aria-hidden="true">
+                  <i className="material-symbols-rounded">schedule</i>
+                </span>
+                <div>
+                  <strong>Scheduled backup</strong>
+                  <p>When on, a dump is emailed when the cron matches India time.</p>
                 </div>
-                <div className={"input-group input-group-outline mb-3 is-filled"}>
-                  <label className="form-label">Cron (min hour day month weekday)</label>
-                  <input className="form-control" value={form.cron} onChange={(e) => patch({ cron: e.target.value })} placeholder="0 2 * * *" />
+              </section>
+              <section className={"gform-channel" + (form.email_enabled ? " is-on" : "")}>
+                <span className="ncfg-icon is-gold" aria-hidden="true">
+                  <i className="material-symbols-rounded">mail</i>
+                </span>
+                <div>
+                  <strong>Email dump</strong>
+                  <p>Required for Backup now and for the schedule.</p>
                 </div>
-                <p className="report-cron-line text-xs mb-3">
-                  Cron: <code>{form.cron || "0 2 * * *"}</code>
-                  <span className="text-secondary"> · Asia/Kolkata · e.g. 0 2 * * * = every day at 2:00 AM</span>
-                </p>
-                {form.last_sent_at ? <p className="text-xs text-secondary">Last sent {new Date(form.last_sent_at).toLocaleString("en-GB")}</p> : null}
-                {form.last_error ? <p className="text-xs text-danger">Last error: {form.last_error}</p> : null}
-                {ok ? <p className="text-success text-sm">{ok}</p> : null}
-                <button className="btn bg-gradient-info mb-0 me-2" type="submit" disabled={busy}>{busy ? "Saving…" : "Save schedule"}</button>
-                <button className="btn btn-outline-info mb-0" type="button" disabled={busy} onClick={backupNow}>Backup now</button>
-              </form>
-            )}
-          </Card>
+                <Toggle on={form.email_enabled} onChange={(v) => patch({ email_enabled: v })} label="Email dump" />
+              </section>
+            </div>
+
+            <label className="gform-field">
+              <span>Send to email</span>
+              <input type="email" value={form.email || ""} readOnly tabIndex={-1} />
+            </label>
+            <p className="gform-help">
+              This is the admin email from <Link to="/notifications/config">Notification configure</Link>. Change it there.
+            </p>
+
+            <div className="gform-block">
+              <p className="gform-label">Repeat</p>
+              <div className="gform-tiles gform-tiles-3">
+                <button
+                  type="button"
+                  className={"gform-tile" + (daily ? " is-on" : "")}
+                  onClick={() => {
+                    const p = cronParts(form.cron);
+                    patch({ cron: p.minute + " " + p.hour + " * * *" });
+                  }}
+                >
+                  <i className="material-symbols-rounded">today</i>
+                  <strong>Daily</strong>
+                </button>
+                <button
+                  type="button"
+                  className={"gform-tile" + (monthly ? " is-on" : "")}
+                  onClick={() => {
+                    const p = cronParts(form.cron);
+                    patch({ cron: p.minute + " " + p.hour + " 1 * *" });
+                  }}
+                >
+                  <i className="material-symbols-rounded">calendar_month</i>
+                  <strong>Monthly once</strong>
+                </button>
+                <button
+                  type="button"
+                  className={"gform-tile" + (sunday ? " is-on" : "")}
+                  onClick={() => {
+                    const p = cronParts(form.cron);
+                    patch({ cron: p.minute + " " + p.hour + " * * 0" });
+                  }}
+                >
+                  <i className="material-symbols-rounded">event</i>
+                  <strong>Sunday</strong>
+                </button>
+              </div>
+              {monthly ? (
+                <p className="gform-hint">Once a month — 1st of the month at this time (IST).</p>
+              ) : null}
+            </div>
+
+            <div className="gform-block">
+              <p className="gform-label">Time presets</p>
+              <div className="gform-tiles gform-tiles-2">
+                {CRON_PRESETS.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    className={"gform-tile" + (form.cron === p.id ? " is-on" : "")}
+                    onClick={() => patch({ cron: p.id })}
+                  >
+                    <i className="material-symbols-rounded">{p.icon}</i>
+                    <strong>{p.label}</strong>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <label className="gform-field">
+              <span>Cron (min hour day month weekday)</span>
+              <input value={form.cron} onChange={(e) => patch({ cron: e.target.value })} placeholder="0 2 * * *" />
+            </label>
+            {!known && form.cron ? <p className="gform-hint">Custom expression — not one of the presets.</p> : null}
+
+            <div className="gform-cron">
+              <span>Cron</span>
+              <code>{form.cron || "0 2 * * *"}</code>
+              <em>Asia/Kolkata</em>
+            </div>
+            {form.last_sent_at ? (
+              <p className="gform-meta">Last sent {new Date(form.last_sent_at).toLocaleString("en-GB")}</p>
+            ) : null}
+            {form.last_error ? <p className="gform-err">Last error: {form.last_error}</p> : null}
+            {ok ? <p className="gform-ok">{ok}</p> : null}
+
+            <div className="gform-actions">
+              <button className="gform-btn-primary" type="submit" disabled={busy}>
+                <i className="material-symbols-rounded">save</i>
+                {busy ? "Saving…" : "Save schedule"}
+              </button>
+              <button className="gform-btn-gold" type="button" disabled={busy} onClick={backupNow}>
+                <i className="material-symbols-rounded">cloud_download</i>
+                Backup now
+              </button>
+            </div>
+          </form>
+
+          <aside className="gform-aside">
+            <div className="gform-aside-art" aria-hidden="true">
+              <i className="material-symbols-rounded">database</i>
+            </div>
+            <p className="gform-kicker">What is sent</p>
+            <ol className="gform-steps">
+              <li>
+                <strong>JSON dump</strong>
+                <span>Gzipped snapshot of products, orders, enquiries, visits, reviews, and settings.</span>
+              </li>
+              <li>
+                <strong>SQL script</strong>
+                <span>Insert statements you can restore from.</span>
+              </li>
+              <li>
+                <strong>IST cron</strong>
+                <span>Checked every minute. Use Monthly 1st for a once-a-month dump.</span>
+              </li>
+            </ol>
+            <p className="gform-help mb-0">SMTP must be set on the server.</p>
+          </aside>
         </div>
-        <div className="col-lg-5">
-          <Card title="What is sent">
-            <p className="text-sm">Backup now builds a dump of products, orders, enquiries, visits, reviews, and settings, then emails:</p>
-            <ul className="text-sm mb-3 ps-3">
-              <li>gzipped JSON dump</li>
-              <li>SQL insert script</li>
-            </ul>
-            <p className="text-sm mb-0">SMTP must be set on the server. The scheduler checks every minute against the cron in IST.</p>
-          </Card>
-        </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }

@@ -166,6 +166,7 @@ create table if not exists public.notification_config (
 );
 
 alter table public.notification_config add column if not exists inbox_cleared_at bigint not null default 0;
+alter table public.notification_config add column if not exists pending_alert_at bigint not null default 0;
 
 insert into public.notification_config (id, admin_email, email_enabled, push_enabled, ntfy_topic, ntfy_url)
 values ('default', 'info@bhrtraders.com', true, true, 'bhr-traders', 'https://ntfy.sh')
@@ -253,6 +254,7 @@ on conflict (id) do nothing;
 
 alter table public.orders add column if not exists notes text;
 alter table public.orders add column if not exists payment_proof text;
+alter table public.orders add column if not exists cancel_remark text;
 
 alter table public.report_schedules enable row level security;
 drop policy if exists "report_schedules_all" on public.report_schedules;

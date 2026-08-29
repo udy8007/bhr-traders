@@ -1,7 +1,16 @@
 import { createPdfDocument } from "./pdfDoc.js";
 import { findPdfLogo } from "./pdfAssets.js";
-import { adminNotifyEmail } from "./notify.js";
-import { sendMail, wrapHtml } from "./mail.js";
+import { adminDeepLink, adminNotifyEmail } from "./notify.js";
+import {
+  escapeHtml,
+  mailFacts,
+  mailMoney,
+  mailPreviewTable,
+  mailSectionLabel,
+  mailStatStrip,
+  sendMail,
+  wrapHtml
+} from "./mail.js";
 import { isShopVisit } from "./shopVisits.js";
 import { getSupabase } from "./supabase.js";
 
@@ -38,7 +47,7 @@ export function normalizeSchedule(row) {
   const hour = Math.min(23, Math.max(0, Number(base.hour) || 0));
   const minute = Math.min(59, Math.max(0, Number(base.minute) || 0));
   const kind = REPORT_KINDS.includes(base.kind) ? base.kind : "overall";
-  const frequency = base.frequency === "weekdays" ? "weekdays" : "daily";
+  const frequency = base.frequency === "weekdays" || base.frequency === "monthly" ? base.frequency : "daily";
   return {
     id: SCHEDULE_ID,
     enabled: asBool(base.enabled, false),
@@ -53,6 +62,25 @@ export function normalizeSchedule(row) {
     last_sent_at: String(base.last_sent_at || ""),
     last_error: String(base.last_error || "")
   };
+}
+
+function rowForDb(schedule) {
+  const row = {
+    id: schedule.id,
+    enabled: schedule.enabled,
+    kind: schedule.kind,
+    category: schedule.category,
+    hour: schedule.hour,
+    minute: schedule.minute,
+    frequency: schedule.frequency,
+    email: schedule.email,
+    last_run_key: schedule.last_run_key || "",
+    last_attempt_key: schedule.last_attempt_key || "",
+    last_error: schedule.last_error || ""
+  };
+  const stamp = String(schedule.last_sent_at || "").trim();
+  if (stamp && !Number.isNaN(new Date(stamp).getTime())) row.last_sent_at = stamp;
+  return row;
 }
 
 async function withNotifyEmail(schedule) {
@@ -71,13 +99,14 @@ export async function saveReportSchedule(input) {
   const prev = normalizeSchedule(data);
   const rest = { ...(input || {}) };
   delete rest.email;
+  if (!String(rest.last_sent_at || "").trim()) delete rest.last_sent_at;
   const next = normalizeSchedule({ ...prev, ...rest, email: prev.email, id: SCHEDULE_ID });
   if (next.enabled && next.kind === "category" && !next.category) {
     const err = new Error("Select a category for the category report.");
     err.status = 400;
     throw err;
   }
-  await supabase.from("report_schedules").upsert(next);
+  await supabase.from("report_schedules").upsert(rowForDb(next));
   return withNotifyEmail(next);
 }
 
@@ -101,6 +130,7 @@ export function istParts(date = new Date()) {
     hour: Number(map.hour) % 24,
     minute: Number(map.minute),
     dateKey: map.year + "-" + map.month + "-" + map.day,
+    day: Number(map.day),
     weekday: map.weekday,
     stamp: map.day + "/" + map.month + "/" + map.year + " " + map.hour + ":" + map.minute + " IST"
   };
@@ -507,24 +537,125 @@ export async function makeReportPdf(kind, category) {
   const k = resolveKind(kind, category);
   const data = await loadReportData();
   const buffer = await buildReportPdf(k, data, category);
-  return { buffer, filename: reportFilename(k, category), kind: k };
+  return { buffer, filename: reportFilename(k, category), kind: k, data };
+}
+
+function frequencyLabel(frequency) {
+  if (frequency === "weekdays") return "Weekdays (Mon–Fri)";
+  if (frequency === "monthly") return "Monthly once (1st of month)";
+  return "Daily";
+}
+
+function reportMailSnapshot(kind, data, category) {
+  const orders = data.orders || [];
+  const products = data.products || [];
+  const visits = shopPageVisits(data.visits);
+  const cat = { name: category, id: category };
+  if (kind === "orders") {
+    return mailPreviewTable(
+      ["Order", "Customer", "Status", "Total"],
+      orders.slice(0, 8).map((o) => [o.id, clip(o.name, 22), o.status || "—", mailMoney(o.total)])
+    );
+  }
+  if (kind === "products") {
+    return mailPreviewTable(
+      ["Product", "Category", "Price"],
+      products.slice(0, 8).map((p) => [clip(p.title, 28), clip(p.cat, 18), mailMoney(p.price)])
+    );
+  }
+  if (kind === "category") {
+    const rows = products.filter((p) => productInCategory(p, cat)).slice(0, 8);
+    return mailPreviewTable(
+      ["Product", "Pack", "Price"],
+      rows.map((p) => [clip(p.title, 28), clip(p.pack || p.price_label, 16), mailMoney(p.price)])
+    );
+  }
+  if (kind === "visits") {
+    return mailPreviewTable(
+      ["When", "Place", "Page"],
+      visits.slice(0, 8).map((v) => [when(v.created_at), clip(visitPlace(v), 24), clip(v.path || "home", 18)])
+    );
+  }
+  return mailPreviewTable(
+    ["Order", "Status", "Total"],
+    orders.slice(0, 6).map((o) => [o.id, o.status || "—", mailMoney(o.total)])
+  );
+}
+
+function reportMailBody({ kind, title, data, category, filename, ist, meta }) {
+  const orders = data.orders || [];
+  const products = data.products || [];
+  const visits = shopPageVisits(data.visits);
+  const unpaid = (s) => /pending|awaiting|cancelled/i.test(s || "");
+  const net = orders.filter((o) => !unpaid(o.status)).reduce((n, o) => n + Number(o.total || 0), 0);
+  const today = ist.dateKey;
+  const ordersToday = orders.filter((o) => visitDayKey(o.created_at) === today).length;
+  const visitsToday = visits.filter((v) => visitDayKey(v.created_at) === today).length;
+  const repeat = frequencyLabel(meta.frequency);
+  const time =
+    meta.hour != null
+      ? String(meta.hour).padStart(2, "0") + ":" + String(meta.minute || 0).padStart(2, "0") + " IST"
+      : ist.stamp;
+  const mode = meta.scheduled ? "Scheduled send" : "Manual send";
+  return (
+    "<p style=\"margin:0 0 14px\">Hello,</p>" +
+    "<p style=\"margin:0 0 16px\">Please find the <strong>" +
+    escapeHtml(title) +
+    "</strong> for BHR Traders. The full PDF is attached to this email.</p>" +
+    mailStatStrip([
+      { label: "Orders", value: String(orders.length) },
+      { label: "Today", value: String(ordersToday) },
+      { label: "Net value", value: mailMoney(net) },
+      { label: "Visits", value: String(visitsToday) }
+    ]) +
+    mailSectionLabel("Schedule") +
+    mailFacts([
+      { label: "Report", value: title },
+      { label: "Send type", value: mode },
+      { label: "Repeat", value: repeat },
+      { label: "Time", value: time },
+      { label: "Generated", value: ist.stamp },
+      { label: "Attachment", value: filename },
+      { label: "Products", value: String(products.length) },
+      { label: "Enquiries", value: String((data.enquiries || []).length) }
+    ]) +
+    mailSectionLabel("Snapshot") +
+    reportMailSnapshot(kind, data, category) +
+    "<p style=\"margin:16px 0 0;font-size:13px;color:#5e6b57\">This is an automated BHR Traders backoffice mail. Open reports in admin if you need another PDF.</p>"
+  );
 }
 
 async function recipientFor() {
   return adminNotifyEmail();
 }
 
-export async function sendReportEmail(kind, category, to) {
-  const { buffer, filename, kind: k } = await makeReportPdf(kind, category);
+export async function sendReportEmail(kind, category, to, meta = {}) {
+  const { buffer, filename, kind: k, data } = await makeReportPdf(kind, category);
   const title = kindTitle(k, { name: category, id: category });
+  const ist = istParts();
+  const click = adminDeepLink("/reports/download");
+  const html = wrapHtml(title, reportMailBody({ kind: k, title, data, category, filename, ist, meta }), {
+    kicker: meta.scheduled ? "Scheduled report" : "Admin report",
+    preheader: title + " · " + filename,
+    button: { href: click, label: "Open reports" }
+  });
+  const text = [
+    "Hello,",
+    "",
+    title + " is attached as a PDF.",
+    "Generated: " + ist.stamp,
+    "Repeat: " + frequencyLabel(meta.frequency),
+    "File: " + filename,
+    "",
+    "Open reports: " + click,
+    "",
+    "BHR Traders"
+  ].join("\n");
   await sendMail({
     to,
-    subject: "BHR Traders · " + title,
-    text: title + " is attached as a PDF.",
-    html: wrapHtml(title, "<p style=\"margin:0\">The scheduled / requested report is attached as a PDF.</p>", {
-      kicker: "Admin report",
-      preheader: title + " is attached"
-    }),
+    subject: "BHR Traders · " + title + " · " + ist.dateKey,
+    text,
+    html,
     attachments: [{ filename, content: buffer, contentType: "application/pdf" }]
   });
   return { filename, to };
@@ -532,7 +663,12 @@ export async function sendReportEmail(kind, category, to) {
 
 export async function sendScheduledReport(schedule) {
   const to = await recipientFor();
-  return sendReportEmail(schedule.kind, schedule.category, to);
+  return sendReportEmail(schedule.kind, schedule.category, to, {
+    scheduled: true,
+    frequency: schedule.frequency,
+    hour: schedule.hour,
+    minute: schedule.minute
+  });
 }
 
 const WEEKDAYS = new Set(["Mon", "Tue", "Wed", "Thu", "Fri"]);
@@ -543,6 +679,7 @@ export async function tickScheduledReports() {
   const now = istParts();
   if (cfg.hour !== now.hour || cfg.minute !== now.minute) return { skipped: "time" };
   if (cfg.frequency === "weekdays" && !WEEKDAYS.has(now.weekday)) return { skipped: "weekend" };
+  if (cfg.frequency === "monthly" && now.day !== 1) return { skipped: "not monthly" };
   const runKey = now.dateKey + "-" + String(now.hour).padStart(2, "0") + String(now.minute).padStart(2, "0");
   if (cfg.last_attempt_key === runKey) return { skipped: "already" };
   await saveReportSchedule({ ...cfg, last_attempt_key: runKey });

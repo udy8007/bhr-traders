@@ -1,5 +1,11 @@
 {
   "framework": "nextjs",
   "installCommand": "npm install && npm install --prefix backoffice && npm install --prefix server",
-  "buildCommand": "npm run build:prod"
+  "buildCommand": "npm run build:prod",
+  "crons": [
+    {
+      "path": "/api/cron/orders",
+      "schedule": "0 */2 * * *"
+    }
+  ]
 }
