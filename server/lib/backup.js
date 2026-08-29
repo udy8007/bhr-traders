@@ -246,7 +246,7 @@ function fieldMatch(field, value) {
     });
 }
 
-export function cronMatches(expr, ist) {
+export function cronMatches(expr, ist, opts = {}) {
   const parts = String(expr || "").trim().split(/\s+/);
   if (parts.length !== 5) return false;
   const day = Number(String(ist.dateKey).split("-")[2]);
@@ -254,7 +254,7 @@ export function cronMatches(expr, ist) {
   const dowMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
   const dow = dowMap[ist.weekday];
   return (
-    fieldMatch(parts[0], ist.minute) &&
+    (opts.ignoreMinute || fieldMatch(parts[0], ist.minute)) &&
     fieldMatch(parts[1], ist.hour) &&
     fieldMatch(parts[2], day) &&
     fieldMatch(parts[3], month) &&
@@ -267,8 +267,8 @@ export async function tickScheduledBackup() {
   if (!cfg.enabled) return { skipped: "disabled" };
   if (!cfg.email_enabled) return { skipped: "email-off" };
   const now = istParts();
-  if (!cronMatches(cfg.cron, now)) return { skipped: "cron" };
-  const runKey = now.dateKey + "-" + String(now.hour).padStart(2, "0") + String(now.minute).padStart(2, "0");
+  if (!cronMatches(cfg.cron, now, { ignoreMinute: true })) return { skipped: "cron" };
+  const runKey = now.dateKey + "-" + String(now.hour).padStart(2, "0");
   if (cfg.last_attempt_key === runKey) return { skipped: "already" };
   await saveBackupSchedule({ ...cfg, last_attempt_key: runKey });
   try {

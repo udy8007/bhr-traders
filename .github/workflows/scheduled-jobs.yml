@@ -1,0 +1,50 @@
+name: Scheduled jobs
+
+on:
+  schedule:
+    # Every hour. Order alerts skip until 2 hours have passed.
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST /api/cron/orders
+        env:
+          CRON_URL: https://www.bhrtraders.com/api/cron/orders
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          NTFY_URL: https://ntfy.sh/udyilangovan
+        run: |
+          set +e
+          if [ -z "$CRON_SECRET" ]; then
+            echo "Add GitHub secret CRON_SECRET (same value as Vercel env CRON_SECRET)."
+            exit 1
+          fi
+          BODY_FILE=$(mktemp)
+          HTTP=$(curl -sS -m 90 -o "$BODY_FILE" -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -H "Content-Type: application/json" \
+            "$CRON_URL")
+          CURL_EXIT=$?
+          BODY=$(cat "$BODY_FILE")
+          echo "HTTP $HTTP"
+          echo "$BODY"
+          if [ "$CURL_EXIT" -eq 0 ] && [ "$HTTP" = "200" ] && echo "$BODY" | grep -q '"ok":true'; then
+            echo "Cron tick passed."
+            exit 0
+          fi
+          RUN_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          MSG="BHR scheduled job failed.
+          URL: $CRON_URL
+          curl_exit: $CURL_EXIT  HTTP: ${HTTP:-none}
+          Body: ${BODY:-<empty>}
+          GitHub: $RUN_URL"
+          curl -sS -m 15 \
+            -H "Title: BHR cron job failed" \
+            -H "Priority: high" \
+            -H "Tags: warning,bhr" \
+            -d "$MSG" \
+            "$NTFY_URL"
+          echo "$MSG"
+          exit 1

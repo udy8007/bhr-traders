@@ -56,8 +56,8 @@ export const API_ENDPOINTS = [
   { group: "Admin ops", path: "/api/admin/backup", method: "POST", auth: "admin", note: "Email dump now." },
   { group: "Admin ops", path: "/api/admin/logs", method: "GET", auth: "admin", note: "Error and audit logs." },
   { group: "Admin ops", path: "/api/admin/bugs", method: "POST", auth: "admin", note: "Report a bug from backoffice." },
-  { group: "Admin ops", path: "/api/cron/orders", method: "GET", auth: "cron", note: "Pending/confirmed order alerts every 2 hours." },
-  { group: "Admin ops", path: "/api/cron/orders", method: "POST", auth: "cron", note: "Same as GET. Used by Vercel Cron." },
+  { group: "Admin ops", path: "/api/cron/orders", method: "GET", auth: "cron", note: "Tick order alerts, reports, and backup. GitHub Actions hourly." },
+  { group: "Admin ops", path: "/api/cron/orders", method: "POST", auth: "cron", note: "Same as GET. Called by GitHub Action, not Vercel Cron." },
 
   { group: "Notifications", path: "/api/admin/notifications/config", method: "GET", auth: "admin", note: "Email and ntfy settings." },
   { group: "Notifications", path: "/api/admin/notifications/config", method: "PUT", auth: "admin", note: "Save notification config." },
