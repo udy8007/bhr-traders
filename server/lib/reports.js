@@ -1,19 +1,12 @@
-import { existsSync } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import { createPdfDocument } from "./pdfDoc.js";
+import { findPdfLogo } from "./pdfAssets.js";
 import { adminNotifyEmail } from "./notify.js";
 import { sendMail, wrapHtml } from "./mail.js";
 import { isShopVisit } from "./shopVisits.js";
 import { getSupabase } from "./supabase.js";
 
-const LOGO_CANDIDATES = [
-  path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "assets", "logo.png"),
-  path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "public", "images", "logo.png")
-];
-
 function logoPath() {
-  return LOGO_CANDIDATES.find((p) => existsSync(p));
+  return findPdfLogo();
 }
 
 const SCHEDULE_ID = "default";

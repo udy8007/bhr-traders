@@ -11,7 +11,7 @@ const nextConfig = {
   outputFileTracingRoot: root,
   serverExternalPackages: ["pdfkit", "fontkit", "linebreak", "png-js", "node-cron", "pg"],
   outputFileTracingIncludes: {
-    "/api/**": [
+    "/*": [
       "./server/lib/fonts/**",
       "./server/assets/**",
       "./public/images/logo.png",

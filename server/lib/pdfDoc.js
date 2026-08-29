@@ -1,16 +1,23 @@
-import path from "path";
-import { fileURLToPath } from "url";
 import PDFDocument from "pdfkit";
+import { readPdfFont } from "./pdfAssets.js";
 
-const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "fonts");
-const REGULAR = path.join(DIR, "sans-regular.ttf");
-const BOLD = path.join(DIR, "sans-bold.ttf");
+let regular;
+let bold;
+
+function fonts() {
+  if (!regular) {
+    regular = readPdfFont("sans-regular.ttf");
+    bold = readPdfFont("sans-bold.ttf");
+  }
+  return { regular, bold };
+}
 
 /** Standard names so existing .font("Helvetica") calls keep working on Vercel. */
 export function createPdfDocument(options = {}) {
+  const { regular: regularFont, bold: boldFont } = fonts();
   const doc = new PDFDocument({ ...options, font: null });
-  doc.registerFont("Helvetica", REGULAR);
-  doc.registerFont("Helvetica-Bold", BOLD);
+  doc.registerFont("Helvetica", regularFont);
+  doc.registerFont("Helvetica-Bold", boldFont);
   doc.font("Helvetica");
   return doc;
 }

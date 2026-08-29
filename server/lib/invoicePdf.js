@@ -1,15 +1,7 @@
-import { existsSync } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import { createPdfDocument } from "./pdfDoc.js";
+import { findPdfLogo } from "./pdfAssets.js";
 import { getSupabase } from "./supabase.js";
 import { istParts, pdfResponse } from "./reports.js";
-
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const LOGO_CANDIDATES = [
-  path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "assets", "logo.png"),
-  path.join(ROOT, "public", "images", "logo.png")
-];
 
 const FOREST = "#143524";
 const GREEN = "#1f4d32";
@@ -22,7 +14,7 @@ const PAGE_H = 841.89;
 const MARGIN = 36;
 
 function logoFile() {
-  return LOGO_CANDIDATES.find((p) => existsSync(p));
+  return findPdfLogo();
 }
 
 function money(n) {
