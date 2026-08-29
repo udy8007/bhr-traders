@@ -3,6 +3,8 @@ import { startReportCron } from "../../../../../server/lib/reportCron.js";
 import { makeReportPdf, pdfResponse } from "../../../../../server/lib/reports.js";
 import { json, options } from "../../../../../server/lib/supabase.js";
 
+export const runtime = "nodejs";
+
 export function OPTIONS() {
   return options();
 }

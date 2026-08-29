@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import PDFDocument from "pdfkit";
+import { createPdfDocument } from "./pdfDoc.js";
 import { getSupabase } from "./supabase.js";
 import { istParts, pdfResponse } from "./reports.js";
 
@@ -59,7 +59,7 @@ export async function loadOrderInvoice(id) {
 
 export async function makeInvoicePdf(order, items) {
   const ist = istParts(order.created_at ? new Date(order.created_at) : new Date());
-  const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: "Invoice " + order.id, Author: "BHR Traders" } });
+  const doc = createPdfDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: "Invoice " + order.id, Author: "BHR Traders" } });
   const done = bufferFromDoc(doc);
 
   doc.save();

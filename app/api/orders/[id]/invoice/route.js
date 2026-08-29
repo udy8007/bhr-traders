@@ -1,6 +1,8 @@
 import { invoiceResponse } from "../../../../../server/lib/invoicePdf.js";
 import { json, options } from "../../../../../server/lib/supabase.js";
 
+export const runtime = "nodejs";
+
 export function OPTIONS() {
   return options();
 }

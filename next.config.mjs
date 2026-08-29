@@ -9,7 +9,15 @@ nextEnv.loadEnvConfig(root);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   outputFileTracingRoot: root,
-  serverExternalPackages: ["pdfkit", "node-cron", "pg"],
+  serverExternalPackages: ["pdfkit", "fontkit", "linebreak", "png-js", "node-cron", "pg"],
+  outputFileTracingIncludes: {
+    "/api/**": [
+      "./server/lib/fonts/**",
+      "./server/assets/**",
+      "./public/images/logo.png",
+      "./node_modules/pdfkit/**"
+    ]
+  },
   async headers() {
     return [
       {

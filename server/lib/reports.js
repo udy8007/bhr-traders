@@ -1,8 +1,8 @@
 import { existsSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import PDFDocument from "pdfkit";
-import { getNotifyConfig } from "./notify.js";
+import { createPdfDocument } from "./pdfDoc.js";
+import { adminNotifyEmail } from "./notify.js";
 import { sendMail, wrapHtml } from "./mail.js";
 import { isShopVisit } from "./shopVisits.js";
 import { getSupabase } from "./supabase.js";
@@ -62,23 +62,30 @@ export function normalizeSchedule(row) {
   };
 }
 
+async function withNotifyEmail(schedule) {
+  return { ...schedule, email: await adminNotifyEmail() };
+}
+
 export async function getReportSchedule() {
   const supabase = getSupabase();
   const { data } = await supabase.from("report_schedules").select("*").eq("id", SCHEDULE_ID).maybeSingle();
-  return normalizeSchedule(data);
+  return withNotifyEmail(normalizeSchedule(data));
 }
 
 export async function saveReportSchedule(input) {
-  const prev = await getReportSchedule();
-  const next = normalizeSchedule({ ...prev, ...input, id: SCHEDULE_ID });
+  const supabase = getSupabase();
+  const { data } = await supabase.from("report_schedules").select("*").eq("id", SCHEDULE_ID).maybeSingle();
+  const prev = normalizeSchedule(data);
+  const rest = { ...(input || {}) };
+  delete rest.email;
+  const next = normalizeSchedule({ ...prev, ...rest, email: prev.email, id: SCHEDULE_ID });
   if (next.enabled && next.kind === "category" && !next.category) {
     const err = new Error("Select a category for the category report.");
     err.status = 400;
     throw err;
   }
-  const supabase = getSupabase();
   await supabase.from("report_schedules").upsert(next);
-  return next;
+  return withNotifyEmail(next);
 }
 
 export function istParts(date = new Date()) {
@@ -258,24 +265,6 @@ function drawTable(doc, headers, rows, widths) {
   rows.forEach((r) => row(r, false));
 }
 
-function pageLabel(path) {
-  const p = String(path || "home").replace(/^#\/?/, "").replace(/^\//, "") || "home";
-  const names = {
-    home: "Home",
-    products: "Products",
-    guide: "Buying guide",
-    packs: "Pack sizes",
-    about: "About",
-    quality: "Quality",
-    shop: "Shop",
-    contact: "Location",
-    enquiry: "Enquiry",
-    checkout: "Checkout",
-    "order-placed": "Order placed"
-  };
-  return names[p] || p;
-}
-
 function visitPlace(v) {
   return [v.city, v.region, v.country].filter(Boolean).join(", ") || "Unknown";
 }
@@ -325,7 +314,7 @@ function drawVisitReport(doc, allVisits, { full }) {
   const todayCount = pages.filter((v) => visitDayKey(v.created_at) === today).length;
   const checkouts = (allVisits || []).filter((v) => v.kind === "checkout_start").length;
   const completes = (allVisits || []).filter((v) => v.kind === "checkout_complete").length;
-  kv(doc, "Shop page views", String(pages.length));
+  kv(doc, "Shop visits", String(pages.length));
   kv(doc, "Visits today (IST)", String(todayCount));
   kv(doc, "Cities", String(new Set(pages.map(visitPlace)).size));
   kv(doc, "Checkout started", String(checkouts));
@@ -343,10 +332,6 @@ function drawVisitReport(doc, allVisits, { full }) {
   sectionTitle(doc, "Visits last 14 days");
   drawTable(doc, ["Day", "Views"], last14, [260, 255]);
 
-  sectionTitle(doc, "Top pages");
-  const pagesTbl = countBy(pages, (v) => pageLabel(v.path));
-  drawTable(doc, ["Page", "Views"], pagesTbl.length ? pagesTbl.slice(0, full ? 20 : 8) : [["No visits yet", "—"]], [360, 155]);
-
   sectionTitle(doc, "Top locations");
   const locTbl = countBy(pages, visitPlace);
   drawTable(doc, ["Place", "Views"], locTbl.length ? locTbl.slice(0, full ? 20 : 8) : [["No visits yet", "—"]], [360, 155]);
@@ -362,8 +347,8 @@ function drawVisitReport(doc, allVisits, { full }) {
   drawTable(doc, ["Source", "Views"], refs.length ? refs.slice(0, 12) : [["Direct", "0"]], [360, 155]);
 
   sectionTitle(doc, "Recent visits");
-  const recent = pages.slice(0, 40).map((v) => [when(v.created_at), clip(visitPlace(v), 22), clip(pageLabel(v.path), 16)]);
-  drawTable(doc, ["When", "Place", "Page"], recent.length ? recent : [["No visits yet", "", ""]], [160, 200, 155]);
+  const recent = pages.slice(0, 40).map((v) => [when(v.created_at), clip(visitPlace(v), 36)]);
+  drawTable(doc, ["When", "Place"], recent.length ? recent : [["No visits yet", ""]], [200, 315]);
 }
 
 function kv(doc, label, value) {
@@ -394,7 +379,7 @@ export function buildReportPdf(kind, data, category) {
   const orderRevenue = (list) => list.reduce((s, o) => s + Number(o.total || 0), 0);
 
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({
+    const doc = createPdfDocument({
       size: "A4",
       margins: { top: 40, left: 40, right: 40, bottom: 0 },
       bufferPages: true,
@@ -532,10 +517,8 @@ export async function makeReportPdf(kind, category) {
   return { buffer, filename: reportFilename(k, category), kind: k };
 }
 
-async function recipientFor(schedule) {
-  if (schedule.email) return schedule.email;
-  const cfg = await getNotifyConfig();
-  return cfg.admin_email || "info@bhrtraders.com";
+async function recipientFor() {
+  return adminNotifyEmail();
 }
 
 export async function sendReportEmail(kind, category, to) {
@@ -552,7 +535,7 @@ export async function sendReportEmail(kind, category, to) {
 }
 
 export async function sendScheduledReport(schedule) {
-  const to = await recipientFor(schedule);
+  const to = await recipientFor();
   return sendReportEmail(schedule.kind, schedule.category, to);
 }
 

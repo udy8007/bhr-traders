@@ -1,6 +1,8 @@
 import { makePriceListPdf, priceListPdfResponse } from "../../../server/lib/priceListPdf.js";
 import { json, options } from "../../../server/lib/supabase.js";
 
+export const runtime = "nodejs";
+
 export function OPTIONS() {
   return options();
 }

@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import PDFDocument from "pdfkit";
+import { createPdfDocument } from "./pdfDoc.js";
 import { getSupabase, mapProduct, seedIfEmpty, SEED_PRODUCTS } from "./supabase.js";
 import { istParts, pdfResponse } from "./reports.js";
 
@@ -175,7 +175,7 @@ export function buildPriceListPdf(products) {
   const stamp = ist.stamp;
 
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: "BHR Traders Price List", Author: "BHR Traders" } });
+    const doc = createPdfDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: "BHR Traders Price List", Author: "BHR Traders" } });
     const chunks = [];
     doc.on("data", (c) => chunks.push(c));
     doc.on("end", () => resolve(Buffer.concat(chunks)));
