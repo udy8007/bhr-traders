@@ -1,0 +1,52 @@
+name: Site health
+
+on:
+  schedule:
+    # 06:00 IST (GitHub cron is UTC)
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call /api/health and alert ntfy on failure
+        env:
+          HEALTH_URL: https://www.bhrtraders.com/api/health
+          NTFY_URL: https://ntfy.sh/udyilangovan
+        run: |
+          set +e
+          BODY_FILE=$(mktemp)
+          HTTP=$(curl -sS -m 25 -o "$BODY_FILE" -w "%{http_code}" "$HEALTH_URL")
+          CURL_EXIT=$?
+          BODY=$(cat "$BODY_FILE")
+          echo "HTTP $HTTP"
+          echo "$BODY"
+
+          OK=0
+          if [ "$CURL_EXIT" -eq 0 ] && [ "$HTTP" = "200" ] && echo "$BODY" | grep -q '"ok":true'; then
+            OK=1
+          fi
+
+          if [ "$OK" -eq 1 ]; then
+            echo "Health check passed."
+            exit 0
+          fi
+
+          RUN_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          MSG="BHR /api/health failed at 6 AM IST check.
+          URL: $HEALTH_URL
+          curl_exit: $CURL_EXIT  HTTP: ${HTTP:-none}
+          Body: ${BODY:-<empty>}
+          GitHub: $RUN_URL"
+
+          curl -sS -m 15 \
+            -H "Title: BHR site health failed" \
+            -H "Priority: high" \
+            -H "Tags: warning,bhr" \
+            -H "Click: $HEALTH_URL" \
+            -d "$MSG" \
+            "$NTFY_URL"
+
+          echo "$MSG"
+          exit 1
