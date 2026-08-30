@@ -36,6 +36,7 @@ export const API_ENDPOINTS = [
   { group: "Shop sales", path: "/api/visits", method: "POST", auth: "public", note: "Shop visit / checkout tracking." },
 
   { group: "Admin sales", path: "/api/admin/stats", method: "GET", auth: "admin", note: "Dashboard snapshot." },
+  { group: "Admin sales", path: "/api/admin/visits", method: "DELETE", auth: "admin", note: "Reset all shop page visits." },
   { group: "Admin sales", path: "/api/admin/orders", method: "GET", auth: "admin", note: "All orders." },
   { group: "Admin sales", path: "/api/admin/orders/:id", method: "GET", auth: "admin", note: "Order detail." },
   { group: "Admin sales", path: "/api/admin/orders/:id", method: "PATCH", auth: "admin", note: "Status update. Cancel requires remark." },

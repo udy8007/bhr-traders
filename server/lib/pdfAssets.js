@@ -18,6 +18,18 @@ export function findPdfLogo() {
   ]);
 }
 
+/** Draw the oval logo inside a box so it cannot overlap nearby text. Returns the box width used. */
+export function placePdfLogo(doc, x, y, maxW, maxH) {
+  const file = findPdfLogo();
+  if (!file) return 0;
+  try {
+    doc.image(file, x, y, { fit: [maxW, maxH], align: "center", valign: "center" });
+    return maxW;
+  } catch {
+    return 0;
+  }
+}
+
 export function readPdfFont(name) {
   const file = firstExisting([
     path.join(process.cwd(), "server", "lib", "fonts", name),

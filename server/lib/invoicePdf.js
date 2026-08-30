@@ -1,5 +1,5 @@
 import { createPdfDocument } from "./pdfDoc.js";
-import { findPdfLogo } from "./pdfAssets.js";
+import { placePdfLogo } from "./pdfAssets.js";
 import { getSupabase } from "./supabase.js";
 import { istParts, pdfResponse } from "./reports.js";
 
@@ -12,10 +12,6 @@ const MUTED = "#5e6b57";
 const PAGE_W = 595.28;
 const PAGE_H = 841.89;
 const MARGIN = 36;
-
-function logoFile() {
-  return findPdfLogo();
-}
 
 function money(n) {
   return "Rs. " + Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -59,18 +55,13 @@ export async function makeInvoicePdf(order, items) {
   doc.rect(0, 118, PAGE_W, 6).fill(GOLD);
   doc.rect(0, 0, 10, PAGE_H).fill(GOLD);
 
-  const file = logoFile();
-  if (file) {
-    try {
-      doc.image(file, 28, 22, { height: 48 });
-    } catch {
-      /* text fallback */
-    }
-  }
-  const left = 28 + (file ? 64 : 0);
-  doc.fillColor(GOLD).font("Helvetica-Bold").fontSize(8).text("WHOLESALE RICE · CHENNAI", left, 26);
-  doc.fillColor("#ffffff").font("Helvetica-Bold").fontSize(22).text("BHR TRADERS", left, 40);
-  doc.fillColor("#d7e4d4").font("Helvetica").fontSize(8).text("Tax invoice", left, 66);
+  const logoW = 108;
+  const used = placePdfLogo(doc, 20, 22, logoW, 74);
+  const left = 20 + (used ? used + 14 : 0);
+  const titleW = PAGE_W - left - 200;
+  doc.fillColor(GOLD).font("Helvetica-Bold").fontSize(8).text("WHOLESALE RICE · CHENNAI", left, 26, { width: titleW });
+  doc.fillColor("#ffffff").font("Helvetica-Bold").fontSize(22).text("BHR TRADERS", left, 40, { width: titleW });
+  doc.fillColor("#d7e4d4").font("Helvetica").fontSize(8).text("Tax invoice", left, 66, { width: titleW });
   doc.fillColor(GOLD).font("Helvetica-Bold").fontSize(16).text("INVOICE", PAGE_W - 210, 32, { width: 174, align: "right" });
   doc.fillColor("#d7e4d4").font("Helvetica").fontSize(9).text(order.id, PAGE_W - 210, 54, { width: 174, align: "right" });
   doc.fillColor("#d7e4d4").font("Helvetica").fontSize(8).text(ist.stamp, PAGE_W - 210, 70, { width: 174, align: "right" });

@@ -105,6 +105,7 @@ export const api = {
   enquiries: () => request("/api/admin/enquiries"),
   updateEnquiry: (id, status) => request("/api/admin/enquiries/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ status }) }),
   resetEnquiries: (opts = {}) => request("/api/admin/enquiries", { method: "DELETE", quiet: opts.quiet }),
+  resetVisits: (opts = {}) => request("/api/admin/visits", { method: "DELETE", quiet: opts.quiet }),
   customers: () => request("/api/admin/customers"),
   logs: (kind, opts = {}) => {
     const q = new URLSearchParams({

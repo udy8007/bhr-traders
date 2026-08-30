@@ -166,7 +166,9 @@ function RankBars({ rows, color }) {
 export function Analytics() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+  const [ok, setOk] = useState("");
   const [tick, setTick] = useState(new Date());
+  const [resetting, setResetting] = useState(false);
 
   function load(quiet) {
     api.stats(quiet).then((d) => {
@@ -180,6 +182,22 @@ export function Analytics() {
     const t = setInterval(() => load(true), 5000);
     return () => clearInterval(t);
   }, []);
+
+  async function resetVisits() {
+    if (!confirm("Delete all shop page visit data? This cannot be undone.")) return;
+    setResetting(true);
+    setError("");
+    setOk("");
+    try {
+      const res = await api.resetVisits();
+      setOk("Visit data reset (" + (res.deleted ?? 0) + " rows).");
+      load(true);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setResetting(false);
+    }
+  }
 
   const s = data?.stats || {};
   const kpis = [
@@ -196,12 +214,23 @@ export function Analytics() {
       <div className="d-flex flex-wrap justify-content-between align-items-start mb-3">
         <PageHead title="Analytics" small="Storefront visitor traffic and geography" />
         <div className="ms-3 mb-3 text-end">
-          <span className="analytics-live text-xs text-secondary">
-            <span className="analytics-pulse" /> Live · every 5s · {tick.toLocaleTimeString()}
-          </span>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger mb-2"
+            disabled={resetting || !(data?.stats?.visitsTotal)}
+            onClick={resetVisits}
+          >
+            {resetting ? "Resetting…" : "Reset visits"}
+          </button>
+          <div>
+            <span className="analytics-live text-xs text-secondary">
+              <span className="analytics-pulse" /> Live · every 5s · {tick.toLocaleTimeString()}
+            </span>
+          </div>
         </div>
       </div>
       {error ? <div className="alert alert-warning text-white">{error}</div> : null}
+      {ok ? <div className="alert alert-success text-white">{ok}</div> : null}
 
       <div className="row">
         {kpis.map((k) => (

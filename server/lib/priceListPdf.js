@@ -1,5 +1,5 @@
 import { createPdfDocument } from "./pdfDoc.js";
-import { findPdfLogo } from "./pdfAssets.js";
+import { placePdfLogo } from "./pdfAssets.js";
 import { getSupabase, mapProduct, seedIfEmpty, SEED_PRODUCTS } from "./supabase.js";
 import { istParts, pdfResponse } from "./reports.js";
 
@@ -14,10 +14,6 @@ const ROW_B = "#f3eee4";
 const PAGE_W = 595.28;
 const PAGE_H = 841.89;
 const MARGIN = 36;
-
-function logoFile() {
-  return findPdfLogo();
-}
 
 function money(n) {
   return "Rs. " + Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -45,26 +41,29 @@ async function loadCatalog() {
 }
 
 function paintHeader(doc, stamp, first) {
+  const headH = first ? 148 : 78;
   doc.save();
-  doc.rect(0, 0, PAGE_W, first ? 148 : 72).fill(FOREST);
-  doc.rect(0, first ? 148 : 72, PAGE_W, 6).fill(GOLD);
+  doc.rect(0, 0, PAGE_W, headH).fill(FOREST);
+  doc.rect(0, headH, PAGE_W, 6).fill(GOLD);
   doc.rect(0, 0, 10, PAGE_H).fill(GOLD);
 
-  const file = logoFile();
-  if (file) {
-    try {
-      doc.image(file, 28, first ? 22 : 14, { height: first ? 54 : 36 });
-    } catch {
-      /* text fallback below */
-    }
-  }
+  const logoW = first ? 118 : 72;
+  const logoH = first ? 92 : 50;
+  const logoX = 20;
+  const logoY = first ? 26 : 14;
+  const used = placePdfLogo(doc, logoX, logoY, logoW, logoH);
+  const left = logoX + (used ? used + 14 : 0);
+  const titleW = PAGE_W - left - 200;
 
-  const left = 28 + (file ? 70 : 0);
-  doc.fillColor(GOLD).font("Helvetica-Bold").fontSize(8).text("WHOLESALE RICE · CHENNAI", left, first ? 26 : 18);
-  doc.fillColor("#ffffff").font("Helvetica-Bold").fontSize(first ? 22 : 14).text("BHR TRADERS", left, first ? 40 : 30);
+  doc.fillColor(GOLD).font("Helvetica-Bold").fontSize(8).text("WHOLESALE RICE · CHENNAI", left, first ? 32 : 18, {
+    width: titleW
+  });
+  doc.fillColor("#ffffff").font("Helvetica-Bold").fontSize(first ? 22 : 14).text("BHR TRADERS", left, first ? 46 : 32, {
+    width: titleW
+  });
   if (first) {
-    doc.fillColor("#d7e4d4").font("Helvetica").fontSize(9).text("Premium quality rice · Competitive wholesale rates · Reliable supply", left, 68, {
-      width: 340
+    doc.fillColor("#d7e4d4").font("Helvetica").fontSize(9).text("Premium quality rice · Competitive wholesale rates · Reliable supply", left, 76, {
+      width: titleW
     });
     doc.fillColor(GOLD).font("Helvetica-Bold").fontSize(16).text("Price List", PAGE_W - 210, 36, { width: 174, align: "right" });
     doc.fillColor("#d7e4d4").font("Helvetica").fontSize(8).text(stamp, PAGE_W - 210, 58, { width: 174, align: "right" });
@@ -73,7 +72,7 @@ function paintHeader(doc, stamp, first) {
     doc.fillColor("#d7e4d4").font("Helvetica").fontSize(7).text(stamp, PAGE_W - 210, 38, { width: 174, align: "right" });
   }
   doc.restore();
-  doc.y = first ? 172 : 96;
+  doc.y = headH + 24;
 }
 
 function paintFooter(doc, page, total) {

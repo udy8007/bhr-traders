@@ -1,5 +1,5 @@
 import { createPdfDocument } from "./pdfDoc.js";
-import { findPdfLogo } from "./pdfAssets.js";
+import { placePdfLogo } from "./pdfAssets.js";
 import { adminDeepLink, adminNotifyEmail } from "./notify.js";
 import {
   escapeHtml,
@@ -14,10 +14,6 @@ import {
 import { isShopVisit } from "./shopVisits.js";
 import { visitDevice } from "./device.js";
 import { getSupabase } from "./supabase.js";
-
-function logoPath() {
-  return findPdfLogo();
-}
 
 const SCHEDULE_ID = "default";
 export const REPORT_KINDS = ["overall", "orders", "products", "category", "visits"];
@@ -230,19 +226,14 @@ function kindTitle(kind, cat) {
 }
 
 function drawHeader(doc, title, stamp, compact = false) {
-  const file = logoPath();
   const top = 22;
-  const logoH = compact ? 34 : 52;
-  if (file) {
-    try {
-      doc.image(file, 40, top, { height: logoH });
-    } catch {
-      doc.fillColor("#1f4d32").fontSize(compact ? 14 : 18).font("Helvetica-Bold").text("BHR Traders", 40, top);
-    }
-  } else {
+  const logoH = compact ? 40 : 56;
+  const logoW = compact ? 72 : 100;
+  const used = placePdfLogo(doc, 40, top, logoW, logoH);
+  if (!used) {
     doc.fillColor("#1f4d32").fontSize(compact ? 14 : 18).font("Helvetica-Bold").text("BHR Traders", 40, top);
   }
-  let y = top + logoH + 6;
+  let y = top + logoH + 8;
   doc.fillColor("#5e6b57").fontSize(8).font("Helvetica").text("Wholesale rice · GSTIN 33BDJPB0270L2ZT", 40, y);
   y = doc.y + 2;
   if (!compact) {

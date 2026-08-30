@@ -97,7 +97,7 @@ export function AdminLayout() {
           <div className="bhr-sidenav-head">
             <NavLink className="bhr-brand" to="/" onClick={closeNav}>
               <span className="bhr-brand-mark">
-                <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" />
+                <img src={import.meta.env.BASE_URL + "assets/img/logo.png?v=3"} alt="BHR Traders" />
               </span>
               <span className="bhr-brand-label">Backoffice</span>
             </NavLink>
@@ -154,7 +154,7 @@ export function AdminLayout() {
                 </span>
               </button>
               <NavLink className="bhr-topbar-brand d-xl-none" to="/" onClick={closeNav}>
-                <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" />
+                <img src={import.meta.env.BASE_URL + "assets/img/logo.png?v=3"} alt="BHR Traders" />
                 <span>
                   <small>Backoffice</small>
                   <strong>{pageTitle}</strong>

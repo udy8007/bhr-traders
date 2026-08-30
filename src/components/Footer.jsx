@@ -9,7 +9,7 @@ export function Footer() {
       <div className="wrap foot-grid">
         <div>
           <a className="logo" href="#home">
-            <img src="images/logo.png" alt="BHR TRADERS" />
+            <img src="images/logo.png?v=3" alt="BHR TRADERS" />
           </a>
           <p style={{ marginTop: 12 }}>
             BHR TRADERS is a wholesale rice trading business offering high-quality rice at very competitive and affordable prices.

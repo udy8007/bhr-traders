@@ -87,18 +87,25 @@
       display: flex;
       align-items: center;
       gap: 18px;
-      min-height: 78px;
+      min-height: 92px;
     }
-    .logo { display: flex; align-items: center; flex-shrink: 0; }
+    .logo {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      line-height: 0;
+    }
     .logo img {
-      height: 58px;
+      height: 76px;
       width: auto;
+      max-width: 186px;
       display: block;
+      object-fit: contain;
     }
     footer .logo img {
-      height: 64px;
-      filter: brightness(1.15) saturate(1.05);
-      margin-bottom: 4px;
+      height: 76px;
+      max-width: 180px;
+      margin-bottom: 8px;
     }
     .nav-links {
       list-style: none;
@@ -516,15 +523,14 @@
       top: 10px;
       left: 10px;
       z-index: 1;
-      background: #c0392b;
+      background: #9a2b22;
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       line-height: 1;
-      padding: 6px 8px;
-      border-radius: 6px;
-      box-shadow: 0 4px 10px rgba(192, 57, 43, 0.28);
+      padding: 5px 7px;
+      border-radius: 4px;
     }
     .shop-photo img {
       width: 100%;
@@ -1921,112 +1927,149 @@
     }
     .track-box {
       width: min(560px, 100%);
-      padding: 0 0 20px;
+      padding: 0 0 24px;
       overflow-x: hidden;
       overflow-y: auto;
       max-height: min(92vh, 900px);
+      border-radius: 18px;
     }
     .track-hero {
       position: relative;
-      height: 118px;
+      min-height: 168px;
       background:
-        linear-gradient(105deg, rgba(10,61,36,.94), rgba(10,61,36,.38)),
-        url("/images/product-hero.jpg") 50% 60% / cover no-repeat;
+        linear-gradient(180deg, rgba(8, 36, 22, .28) 0%, rgba(8, 36, 22, .55) 42%, rgba(8, 36, 22, .92) 100%),
+        url("/images/product-hero.jpg") 50% 58% / cover no-repeat;
     }
     .track-hero-copy {
       position: absolute;
-      left: 22px;
-      bottom: 16px;
-      color: #fff;
+      left: 24px;
+      right: 64px;
+      bottom: 22px;
+      color: #fffef6;
     }
     .track-hero-copy small {
-      color: #c9a85e;
-      font-weight: 700;
-      letter-spacing: .1em;
+      display: inline-block;
+      color: #143524;
+      background: #c9a85e;
+      font-weight: 800;
+      letter-spacing: .14em;
       text-transform: uppercase;
       font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 99px;
+      margin-bottom: 8px;
     }
-    .track-hero-copy h3 {
+    .track-box .track-hero-copy h3 {
+      font-family: "Playfair Display", serif;
+      color: #fffef6;
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.15;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, .35);
+    }
+    .track-hero-copy p {
+      margin: 8px 0 0;
+      color: #eadfc8;
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 36ch;
+    }
+    .track-x {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .16);
       color: #fff;
-      margin: 2px 0 0;
-      font-size: 28px;
-    }
-    .track-x { position: absolute; top: 10px; right: 12px; color: #fff; }
-    .track-form { padding: 18px 22px 0; display: grid; gap: 10px; }
-    .track-form .btn { width: 100%; }
-    .track-ticket {
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      place-items: center;
+      line-height: 1;
+    }
+    .track-x:hover { background: rgba(255, 255, 255, .28); color: #fff; }
+    .track-form { padding: 22px 22px 0; display: grid; gap: 12px; }
+    .track-form .btn { width: 100%; }
+    .track-submit {
+      height: 48px;
+      border-radius: 12px;
+      font-size: 14px;
+      letter-spacing: .02em;
+    }
+    .track-field {
+      display: flex;
       align-items: center;
       gap: 12px;
       margin: 0;
-      padding: 8px 8px 8px 10px;
-      border-radius: 16px;
-      border: 1.5px solid #dcc9a0;
-      background:
-        linear-gradient(90deg, #123f28 0 58px, transparent 58px),
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 6px,
-          rgba(196, 163, 90, .12) 6px,
-          rgba(196, 163, 90, .12) 7px
-        ),
-        linear-gradient(180deg, #fffdf8, #f4ead2);
-      box-shadow: 0 10px 24px rgba(20, 53, 36, .08);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1.5px solid #eadfc8;
+      background: #fffdf8;
+      box-shadow: 0 8px 22px rgba(20, 53, 36, .06);
     }
-    .track-ticket-mark {
-      width: 42px;
-      height: 42px;
+    .track-field:focus-within {
+      border-color: #c9a85e;
+      box-shadow: 0 0 0 4px rgba(201, 168, 94, .18);
+    }
+    .track-field-ico {
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
       display: grid;
       place-items: center;
-      background: #c9a85e;
-      color: #0a3d24;
+      background: #143524;
+      color: #c9a85e;
+      flex-shrink: 0;
     }
-    .track-ticket-mark svg { width: 22px; height: 22px; }
-    .track-ticket-copy { display: grid; gap: 1px; min-width: 0; }
-    .track-ticket-copy small {
+    .track-field-ico svg { width: 20px; height: 20px; }
+    .track-field-copy { display: grid; gap: 2px; min-width: 0; flex: 1; }
+    .track-field-copy small {
       color: #8a7a4e;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
       letter-spacing: .14em;
       text-transform: uppercase;
     }
-    .track-ticket-copy input {
+    .track-field-copy input {
       margin: 0;
+      margin-bottom: 0;
       padding: 0;
       height: 28px;
+      width: 100%;
       border: 0;
+      border-radius: 0;
       background: transparent;
-      font-family: "Playfair Display", serif;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: .06em;
+      font-family: Montserrat, sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .08em;
       color: #0a3d24;
     }
-    .track-ticket-copy input::placeholder { color: #c9a85e; opacity: .7; }
-    .track-ticket-stub {
-      width: 46px;
-      height: 52px;
-      border-left: 1.5px dashed #d4c19a;
-      display: grid;
-      place-items: center;
-      color: #0a3d24;
-      font-size: 10px;
+    .track-field-copy input::placeholder { color: #c4b48a; opacity: 1; }
+    .track-preview {
+      margin: 20px 22px 0;
+      padding: 16px 12px 14px;
+      border-radius: 16px;
+      background: #f7f3ea;
+      border: 1px solid #eadfc8;
+    }
+    .track-preview-label {
+      text-align: center;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: .14em;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #8a7a4e;
+      margin: 0 0 14px;
     }
     .track-journey {
       position: relative;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      margin: 16px 22px 4px;
+      margin: 0;
     }
-    .track-journey.live { list-style: none; padding: 0; margin: 18px 0 14px; }
+    .track-journey.live { list-style: none; padding: 18px 4px 8px; margin: 8px 0 16px; }
     .track-rail {
       position: absolute;
       left: 12%;
@@ -2148,12 +2191,11 @@
     }
     .track-result.show { display: block; }
     .track-panel {
-      margin: 16px 22px 0;
-      padding: 16px;
-      border: 1px solid #eadfca;
+      margin: 18px 22px 0;
+      padding: 18px;
+      border: 1px solid #eadfc8;
       border-radius: 16px;
-      background:
-        linear-gradient(180deg, #fffdf8, #f4efe3);
+      background: #fffdf8;
     }
     .track-status-card {
       display: flex;
@@ -2666,7 +2708,7 @@
       .topbar-item:not(.center) { display: none; }
       .menu-toggle { display: grid; }
       .nav-row { justify-content: space-between; }
-      .logo img { height: 46px; }
+      .logo img { height: 60px; max-width: 148px; }
       .nav-links {
         position: fixed; inset: 0 auto 0 0;
         width: min(280px, 84vw);

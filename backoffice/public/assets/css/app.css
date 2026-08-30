@@ -14,31 +14,37 @@
 }
 .bhr-loader-mark {
   position: relative;
-  width: 118px;
-  height: 118px;
+  width: 188px;
+  height: 188px;
   display: grid;
   place-items: center;
 }
 .bhr-loader-mark img {
-  width: 84px;
+  width: 148px;
   height: auto;
-  max-height: 52px;
+  max-height: 96px;
   object-fit: contain;
-  background: #fffef6;
-  border-radius: 16px;
-  padding: 10px 12px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
   position: relative;
   z-index: 1;
 }
 .bhr-loader-ring {
   position: absolute;
-  inset: 0;
+  width: 176px;
+  height: 176px;
+  left: 50%;
+  top: 50%;
+  margin: -88px 0 0 -88px;
   border-radius: 50%;
-  border: 3px solid rgba(196, 163, 90, 0.22);
-  border-top-color: #c4a35a;
-  border-right-color: #e0c57a;
-  animation: bhr-spin 0.85s linear infinite;
+  border: 3px solid rgba(196, 163, 90, 0.2);
+  border-top-color: #e8d08a;
+  border-right-color: #c4a35a;
+  box-sizing: border-box;
+  transform-origin: 50% 50%;
+  animation: bhr-spin 0.9s linear infinite;
 }
 .bhr-loader-kicker {
   margin: 0;
@@ -589,14 +595,14 @@
   margin: 0 auto;
 }
 .bug-report-logo {
-  width: 52px;
-  height: 52px;
+  width: 88px;
+  height: auto;
+  max-height: 58px;
   object-fit: contain;
-  border-radius: 50%;
-  background: #fff;
-  padding: 4px;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(20, 53, 36, 0.18);
 }
 .bug-shell {
   padding: 0 0 20px;
@@ -886,7 +892,7 @@ body.bhr-graphic .btn-outline-info:hover {
   justify-content: center;
   background: #fffef6;
   border-radius: 14px;
-  padding: 8px 10px;
+  padding: 4px 6px;
   border: 1px solid rgba(196, 163, 90, 0.45);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   overflow: hidden;
@@ -895,10 +901,10 @@ body.bhr-graphic .btn-outline-info:hover {
 .bhr-sidenav .navbar-brand-img {
   width: 100%;
   height: auto;
-  max-height: 58px;
+  max-height: 72px;
   object-fit: contain;
   display: block;
-  background: transparent;
+  background: #fff;
   border-radius: 0;
   padding: 0;
 }
@@ -1780,14 +1786,14 @@ body.bhr-graphic .breadcrumb-item .text-dark {
   color: #143524;
 }
 .bhr-topbar-brand img {
-  width: 36px;
+  width: auto;
   height: 36px;
   object-fit: contain;
   background: #fff;
   border: 1px solid #eadfc8;
-  border-radius: 10px;
-  padding: 4px;
-  flex: 0 0 36px;
+  border-radius: 8px;
+  padding: 0;
+  flex: 0 0 auto;
 }
 .bhr-topbar-brand span {
   min-width: 0;

@@ -183,6 +183,7 @@ export function Dashboard() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [tick, setTick] = useState(new Date());
+  const [resettingVisits, setResettingVisits] = useState(false);
 
   function load(quiet) {
     api.stats(quiet).then((d) => {
@@ -195,6 +196,20 @@ export function Dashboard() {
     const t = setInterval(() => load(true), 5000);
     return () => clearInterval(t);
   }, []);
+
+  async function resetVisits() {
+    if (!confirm("Delete all shop page visit data? This cannot be undone.")) return;
+    setResettingVisits(true);
+    setError("");
+    try {
+      await api.resetVisits();
+      load(true);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setResettingVisits(false);
+    }
+  }
 
   async function changeStatus(id, status) {
     try {
@@ -417,7 +432,19 @@ export function Dashboard() {
       </div>
       <div className="row">
         <div className="col-12 mb-4">
-          <Card title="Live shop visits">
+          <Card
+            title="Live shop visits"
+            action={
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-danger mb-0"
+                disabled={resettingVisits || !(data?.liveVisits || []).length}
+                onClick={resetVisits}
+              >
+                {resettingVisits ? "Resetting…" : "Reset"}
+              </button>
+            }
+          >
             <div className="row">
               {visitPager.slice.map((v) => (
                 <div className="col-md-6 col-xl-4 mb-3" key={v.id || v.place + v.at}>

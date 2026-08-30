@@ -40,7 +40,7 @@ export function ReportBugForm() {
   return (
     <form className="gform-shell bug-shell" onSubmit={send}>
       <div className="bug-banner">
-        <img src={import.meta.env.BASE_URL + "assets/img/logo.png"} alt="BHR Traders" className="bug-report-logo" />
+        <img src={import.meta.env.BASE_URL + "assets/img/logo.png?v=3"} alt="BHR Traders" className="bug-report-logo" />
         <div>
           <p className="bug-banner-kicker">Developer channel</p>
           <h4>Report a Bug</h4>

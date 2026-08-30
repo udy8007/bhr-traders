@@ -103,6 +103,7 @@ export function TrackModal() {
           <div className="track-hero-copy">
             <small>Live rice delivery</small>
             <h3 id="trackTitle">Track your order</h3>
+            <p>Enter the ID from your invoice or confirmation message.</p>
           </div>
           <button className="modal-close track-x" type="button" aria-label="Close" onClick={() => setTrackOpen(false)}>
             ×
@@ -116,14 +117,14 @@ export function TrackModal() {
             lookup(query);
           }}
         >
-          <label className="track-ticket">
-            <span className="track-ticket-mark" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
-                <rect x="4" y="3.5" width="16" height="17" rx="2" />
-                <path d="M8 8h8M8 12h8M8 16h5" />
+          <label className="track-field">
+            <span className="track-field-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="M16.2 16.2 21 21" />
               </svg>
             </span>
-            <span className="track-ticket-copy">
+            <span className="track-field-copy">
               <small>Transaction ID</small>
               <input
                 name="orderId"
@@ -134,25 +135,27 @@ export function TrackModal() {
                 onChange={(e) => setQuery(e.target.value.toUpperCase())}
               />
             </span>
-            <span className="track-ticket-stub" aria-hidden="true">BHR</span>
           </label>
-          <button className="btn btn-green" type="submit" disabled={busy}>
+          <button className="btn btn-green track-submit" type="submit" disabled={busy}>
             {busy ? "Tracking…" : "Track order"}
           </button>
         </form>
 
         {!order && !error ? (
-          <div className="track-journey" aria-hidden="true">
-            <div className="track-rail" />
-            {STEP_COPY.map((s) => (
-              <div key={s.label} className="track-node idle">
-                <span className="track-node-ico">
-                  <StepIcon name={s.label} />
-                </span>
-                <strong>{s.label}</strong>
-                <small>{s.hint}</small>
-              </div>
-            ))}
+          <div className="track-preview">
+            <p className="track-preview-label">How an order moves</p>
+            <div className="track-journey" aria-hidden="true">
+              <div className="track-rail" />
+              {STEP_COPY.map((s) => (
+                <div key={s.label} className="track-node idle">
+                  <span className="track-node-ico">
+                    <StepIcon name={s.label} />
+                  </span>
+                  <strong>{s.label}</strong>
+                  <small>{s.hint}</small>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 

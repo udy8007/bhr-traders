@@ -107,7 +107,7 @@ export function Navbar() {
             </svg>
           </button>
           <a className="logo" href="#home">
-            <img src="images/logo.png" alt="BHR TRADERS" />
+            <img src="images/logo.png?v=3" alt="BHR TRADERS" />
           </a>
           <ul className={"nav-links" + (menuOpen ? " open" : "")}>
             {NAV_LINKS.map((link) => (
