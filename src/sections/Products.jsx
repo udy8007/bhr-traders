@@ -160,6 +160,7 @@ export function Products() {
                   onClick={() => openPdp(p.id)}
                 >
                   <div className="shop-photo">
+                    <span className="offer-tag">80% OFF</span>
                     <img src={p.img} alt={p.title} />
                     <button
                       className={"wish" + (wish[p.id] ? " on" : "")}
