@@ -165,12 +165,18 @@ function CityChart({ rows }) {
   );
 }
 
-const VISIT_TONES = ["info", "success", "warning", "primary", "danger", "dark"];
+function deviceIcon(device) {
+  if (device === "Mobile") return "smartphone";
+  if (device === "Tablet") return "tablet";
+  if (device === "Desktop") return "computer";
+  return "devices";
+}
 
-function visitTone(place) {
-  let n = 0;
-  String(place || "").split("").forEach((ch) => { n += ch.charCodeAt(0); });
-  return VISIT_TONES[n % VISIT_TONES.length];
+function deviceTone(device) {
+  if (device === "Mobile") return "warning";
+  if (device === "Tablet") return "info";
+  if (device === "Desktop") return "success";
+  return "secondary";
 }
 
 export function Dashboard() {
@@ -218,6 +224,7 @@ export function Dashboard() {
     { label: "Incomplete checkouts", value: s.incompleteCheckouts ?? 0, hint: "Started, not finished", icon: "shopping_cart", tone: "forest", to: "/sales/orders" },
     { label: "Net revenue", value: rupee(s.netRevenue), hint: "Excl. cancelled / pending", icon: "payments", tone: "gold", to: "/reports" },
     { label: "Visits today", value: s.visitsToday ?? 0, hint: "of " + (s.visitsTotal ?? 0) + " total", icon: "visibility", tone: "forest", to: "/reports" },
+    { label: "Mobile visits", value: s.mobileVisits ?? 0, hint: (s.desktopVisits ?? 0) + " desktop · " + (s.tabletVisits ?? 0) + " tablet", icon: "smartphone", tone: "gold", to: "/reports" },
     { label: "Customers", value: s.customers ?? 0, hint: "From orders & enquiries", icon: "group", tone: "gold", to: "/sales/customers" },
     { label: "Live catalog", value: s.live ?? s.products ?? 0, hint: (s.hidden ?? 0) + " hidden", icon: "inventory_2", tone: "forest", to: "/master/products" }
   ];
@@ -285,6 +292,14 @@ export function Dashboard() {
           <Card title="Top visitor cities">
             <CityChart rows={data?.topCities || []} />
           </Card>
+          <div className="mt-4">
+            <Card title="Visit devices">
+              <CityChart rows={(data?.devices || []).map((r) => ({ city: r.label, count: r.count }))} />
+              <p className="text-xs text-secondary mb-0 mt-3">
+                Mobile {s.mobileVisits ?? 0} · Tablet {s.tabletVisits ?? 0} · Desktop {s.desktopVisits ?? 0}
+              </p>
+            </Card>
+          </div>
         </div>
         <div className="col-lg-8 mb-4">
           <Card title="Recent orders" bodyClass="px-0 pt-0 pb-2">
@@ -407,10 +422,13 @@ export function Dashboard() {
               {visitPager.slice.map((v) => (
                 <div className="col-md-6 col-xl-4 mb-3" key={v.id || v.place + v.at}>
                   <div className="visit-card">
-                    <div className={"visit-pin bg-gradient-" + visitTone(v.place)}>
-                      <i className="material-symbols-rounded">location_on</i>
+                    <div className={"visit-pin bg-gradient-" + deviceTone(v.device)}>
+                      <i className="material-symbols-rounded">{deviceIcon(v.device)}</i>
                     </div>
                     <p className="text-sm font-weight-bold mb-1">{v.place}</p>
+                    <p className="text-xs mb-0">
+                      <span className={"visit-device is-" + String(v.device || "unknown").toLowerCase()}>{v.device || "Unknown"}</span>
+                    </p>
                     <p className="text-xs text-secondary mb-0 mt-2">{when(v.at)}</p>
                   </div>
                 </div>

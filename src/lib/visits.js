@@ -5,6 +5,24 @@ function pagePath() {
   return h || "home";
 }
 
+function detectDevice() {
+  const ua = navigator.userAgent || "";
+  if (/iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua))) return "Tablet";
+  if (/Mobi|iPhone|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return "Mobile";
+  try {
+    if (navigator.userAgentData && navigator.userAgentData.mobile) return "Mobile";
+  } catch {
+    /* ignore */
+  }
+  try {
+    if (window.matchMedia("(max-width: 768px)").matches) return "Mobile";
+    if (window.matchMedia("(max-width: 1024px)").matches) return "Tablet";
+  } catch {
+    /* ignore */
+  }
+  return "Desktop";
+}
+
 function send(kind, extra = {}) {
   const path = extra.path || pagePath();
   if (/^(login|dashboard|master|sales|reports|logs|catalog)(\/|$)/i.test(path.replace(/^#\/?/, ""))) return;
@@ -16,6 +34,7 @@ function send(kind, extra = {}) {
     lang: navigator.language || "",
     screen: (window.screen && window.screen.width + "x" + window.screen.height) || "",
     ...extra,
+    device: extra.device || detectDevice(),
     path: kind === "page" ? "home" : path
   };
   fetch(API + "/api/visits", {

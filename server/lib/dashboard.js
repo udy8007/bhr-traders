@@ -1,3 +1,4 @@
+import { visitDevice } from "./device.js";
 import { isShopVisit } from "./shopVisits.js";
 import { needsAdminAction } from "./orderAlerts.js";
 
@@ -187,6 +188,8 @@ export function buildDashboard(products, orders, enquiries, items, visits) {
       region: v.region || "",
       country: v.country || "",
       path: v.path || "home",
+      device: visitDevice(v),
+      screen: v.screen || "",
       at: v.created_at
     }));
 
@@ -200,6 +203,10 @@ export function buildDashboard(products, orders, enquiries, items, visits) {
   const topReferrers = countMap(pageVisits, (v) => referrerHost(v.referrer)).slice(0, 6);
   const uniqueCities = new Set(pageVisits.map(loc)).size;
   const uniqueCountries = new Set(pageVisits.map((v) => v.country || "Unknown")).size;
+  const devices = countMap(pageVisits, (v) => visitDevice(v));
+  const mobileVisits = pageVisits.filter((v) => visitDevice(v) === "Mobile").length;
+  const tabletVisits = pageVisits.filter((v) => visitDevice(v) === "Tablet").length;
+  const desktopVisits = pageVisits.filter((v) => visitDevice(v) === "Desktop").length;
   const customerPack = buildCustomers(orderRows, enquiryRows);
 
   return {
@@ -219,6 +226,9 @@ export function buildDashboard(products, orders, enquiries, items, visits) {
       visitsTotal: pageVisits.length,
       uniqueCities,
       uniqueCountries,
+      mobileVisits,
+      tabletVisits,
+      desktopVisits,
       checkoutStarts: visitRows.filter((v) => v.kind === "checkout_start").length,
       checkoutCompletes: visitRows.filter((v) => v.kind === "checkout_complete").length,
       customers: customerPack.customerCount
@@ -230,6 +240,7 @@ export function buildDashboard(products, orders, enquiries, items, visits) {
     topPages,
     topCountries,
     topReferrers,
+    devices,
     checkoutFunnel: [
       { label: "Page views", count: pageVisits.length },
       { label: "Checkout started", count: visitRows.filter((v) => v.kind === "checkout_start").length },

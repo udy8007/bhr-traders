@@ -15,7 +15,7 @@ const MUTED = "#5e6b57";
 export const MAIL_BRAND = {
   name: "BHR Traders",
   kicker: "Wholesale rice · Chennai",
-  address: "No. 66, Kannagi Nagar, Puthagaram Road, Anna Nagar West, Chennai 600040",
+  address: "No: 66, Kannagi Nagar, PadiKuppam Main Road, Anna Nagar West, Chennai, Tamil Nadu - 600040.",
   phone: "+91 99403 38654",
   phone2: "+91 99403 39654",
   email: "info@bhrtraders.com",

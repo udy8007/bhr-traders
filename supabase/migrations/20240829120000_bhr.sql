@@ -106,10 +106,12 @@ create table if not exists public.visits (
   tz text,
   lang text,
   screen text,
+  device text,
   created_at timestamptz not null default now()
 );
 
 alter table public.visits add column if not exists screen text;
+alter table public.visits add column if not exists device text;
 
 alter table public.visits enable row level security;
 drop policy if exists "visits_insert" on public.visits;
@@ -271,6 +273,8 @@ create table if not exists public.backup_schedules (
   last_sent_at timestamptz,
   last_error text
 );
+
+alter table public.backup_schedules add column if not exists email_override boolean not null default false;
 
 insert into public.backup_schedules (id, enabled, email_enabled, email, cron)
 values ('default', false, true, 'info@bhrtraders.com', '0 2 * * *')

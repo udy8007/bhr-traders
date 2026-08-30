@@ -83,7 +83,7 @@ function paintFooter(doc, page, total) {
   doc.fillColor("#d7e4d4")
     .font("Helvetica")
     .fontSize(7)
-    .text("No. 66, Kannagi Nagar, Puthagaram Road, Anna Nagar West, Chennai 600040", 24, PAGE_H - 40, { width: 390, lineBreak: false });
+    .text("No: 66, Kannagi Nagar, PadiKuppam Main Road, Anna Nagar West, Chennai 600040", 24, PAGE_H - 40, { width: 390, lineBreak: false });
   doc.text("+91 99403 38654  ·  +91 99403 39654  ·  info@bhrtraders.com  ·  GSTIN 33BDJPB0270L2ZT", 24, PAGE_H - 26, {
     width: 390,
     lineBreak: false

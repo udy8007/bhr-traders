@@ -79,7 +79,7 @@ export function NotificationConfig() {
                 </span>
                 <div className="ncfg-channel-copy">
                   <h6>Email notification</h6>
-                  <p>Shop alerts, scheduled reports, and database backups. Customers still get their own order and enquiry emails.</p>
+                  <p>Shop alerts and scheduled reports. Database backups use a separate email on DB backup. Customers still get their own order and enquiry emails.</p>
                 </div>
                 <Toggle
                   on={form.email_enabled}
@@ -98,7 +98,7 @@ export function NotificationConfig() {
                   placeholder="admin@example.com"
                 />
               </label>
-              <p className="ncfg-help">Used for orders, enquiries, scheduled reports, and DB backups.</p>
+              <p className="ncfg-help">Used for orders, enquiries, and scheduled reports. DB backup has its own recipient.</p>
             </section>
 
             <section className={"ncfg-channel" + (form.push_enabled ? " is-live" : "")}>

@@ -12,6 +12,7 @@ import {
   wrapHtml
 } from "./mail.js";
 import { isShopVisit } from "./shopVisits.js";
+import { visitDevice } from "./device.js";
 import { getSupabase } from "./supabase.js";
 
 function logoPath() {
@@ -340,6 +341,9 @@ function drawVisitReport(doc, allVisits, { full }) {
   kv(doc, "Shop visits", String(pages.length));
   kv(doc, "Visits today (IST)", String(todayCount));
   kv(doc, "Cities", String(new Set(pages.map(visitPlace)).size));
+  kv(doc, "Mobile", String(pages.filter((v) => visitDevice(v) === "Mobile").length));
+  kv(doc, "Tablet", String(pages.filter((v) => visitDevice(v) === "Tablet").length));
+  kv(doc, "Desktop", String(pages.filter((v) => visitDevice(v) === "Desktop").length));
   kv(doc, "Checkout started", String(checkouts));
   kv(doc, "Checkout complete", String(completes));
   doc.y += 8;
@@ -369,9 +373,13 @@ function drawVisitReport(doc, allVisits, { full }) {
   const refs = countBy(pages, (v) => referrerHost(v.referrer));
   drawTable(doc, ["Source", "Views"], refs.length ? refs.slice(0, 12) : [["Direct", "0"]], [360, 155]);
 
+  sectionTitle(doc, "Devices");
+  const devices = countBy(pages, (v) => visitDevice(v));
+  drawTable(doc, ["Device", "Views"], devices.length ? devices : [["No visits yet", "—"]], [360, 155]);
+
   sectionTitle(doc, "Recent visits");
-  const recent = pages.slice(0, 40).map((v) => [when(v.created_at), clip(visitPlace(v), 36)]);
-  drawTable(doc, ["When", "Place"], recent.length ? recent : [["No visits yet", ""]], [200, 315]);
+  const recent = pages.slice(0, 40).map((v) => [when(v.created_at), clip(visitPlace(v), 28), visitDevice(v)]);
+  drawTable(doc, ["When", "Place", "Device"], recent.length ? recent : [["No visits yet", "", ""]], [160, 255, 100]);
 }
 
 function kv(doc, label, value) {
@@ -524,7 +532,7 @@ export function buildReportPdf(kind, data, category) {
     }
 
     doc.font("Helvetica").fillColor("#5e6b57").fontSize(8).text(
-      "No. 66 Kannagi Nagar, Anna Nagar West, Chennai 600040 · info@bhrtraders.com",
+      "No: 66, Kannagi Nagar, PadiKuppam Main Road, Anna Nagar West, Chennai 600040 · info@bhrtraders.com",
       40,
       812,
       { width: 515, align: "center", lineBreak: false }
@@ -572,8 +580,8 @@ function reportMailSnapshot(kind, data, category) {
   }
   if (kind === "visits") {
     return mailPreviewTable(
-      ["When", "Place", "Page"],
-      visits.slice(0, 8).map((v) => [when(v.created_at), clip(visitPlace(v), 24), clip(v.path || "home", 18)])
+      ["When", "Place", "Device"],
+      visits.slice(0, 8).map((v) => [when(v.created_at), clip(visitPlace(v), 24), visitDevice(v)])
     );
   }
   return mailPreviewTable(

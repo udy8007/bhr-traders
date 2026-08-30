@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ABOUT_FEATS, ADDRESS, EMAIL, GSTIN, MAP_QUERY, PHONE, PHONE_2 } from "../data/site.js";
+import { ABOUT_FEATS, ADDRESS, EMAIL, GSTIN, HOURS_SUNDAY, HOURS_WEEKDAY, MAP_QUERY, PHONE, PHONE_2 } from "../data/site.js";
 import { ArrowIcon, SectionHead } from "../components/Icons.jsx";
 import { useStore } from "../context/StoreContext.jsx";
 
@@ -168,9 +168,9 @@ export function Location() {
                 </svg>
               </span>
               <span>
-                Monday to Saturday 9:00 AM – 7:00 PM
+                {HOURS_WEEKDAY}
                 <br />
-                Sunday Closed
+                {HOURS_SUNDAY}
               </span>
             </div>
             <div className="loc-row">

@@ -387,6 +387,28 @@
   border-radius: 999px;
   padding: 3px 8px;
 }
+.visit-device {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: #edf0f5;
+  color: #344767;
+}
+.visit-device.is-mobile {
+  background: #fff4e0;
+  color: #8b5a12;
+}
+.visit-device.is-tablet {
+  background: #e8f4ff;
+  color: #1a73e8;
+}
+.visit-device.is-desktop {
+  background: #e8f5ee;
+  color: #143524;
+}
 .admin-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -567,41 +589,70 @@
   margin: 0 auto;
 }
 .bug-report-logo {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
-  margin-right: 12px;
   border-radius: 50%;
   background: #fff;
   padding: 4px;
-  box-shadow: 0 2px 8px rgba(52, 71, 103, 0.12);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(20, 53, 36, 0.18);
 }
-.bug-report-intro strong {
-  color: #ea0606;
-}
-.bug-panel {
-  background: #fff;
-  border-radius: 18px;
+.bug-shell {
+  padding: 0 0 20px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(52, 71, 103, 0.08);
-  border: 1px solid #edf0f5;
 }
-.bug-panel-head {
-  border-radius: 0;
+.bug-shell::before {
+  display: none;
 }
-.bug-modal-head {
+.bug-banner {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 18px;
-  background: linear-gradient(195deg, #ef5350, #e53935);
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 18px 22px;
+  margin: 0 0 18px;
+  background: linear-gradient(195deg, #ef5350, #c62828);
+  color: #fff;
 }
-.bug-modal-head .bug-report-logo {
-  margin-right: 0;
-  background: #fff;
+.bug-banner-kicker {
+  margin: 0 0 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffd7d0;
 }
-.bug-modal-body {
-  padding: 18px;
+.bug-banner h4 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+.bug-banner p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+.bug-banner p strong {
+  color: #fff;
+}
+.bug-banner-badge {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+.bug-banner-badge .material-symbols-rounded {
+  color: #ffd7d0;
+}
+.bug-shell .gform-block,
+.bug-shell .gform-field,
+.bug-shell .gform-actions,
+.bug-shell .gform-err,
+.bug-shell .gform-ok {
+  margin-left: 22px;
+  margin-right: 22px;
 }
 .bug-chips {
   display: flex;
@@ -609,18 +660,19 @@
   gap: 8px;
 }
 .bug-chip {
-  border: 1px solid #edf0f5;
-  background: #f8fafc;
-  color: #344767;
+  border: 1px solid #eadfc8;
+  background: #f6f0e4;
+  color: #143524;
   border-radius: 999px;
   font-size: 12px;
-  font-weight: 600;
-  padding: 6px 12px;
+  font-weight: 700;
+  padding: 8px 14px;
   appearance: none;
   -webkit-appearance: none;
   outline: none;
   box-shadow: none;
-  caret-color: transparent;
+  cursor: pointer;
+  min-height: 36px;
 }
 .bug-chip:focus,
 .bug-chip:focus-visible,
@@ -629,25 +681,25 @@
   box-shadow: none;
 }
 .bug-chip.on {
-  background: #1a73e8;
-  border-color: #1a73e8;
+  background: #143524;
+  border-color: #143524;
   color: #fff;
 }
-.bug-chip.sev-success.on {
-  background: #2dce89;
-  border-color: #2dce89;
+.bug-chip.on.sev-low {
+  background: #2d6a4f;
+  border-color: #2d6a4f;
 }
-.bug-chip.sev-warning.on {
-  background: #fb8c00;
-  border-color: #fb8c00;
+.bug-chip.on.sev-medium {
+  background: #143524;
+  border-color: #143524;
 }
-.bug-chip.sev-danger.on {
-  background: #f5365c;
-  border-color: #f5365c;
+.bug-chip.on.sev-high {
+  background: #c62828;
+  border-color: #c62828;
 }
-.bug-chip.sev-dark.on {
-  background: #344767;
-  border-color: #344767;
+.bug-chip.on.sev-critical {
+  background: #7f1d1d;
+  border-color: #7f1d1d;
 }
 .bug-launch {
   display: flex;
@@ -2771,7 +2823,8 @@ html, body.bhr-graphic {
   text-decoration: none;
 }
 .gform-btn-primary .material-symbols-rounded,
-.gform-btn-gold .material-symbols-rounded {
+.gform-btn-gold .material-symbols-rounded,
+.gform-btn-danger .material-symbols-rounded {
   font-size: 18px;
 }
 .gform-btn-primary {

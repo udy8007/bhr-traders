@@ -185,9 +185,9 @@ export function Analytics() {
   const kpis = [
     { label: "Total visits", value: s.visitsTotal ?? 0 },
     { label: "Visits today", value: s.visitsToday ?? 0 },
+    { label: "Mobile", value: s.mobileVisits ?? 0 },
+    { label: "Desktop", value: s.desktopVisits ?? 0 },
     { label: "Cities", value: s.uniqueCities ?? 0 },
-    { label: "Countries", value: s.uniqueCountries ?? 0 },
-    { label: "Checkouts started", value: s.checkoutStarts ?? 0 },
     { label: "Orders", value: s.orders ?? 0 }
   ];
 
@@ -243,12 +243,20 @@ export function Analytics() {
       </div>
 
       <div className="row">
-        <div className="col-lg-6 mb-4">
+        <div className="col-lg-4 mb-4">
+          <Card title="Devices">
+            <RankBars rows={data?.devices || []} color="#143524" />
+            <p className="text-xs text-secondary mb-0 mt-3">
+              Mobile {s.mobileVisits ?? 0} · Tablet {s.tabletVisits ?? 0} · Desktop {s.desktopVisits ?? 0}
+            </p>
+          </Card>
+        </div>
+        <div className="col-lg-4 mb-4">
           <Card title="Referrers">
             <RankBars rows={data?.topReferrers || []} color="#c4a35a" />
           </Card>
         </div>
-        <div className="col-lg-6 mb-4">
+        <div className="col-lg-4 mb-4">
           <Card title="Top cities" bodyClass="px-0 pt-0 pb-2">
             <div className="table-responsive p-0">
               <table className="table align-items-center mb-0">
@@ -283,6 +291,7 @@ export function Analytics() {
                 <thead>
                   <tr>
                     <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Location</th>
+                    <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Device</th>
                     <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 pe-3">Time</th>
                   </tr>
                 </thead>
@@ -290,11 +299,12 @@ export function Analytics() {
                   {(data?.liveVisits || []).map((v) => (
                     <tr key={v.id}>
                       <td className="ps-3"><p className="text-xs mb-0">{v.place}</p></td>
+                      <td><p className="text-xs mb-0">{v.device || "Unknown"}</p></td>
                       <td className="pe-3"><p className="text-xs text-secondary mb-0">{visitWhen(v.at)}</p></td>
                     </tr>
                   ))}
                   {!data?.liveVisits?.length ? (
-                    <tr><td colSpan="2" className="ps-3 text-sm">Waiting for storefront traffic…</td></tr>
+                    <tr><td colSpan="3" className="ps-3 text-sm">Waiting for storefront traffic…</td></tr>
                   ) : null}
                 </tbody>
               </table>

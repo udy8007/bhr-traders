@@ -248,6 +248,7 @@ export function Enquiries() {
   const [tab, setTab] = useState("all");
   const [error, setError] = useState("");
   const [ok, setOk] = useState("");
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     api.enquiries().then((r) => setRows(r.enquiries || [])).catch((e) => setError(e.message));
@@ -274,6 +275,24 @@ export function Enquiries() {
       }
     } catch (e) {
       setError(e.message);
+    }
+  }
+
+  async function resetAll() {
+    if (!rows.length) return;
+    if (!confirm("Delete all enquiry data? This cannot be undone.")) return;
+    setResetting(true);
+    setError("");
+    setOk("");
+    try {
+      await api.resetEnquiries();
+      setRows([]);
+      setTab("all");
+      setOk("All enquiries were deleted.");
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setResetting(false);
     }
   }
 
@@ -337,21 +356,31 @@ export function Enquiries() {
         </div>
       </div>
       <Card title="Enquiries">
-        <div className="d-flex flex-wrap gap-2 mb-3">
-          {[
-            { id: "all", label: "All (" + rows.length + ")" },
-            { id: "pending", label: "Pending (" + pending + ")" },
-            { id: "resolved", label: "Resolved (" + resolved + ")" }
-          ].map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              className={"btn btn-sm mb-0 " + (tab === t.id ? "bg-gradient-info" : "btn-outline-info")}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+          <div className="d-flex flex-wrap gap-2">
+            {[
+              { id: "all", label: "All (" + rows.length + ")" },
+              { id: "pending", label: "Pending (" + pending + ")" },
+              { id: "resolved", label: "Resolved (" + resolved + ")" }
+            ].map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                className={"btn btn-sm mb-0 " + (tab === t.id ? "bg-gradient-info" : "btn-outline-info")}
+                onClick={() => setTab(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger mb-0"
+            disabled={resetting || !rows.length}
+            onClick={resetAll}
+          >
+            {resetting ? "Resetting…" : "Reset"}
+          </button>
         </div>
         <div className="table-responsive">
           <table className="table align-items-center mb-0">

@@ -27,7 +27,8 @@ export const DEFAULT_BACKUP = {
   id: SCHEDULE_ID,
   enabled: false,
   email_enabled: true,
-  email: "info@bhrtraders.com",
+  email: "",
+  email_override: false,
   cron: "0 2 * * *",
   last_run_key: "",
   last_attempt_key: "",
@@ -39,6 +40,10 @@ function asBool(v, fallback = false) {
   if (v === true || v === "true" || v === 1 || v === "1") return true;
   if (v === false || v === "false" || v === 0 || v === "0") return false;
   return fallback;
+}
+
+function isEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
 }
 
 export function validCron(expr) {
@@ -55,6 +60,7 @@ export function normalizeBackup(row) {
     enabled: asBool(base.enabled, false),
     email_enabled: asBool(base.email_enabled, true),
     email: String(base.email || "").trim(),
+    email_override: asBool(base.email_override, false),
     cron: validCron(cron) ? cron : DEFAULT_BACKUP.cron,
     last_run_key: String(base.last_run_key || ""),
     last_attempt_key: String(base.last_attempt_key || ""),
@@ -69,6 +75,7 @@ function rowForDb(schedule) {
     enabled: schedule.enabled,
     email_enabled: schedule.email_enabled,
     email: schedule.email,
+    email_override: schedule.email_override,
     cron: schedule.cron,
     last_run_key: schedule.last_run_key || "",
     last_attempt_key: schedule.last_attempt_key || "",
@@ -79,18 +86,30 @@ function rowForDb(schedule) {
   return row;
 }
 
-async function withNotifyEmail(schedule) {
-  return { ...schedule, email: await adminNotifyEmail() };
+function backupRecipient(schedule, adminEmail) {
+  const stored = String(schedule?.email || "").trim();
+  if (asBool(schedule?.email_override, false) && isEmail(stored)) return stored;
+  if (isEmail(stored) && stored.toLowerCase() !== "info@bhrtraders.com") return stored;
+  return adminEmail;
+}
+
+async function resolveBackupTo(schedule) {
+  return backupRecipient(schedule, await adminNotifyEmail());
+}
+
+async function presentBackup(schedule) {
+  const adminEmail = await adminNotifyEmail();
+  return { ...schedule, email: backupRecipient(schedule, adminEmail), admin_email: adminEmail };
 }
 
 export async function getBackupSchedule() {
   const supabase = getSupabase();
   const { data, error } = await supabase.from("backup_schedules").select("*").eq("id", SCHEDULE_ID).maybeSingle();
   if (error) {
-    if (/does not exist|schema cache|Could not find/i.test(error.message || "")) return withNotifyEmail(normalizeBackup(null));
+    if (/does not exist|schema cache|Could not find/i.test(error.message || "")) return presentBackup(normalizeBackup(null));
     throw new Error(error.message);
   }
-  return withNotifyEmail(normalizeBackup(data));
+  return presentBackup(normalizeBackup(data));
 }
 
 export async function saveBackupSchedule(input) {
@@ -103,15 +122,31 @@ export async function saveBackupSchedule(input) {
   }
   const prev = normalizeBackup(loaded.data);
   const rest = { ...(input || {}) };
-  delete rest.email;
+  delete rest.admin_email;
+  if (!Object.prototype.hasOwnProperty.call(input || {}, "email")) delete rest.email;
   if (!String(rest.last_sent_at || "").trim()) delete rest.last_sent_at;
-  const next = normalizeBackup({ ...prev, ...rest, email: prev.email, id: SCHEDULE_ID });
+  const next = normalizeBackup({ ...prev, ...rest, id: SCHEDULE_ID });
+  if (Object.prototype.hasOwnProperty.call(input || {}, "email")) {
+    const email = String(input.email || "").trim();
+    if (!isEmail(email)) {
+      const err = new Error("Enter a valid backup email address.");
+      err.status = 400;
+      throw err;
+    }
+    next.email = email;
+    next.email_override = true;
+  }
   if (!validCron(next.cron)) {
     const err = new Error("Enter a valid 5-field cron expression, e.g. 0 2 * * *");
     err.status = 400;
     throw err;
   }
-  const { error } = await supabase.from("backup_schedules").upsert(rowForDb(next));
+  const row = rowForDb(next);
+  let { error } = await supabase.from("backup_schedules").upsert(row);
+  if (error && /email_override/i.test(error.message || "")) {
+    const { email_override: _flag, ...withoutFlag } = row;
+    ({ error } = await supabase.from("backup_schedules").upsert(withoutFlag));
+  }
   if (error) {
     if (/does not exist|schema cache|Could not find/i.test(error.message || "")) {
       const err = new Error("Create the backup_schedules table in Supabase (server/supabase/schema.sql), then save again.");
@@ -120,7 +155,7 @@ export async function saveBackupSchedule(input) {
     }
     throw new Error(error.message);
   }
-  return withNotifyEmail(next);
+  return presentBackup(next);
 }
 
 async function allRows(supabase, table) {
@@ -198,13 +233,9 @@ export async function buildDbDump() {
   };
 }
 
-async function recipientFor() {
-  return adminNotifyEmail();
-}
-
-export async function sendDbBackup() {
+export async function sendDbBackup(schedule) {
   const dump = await buildDbDump();
-  const to = await recipientFor();
+  const to = await resolveBackupTo(schedule || await getBackupSchedule());
   const summary = Object.entries(dump.counts)
     .map(([k, v]) => k + ": " + v)
     .join("\n");
@@ -270,11 +301,16 @@ export async function tickScheduledBackup() {
   if (!cronMatches(cfg.cron, now, { ignoreMinute: true })) return { skipped: "cron" };
   const runKey = now.dateKey + "-" + String(now.hour).padStart(2, "0");
   if (cfg.last_attempt_key === runKey) return { skipped: "already" };
-  await saveBackupSchedule({ ...cfg, last_attempt_key: runKey });
+  const stamp = {
+    enabled: cfg.enabled,
+    email_enabled: cfg.email_enabled,
+    cron: cfg.cron
+  };
+  await saveBackupSchedule({ ...stamp, last_attempt_key: runKey });
   try {
     await sendDbBackup(cfg);
     await saveBackupSchedule({
-      ...cfg,
+      ...stamp,
       last_attempt_key: runKey,
       last_run_key: runKey,
       last_sent_at: new Date().toISOString(),
@@ -283,7 +319,7 @@ export async function tickScheduledBackup() {
     return { ok: true, runKey };
   } catch (err) {
     await saveBackupSchedule({
-      ...cfg,
+      ...stamp,
       last_attempt_key: runKey,
       last_error: String(err.message || err)
     });

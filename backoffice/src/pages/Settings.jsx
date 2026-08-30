@@ -140,6 +140,7 @@ export function DbBackup() {
       const res = await api.saveBackupSchedule({
         enabled: form.enabled,
         email_enabled: form.email_enabled,
+        email: form.email,
         cron: form.cron
       });
       setForm(res.schedule);
@@ -159,6 +160,7 @@ export function DbBackup() {
       const res = await api.sendBackupNow({
         enabled: form.enabled,
         email_enabled: form.email_enabled,
+        email: form.email,
         cron: form.cron
       });
       setForm(res.schedule);
@@ -218,10 +220,19 @@ export function DbBackup() {
 
             <label className="gform-field">
               <span>Send to email</span>
-              <input type="email" value={form.email || ""} readOnly tabIndex={-1} />
+              <input
+                type="email"
+                value={form.email || ""}
+                onChange={(e) => patch({ email: e.target.value })}
+                required
+                autoComplete="email"
+                placeholder="backup@example.com"
+              />
             </label>
             <p className="gform-help">
-              This is the admin email from <Link to="/notifications/config">Notification configure</Link>. Change it there.
+              Saved only for database backups. Overrides the admin email in{" "}
+              <Link to="/notifications/config">Notification configure</Link>
+              {form.admin_email ? " (" + form.admin_email + ")" : ""}.
             </p>
 
             <div className="gform-block">

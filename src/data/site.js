@@ -11,9 +11,11 @@ export const EMAIL = "info@bhrtraders.com";
 export const UPI_ID = "bhr270906@okhdfcbank";
 export const UPI_QR = "images/upi-qr.png";
 export const ADDRESS =
-  "No: 66, Kannagi Nagar, Puthagaram Road, Anna Nagar West, Chennai, Tamil Nadu - 600040.";
+  "No: 66, Kannagi Nagar, PadiKuppam Main Road, Anna Nagar West, Chennai, Tamil Nadu - 600040.";
 export const MAP_QUERY =
-  "No.+66,+Kannagi+Nagar,+Puthagaram+Road,+Anna+Nagar+West,+Chennai+600040";
+  "No.+66,+Kannagi+Nagar,+PadiKuppam+Main+Road,+Anna+Nagar+West,+Chennai+600040";
+export const HOURS_WEEKDAY = "Monday to Saturday 7:00 AM – 9:00 PM";
+export const HOURS_SUNDAY = "Sunday 7:00 AM – 2:00 PM";
 
 export const NAV_LINKS = [
   { href: "#home", label: "Home" },

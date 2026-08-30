@@ -47,7 +47,9 @@ export async function POST(req) {
     }
     const sent = await sendDbBackup(schedule);
     const saved = await saveBackupSchedule({
-      ...schedule,
+      enabled: schedule.enabled,
+      email_enabled: schedule.email_enabled,
+      cron: schedule.cron,
       last_sent_at: new Date().toISOString(),
       last_error: ""
     });
