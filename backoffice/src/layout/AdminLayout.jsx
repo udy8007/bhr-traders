@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/auth.jsx";
+import { api } from "../lib/api.js";
 import { Icon } from "../components/Template.jsx";
 
 const MENU = [
@@ -26,6 +27,7 @@ const MENU = [
   { type: "link", to: "/notifications/log", icon: "campaign", label: "Notification log" },
   { type: "label", label: "Settings" },
   { type: "link", to: "/settings/password", icon: "lock", label: "Change password" },
+  { type: "link", to: "/settings/scheduler", icon: "schedule", label: "Scheduler" },
   { type: "link", to: "/settings/backup", icon: "database", label: "DB backup" },
   { type: "link", to: "/settings/endpoints", icon: "hub", label: "Endpoints" },
   { type: "link", to: "/report-bug", icon: "bug_report", label: "Report a bug" }
@@ -83,6 +85,23 @@ export function AdminLayout() {
       document.body.style.overflow = "";
     };
   }, [pinned]);
+
+  useEffect(() => {
+    let intervalId;
+    let cancelled = false;
+    (async () => {
+      const data = await api.scheduler({ quiet: true }).catch(() => null);
+      if (cancelled) return;
+      const minutes = data?.tick_interval_minutes ?? 30;
+      const tick = () => api.runScheduler({ quiet: true }).catch(() => {});
+      tick();
+      intervalId = setInterval(tick, minutes * 60 * 1000);
+    })();
+    return () => {
+      cancelled = true;
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, []);
 
   const trail = navTrail(location.pathname);
   const pageTitle = trail[trail.length - 1] || "Dashboard";

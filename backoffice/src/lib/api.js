@@ -142,6 +142,9 @@ export const api = {
   backupSchedule: () => request("/api/admin/backup"),
   saveBackupSchedule: (body) => request("/api/admin/backup", { method: "PUT", body: JSON.stringify(body) }),
   sendBackupNow: (body) => request("/api/admin/backup", { method: "POST", body: JSON.stringify(body || {}) }),
+  scheduler: (opts = {}) => request("/api/admin/scheduler", { quiet: opts.quiet }),
+  saveScheduler: (body) => request("/api/admin/scheduler", { method: "PATCH", body: JSON.stringify(body || {}) }),
+  runScheduler: (opts = {}) => request("/api/admin/scheduler", { method: "POST", quiet: opts.quiet }),
   downloadReportPdf: async (kind, category) => {
     showLoader();
     try {

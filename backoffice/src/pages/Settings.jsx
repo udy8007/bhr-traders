@@ -349,3 +349,131 @@ export function DbBackup() {
     </div>
   );
 }
+
+export function SchedulerSettings() {
+  const [form, setForm] = useState(null);
+  const [error, setError] = useState("");
+  const [ok, setOk] = useState("");
+  const [runResult, setRunResult] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [running, setRunning] = useState(false);
+
+  useEffect(() => {
+    api.scheduler().then(setForm).catch((e) => setError(e.message));
+  }, []);
+
+  function patch(next) {
+    setForm({ ...form, ...next });
+  }
+
+  async function save(e) {
+    e.preventDefault();
+    setBusy(true);
+    setError("");
+    setOk("");
+    try {
+      const res = await api.saveScheduler({
+        enabled: form.enabled,
+        tick_interval_minutes: Number(form.tick_interval_minutes) || 30
+      });
+      setForm(res);
+      setOk("Scheduler settings saved.");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function runNow() {
+    setRunning(true);
+    setRunResult("");
+    setError("");
+    try {
+      const data = await api.runScheduler();
+      if (data.skipped) {
+        setRunResult("Skipped — ran recently (5 min debounce).");
+      } else {
+        setRunResult(
+          "Done — orders: " +
+            (data.orders?.skipped || (data.orders?.ok ? "sent" : "checked")) +
+            ", reports: " +
+            (data.reports?.skipped || (data.reports?.ok ? "sent" : "checked")) +
+            ", backup: " +
+            (data.backup?.skipped || (data.backup?.ok ? "sent" : "checked"))
+        );
+      }
+      const next = await api.scheduler().catch(() => null);
+      if (next) setForm(next);
+    } catch (err) {
+      setRunResult(err.message);
+    } finally {
+      setRunning(false);
+    }
+  }
+
+  return (
+    <div className="gform">
+      <PageHead
+        title="Scheduler"
+        small="Runs pending-order alerts, scheduled reports, and backup checks from the app — no Vercel Pro cron needed."
+      />
+      {error ? <div className="alert alert-warning text-white">{error}</div> : null}
+      {!form ? (
+        <div className="gform-shell gform-loading">Loading scheduler…</div>
+      ) : (
+        <form className="gform-shell" onSubmit={save} style={{ maxWidth: 640 }}>
+          <div className="gform-head">
+            <div>
+              <p className="gform-kicker">In-app scheduler</p>
+              <h4>Reminders, reports, and backup</h4>
+            </div>
+            <Toggle on={form.enabled} onChange={(v) => patch({ enabled: v })} label="Scheduler" />
+          </div>
+          <p className="gform-help">
+            Triggers while the backoffice is open, on dashboard load, and when a customer tracks an order.
+            Vercel also hits /api/cron/orders once a day (~2:00 AM IST) as a fallback.
+          </p>
+          <label className="gform-field">
+            <span>Admin portal poll interval (minutes)</span>
+            <input
+              type="number"
+              min={5}
+              max={1440}
+              value={form.tick_interval_minutes}
+              onChange={(e) => patch({ tick_interval_minutes: Number(e.target.value) })}
+            />
+          </label>
+          <p className="gform-hint">How often the backoffice checks for due jobs (5–1440 min).</p>
+          {form.last_tick_at || form.last_reminder_at ? (
+            <p className="gform-meta">
+              {form.last_tick_at
+                ? "Last tick: " +
+                  new Date(form.last_tick_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) +
+                  " IST"
+                : null}
+              {form.last_reminder_at
+                ? (form.last_tick_at ? " · " : "") +
+                  "Last order-alert run: " +
+                  new Date(form.last_reminder_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) +
+                  " IST"
+                : null}
+            </p>
+          ) : null}
+          {ok ? <p className="gform-ok">{ok}</p> : null}
+          {runResult ? <p className={runResult.startsWith("Skipped") ? "gform-hint" : "gform-ok"}>{runResult}</p> : null}
+          <div className="gform-actions">
+            <button className="gform-btn-primary" type="submit" disabled={busy}>
+              <i className="material-symbols-rounded">save</i>
+              {busy ? "Saving…" : "Save scheduler settings"}
+            </button>
+            <button className="gform-btn-gold" type="button" disabled={running} onClick={runNow}>
+              <i className="material-symbols-rounded">play_arrow</i>
+              {running ? "Running…" : "Run scheduler now"}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}

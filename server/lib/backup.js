@@ -19,6 +19,7 @@ const TABLES = [
   "admin_inbox",
   "report_schedules",
   "backup_schedules",
+  "scheduler_state",
   "error_logs",
   "audit_logs"
 ];

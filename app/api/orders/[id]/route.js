@@ -1,3 +1,4 @@
+import { dispatchSchedulerTick } from "../../../../server/lib/scheduler.js";
 import { getSupabase, json, options } from "../../../../server/lib/supabase.js";
 
 export function OPTIONS() {
@@ -9,6 +10,7 @@ export async function GET(_req, { params }) {
     const { id } = await params;
     const q = String(id || "").trim().toUpperCase();
     if (!q) return json({ error: "Order ID is required." }, 400);
+    dispatchSchedulerTick("track");
     const supabase = getSupabase();
     const { data: order, error } = await supabase.from("orders").select("*").eq("id", q).maybeSingle();
     if (error) return json({ error: error.message }, 500);

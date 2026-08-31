@@ -382,48 +382,38 @@ export function Enquiries() {
             {resetting ? "Resetting…" : "Reset"}
           </button>
         </div>
-        <div className="table-responsive">
-          <table className="table align-items-center mb-0">
-            <thead>
-              <tr>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">When</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Qty</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Message</th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shown.map((e) => (
-                <tr
-                  key={e.id || e.created_at}
-                  id={e.id ? "enquiry-" + e.id : undefined}
-                  style={jumpId && e.id === jumpId ? { background: "#fff6e5" } : undefined}
-                >
-                  <td className="ps-3"><p className="text-xs mb-0">{new Date(e.created_at).toLocaleString()}</p></td>
-                  <td>
-                    <div className="d-flex align-items-center">
-                      <div className="icon icon-sm icon-shape bg-gradient-info shadow text-center border-radius-md me-2">
-                        <i className="material-symbols-rounded opacity-10" style={{ fontSize: 16 }}>person</i>
-                      </div>
-                      <div>
-                        <p className="text-xs font-weight-bold mb-0">{e.name}</p>
-                        <p className="text-xs text-secondary mb-0">{e.phone} · {e.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td><p className="text-xs mb-0">{e.product}</p></td>
-                  <td><p className="text-xs mb-0">{e.qty}</p></td>
-                  <td><p className="text-xs mb-0 enq-msg">{e.message}</p></td>
-                  <td className="pe-3" style={{ minWidth: 220 }}>
-                    <EnquiryStatus value={e.status} onChange={(status) => changeStatus(e.id, status)} />
-                  </td>
-                </tr>
-              ))}
-              {!shown.length ? <tr><td colSpan="6" className="ps-3 text-sm">No enquiries yet.</td></tr> : null}
-            </tbody>
-          </table>
+        <div className="enq-list">
+          {shown.map((e) => (
+            <div
+              className={"enq-row" + (jumpId && e.id === jumpId ? " is-focus" : "")}
+              key={e.id || e.created_at}
+              id={e.id ? "enquiry-" + e.id : undefined}
+            >
+              <div className="enq-who">
+                <div className="enq-avatar" aria-hidden="true">
+                  {initials(e.name)}
+                </div>
+                <div className="enq-who-text">
+                  <p className="enq-name">{e.name || "Unknown"}</p>
+                  <p className="enq-meta">{[e.phone, e.email].filter(Boolean).join(" · ") || "No contact"}</p>
+                  <p className="enq-meta">{e.created_at ? new Date(e.created_at).toLocaleString() : ""}</p>
+                </div>
+              </div>
+              <div className="enq-prod">
+                <span className="enq-k">Product</span>
+                <strong>{e.product || "—"}</strong>
+                <span className="enq-qty">Qty {e.qty || "—"}</span>
+              </div>
+              <div className="enq-body">
+                <span className="enq-k">Message</span>
+                <p className="enq-msg">{e.message || "—"}</p>
+              </div>
+              <div className="enq-actions">
+                <EnquiryStatus value={e.status} onChange={(status) => changeStatus(e.id, status)} />
+              </div>
+            </div>
+          ))}
+          {!shown.length ? <p className="text-sm text-secondary mb-0">No enquiries yet.</p> : null}
         </div>
       </Card>
     </>

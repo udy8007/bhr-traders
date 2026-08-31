@@ -112,9 +112,11 @@ export function Products() {
                   <strong className="plist-title">{p.title}</strong>
                   <p>{p.short || p.desc || "No description yet."}</p>
                 </div>
-                <span className="ep-auth is-public">{p.cat || "Uncategorised"}</span>
-                <span className="plist-price">{p.priceLabel || "—"}</span>
-                <span className={"ep-auth " + (on ? "is-admin" : "is-cron")}>{on ? "Active" : "Inactive"}</span>
+                <div className="plist-meta">
+                  <span className="ep-auth is-public">{p.cat || "Uncategorised"}</span>
+                  <span className="plist-price">{p.priceLabel || "—"}</span>
+                  <span className={"ep-auth " + (on ? "is-admin" : "is-cron")}>{on ? "Active" : "Inactive"}</span>
+                </div>
                 <div className="plist-actions">
                   <button className="gform-btn-gold gform-btn-sm" type="button" onClick={() => setPreview(p)}>
                     Preview

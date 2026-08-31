@@ -1,7 +1,7 @@
 import { requireAdmin, unauthorized } from "../../../../server/lib/auth.js";
 import { buildDashboard } from "../../../../server/lib/dashboard.js";
 import { startReportCron } from "../../../../server/lib/reportCron.js";
-import { tickScheduledReports } from "../../../../server/lib/reports.js";
+import { dispatchSchedulerTick } from "../../../../server/lib/scheduler.js";
 import { getSupabase, json, options } from "../../../../server/lib/supabase.js";
 
 export function OPTIONS() {
@@ -12,7 +12,7 @@ export async function GET(req) {
   try {
     requireAdmin(req);
     startReportCron();
-    tickScheduledReports().catch(() => {});
+    dispatchSchedulerTick("overview");
     const supabase = getSupabase();
     const [products, orders, enquiries, items, visits] = await Promise.all([
       supabase.from("products").select("*"),

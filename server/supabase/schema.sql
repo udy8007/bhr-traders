@@ -284,3 +284,20 @@ alter table public.backup_schedules enable row level security;
 drop policy if exists "backup_schedules_all" on public.backup_schedules;
 create policy "backup_schedules_all" on public.backup_schedules for all using (true) with check (true);
 
+create table if not exists public.scheduler_state (
+  id text primary key,
+  enabled boolean not null default true,
+  tick_interval_minutes int not null default 30,
+  last_tick_at timestamptz,
+  last_reminder_at timestamptz,
+  updated_at timestamptz not null default now()
+);
+
+insert into public.scheduler_state (id, enabled, tick_interval_minutes)
+values ('default', true, 30)
+on conflict (id) do nothing;
+
+alter table public.scheduler_state enable row level security;
+drop policy if exists "scheduler_state_all" on public.scheduler_state;
+create policy "scheduler_state_all" on public.scheduler_state for all using (true) with check (true);
+

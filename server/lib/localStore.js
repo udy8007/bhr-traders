@@ -30,6 +30,7 @@ function load(seed) {
   if (!Array.isArray(store.product_reviews)) store.product_reviews = [];
   if (!Array.isArray(store.report_schedules)) store.report_schedules = [];
   if (!Array.isArray(store.backup_schedules)) store.backup_schedules = [];
+  if (!Array.isArray(store.scheduler_state)) store.scheduler_state = [];
   if (Array.isArray(store.enquiries)) {
     let dirty = false;
     store.enquiries.forEach((e) => {

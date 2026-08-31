@@ -676,10 +676,10 @@ export async function tickScheduledReports() {
   const cfg = await getReportSchedule();
   if (!cfg.enabled) return { skipped: "disabled" };
   const now = istParts();
-  if (cfg.hour !== now.hour) return { skipped: "time" };
+  if (now.hour < cfg.hour) return { skipped: "time" };
   if (cfg.frequency === "weekdays" && !WEEKDAYS.has(now.weekday)) return { skipped: "weekend" };
   if (cfg.frequency === "monthly" && now.day !== 1) return { skipped: "not monthly" };
-  const runKey = now.dateKey + "-" + String(now.hour).padStart(2, "0");
+  const runKey = now.dateKey;
   if (cfg.last_attempt_key === runKey) return { skipped: "already" };
   await saveReportSchedule({ ...cfg, last_attempt_key: runKey });
   try {

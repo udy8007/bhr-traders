@@ -12,7 +12,7 @@ import { CustomerReviews } from "./pages/Reviews.jsx";
 import { Analytics } from "./pages/Analytics.jsx";
 import { DownloadReport, ScheduleReport } from "./pages/ReportsHub.jsx";
 import { AuditLog, ErrorLog } from "./pages/Logs.jsx";
-import { ChangePassword, DbBackup } from "./pages/Settings.jsx";
+import { ChangePassword, DbBackup, SchedulerSettings } from "./pages/Settings.jsx";
 import { Endpoints } from "./pages/Endpoints.jsx";
 import { NotificationConfig, NotificationLog } from "./pages/Notifications.jsx";
 import { ReportBug } from "./pages/ReportBug.jsx";
@@ -57,6 +57,7 @@ export default function App() {
             <Route path="logs/audit" element={<AuditLog />} />
             <Route path="settings" element={<Navigate to="/settings/password" replace />} />
             <Route path="settings/password" element={<ChangePassword />} />
+            <Route path="settings/scheduler" element={<SchedulerSettings />} />
             <Route path="settings/backup" element={<DbBackup />} />
             <Route path="settings/endpoints" element={<Endpoints />} />
             <Route path="notifications/config" element={<NotificationConfig />} />
