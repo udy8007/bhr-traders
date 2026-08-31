@@ -211,50 +211,116 @@
 
     .hero {
       position: relative;
-      min-height: 560px;
+      min-height: 620px;
       display: flex;
       align-items: center;
       background:
-        linear-gradient(90deg, rgba(255,252,246,0.92) 0%, rgba(255,252,246,0.78) 34%, rgba(255,252,246,0.18) 58%, rgba(255,252,246,0) 72%),
-        url("/images/hero-banner.jpg") center right / cover no-repeat;
+        linear-gradient(90deg, rgba(255,252,246,0.90) 0%, rgba(255,252,246,0.68) 30%, rgba(255,252,246,0.12) 54%, rgba(255,252,246,0) 68%),
+        url("/images/hero-banner.jpg") 72% 52% / cover no-repeat;
       padding: 72px 0 110px;
     }
     .hero-grid {
       display: grid;
-      grid-template-columns: minmax(280px, 540px) 1fr;
+      grid-template-columns: minmax(280px, 560px) 1fr;
       gap: 40px;
       align-items: center;
     }
+    .hero-copy {
+      position: relative;
+      max-width: 540px;
+      padding: 34px 36px 30px;
+      background: linear-gradient(165deg, rgba(255,252,246,0.88) 0%, rgba(255,250,240,0.72) 100%);
+      border: 1px solid rgba(176, 141, 62, 0.22);
+      border-radius: 22px;
+      box-shadow:
+        0 18px 48px rgba(18, 49, 38, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+    }
+    .hero-copy::before {
+      content: "";
+      position: absolute;
+      left: 36px;
+      right: 36px;
+      top: 0;
+      height: 3px;
+      border-radius: 0 0 3px 3px;
+      background: linear-gradient(90deg, #8a6a28, #d4b56a, #8a6a28);
+    }
     .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       color: #0a4226;
       font-family: Montserrat, sans-serif;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
+    }
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      height: 1px;
+      width: 28px;
+      background: linear-gradient(90deg, #b08d3e, rgba(176,141,62,0.15));
+      flex-shrink: 0;
+    }
+    .eyebrow::after {
+      background: linear-gradient(90deg, rgba(176,141,62,0.15), #b08d3e);
     }
     .hero h1 {
-      font-family: Montserrat, sans-serif;
-      font-size: clamp(44px, 6vw, 72px);
-      font-weight: 800;
-      line-height: 1.02;
-      margin: 12px 0 18px;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(48px, 7vw, 76px);
+      font-weight: 700;
+      line-height: 0.92;
+      margin: 14px 0 10px;
       color: #0a4226;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      text-transform: none;
     }
-    .hero h1 span { color: #b08d3e; }
-    .hero p {
-      max-width: 520px;
-      color: #3a3a3a;
+    .hero-brand {
+      display: block;
+      color: #0a4226;
+    }
+    .hero-name {
+      display: block;
+      color: #b08d3e;
+      font-style: italic;
+      font-weight: 600;
+    }
+    .hero-tag {
+      display: inline-block;
+      margin: 4px 0 16px;
+      padding: 0;
+      color: #8a6a28;
+      font-family: "Playfair Display", serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border: 0;
+      max-width: none;
+    }
+    .hero-tag::after {
+      content: "";
+      display: block;
+      width: 56px;
+      height: 2px;
+      margin-top: 12px;
+      background: linear-gradient(90deg, #b08d3e, transparent);
+    }
+    .hero-lead {
+      max-width: 440px;
+      color: #3d4a42;
       font-family: Montserrat, sans-serif;
       font-size: 15px;
-      font-weight: 400;
-      line-height: 1.7;
-      margin-bottom: 28px;
+      font-weight: 500;
+      line-height: 1.75;
+      margin-bottom: 26px;
     }
-    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
-    .hero-points { display: flex; gap: 22px; flex-wrap: wrap; }
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
+    .hero-points { display: flex; gap: 18px; flex-wrap: wrap; }
     .hero-point {
       display: flex;
       align-items: center;
@@ -279,6 +345,7 @@
       display: block;
     }
     .hero-photo { display: none; }
+    .hero-visual { display: none; }
 
     .services {
       margin-top: -70px;
@@ -510,6 +577,49 @@
     }
     .shop-card:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(26,62,46,0.12); }
     .shop-card { transition: 0.2s ease; }
+    .shop-card-skel {
+      cursor: default;
+      pointer-events: none;
+    }
+    .shop-card-skel:hover { transform: none; box-shadow: var(--shadow); }
+    .skel {
+      display: block;
+      background: linear-gradient(90deg, #eee8dc 0%, #f7f3ea 45%, #eee8dc 90%);
+      background-size: 200% 100%;
+      animation: skel-shimmer 1.2s ease-in-out infinite;
+      border-radius: 8px;
+    }
+    .skel-photo {
+      height: 180px;
+      width: 100%;
+      border-radius: 0;
+    }
+    .skel-wish {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+    .skel-title { height: 16px; width: 62%; margin-bottom: 10px; }
+    .skel-desc { height: 12px; width: 78%; margin-bottom: 14px; }
+    .skel-price { height: 16px; width: 42%; margin-bottom: 14px; }
+    .skel-btn { height: 40px; width: 100%; border-radius: 6px; }
+    .skel-cat {
+      height: 34px;
+      width: 100%;
+      margin-bottom: 8px;
+      border-radius: 8px;
+    }
+    .prod-grid.list .skel-photo { min-height: 160px; height: 100%; }
+    @keyframes skel-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .skel { animation: none; }
+    }
     .prod-grid.list .shop-card {
       flex-direction: row;
       align-items: stretch;
@@ -2724,11 +2834,67 @@
         margin: 0;
       }
       .nav-links.open { transform: translateX(0); }
-      .hero { padding: 40px 0 90px; min-height: 0; background-position: 72% center; }
-      .hero-grid { grid-template-columns: 1fr; }
+      .hero {
+        display: block;
+        min-height: 0;
+        padding: 0 0 88px;
+        background: #fffaf3;
+      }
+      .hero-visual {
+        display: block;
+        height: min(46vw, 300px);
+        min-height: 190px;
+        background: url("/images/hero-banner.jpg") 74% 46% / cover no-repeat;
+      }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        margin-top: -36px;
+        position: relative;
+        z-index: 2;
+      }
+      .hero-copy {
+        max-width: none;
+        width: 100%;
+        padding: 24px 22px 20px;
+        border-radius: 16px;
+        background: #fffdf8;
+        backdrop-filter: none;
+      }
+      .hero-copy::before { left: 22px; right: 22px; }
+      .hero h1 { font-size: clamp(40px, 11vw, 58px); }
+      .hero-lead { max-width: none; margin-bottom: 20px; }
+      .hero-ctas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .hero-ctas .btn {
+        width: 100%;
+        min-height: 46px;
+      }
+      .hero-points {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .hero-point {
+        background: #f6f1e4;
+        border-radius: 10px;
+        padding: 8px 12px;
+      }
       .why-card { transform: none !important; }
     }
     @media (max-width: 640px) {
+      .hero-visual { min-height: 168px; height: 38vw; }
+      .hero-grid { margin-top: -28px; }
+      .hero-copy { padding: 20px 16px 16px; }
+      .eyebrow { letter-spacing: 0.16em; font-size: 10px; gap: 8px; }
+      .eyebrow::before,
+      .eyebrow::after { width: 14px; }
+      .hero-tag { font-size: 14px; }
+      .hero-lead { font-size: 14px; line-height: 1.65; }
+      .hero-ctas { grid-template-columns: 1fr; }
+      .services { margin-top: -48px; }
       .about-grid, .about-feats { grid-template-columns: 1fr; }
       .about-photo { height: auto; }
       .svc-card, .prod-grid, .stats .wrap, .foot-grid, .why-grid, .why-kpis, .pdp-grid, .guide-grid, .pack-grid {

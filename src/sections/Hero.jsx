@@ -4,14 +4,19 @@ import { PriceListButton } from "../components/PriceListButton.jsx";
 export function Hero() {
   return (
     <section className="hero" id="home">
+      <div className="hero-visual" role="img" aria-label="BHR Traders rice products and storefront" />
       <div className="wrap hero-grid">
-        <div>
-          <div className="eyebrow">WHOLESALE RICE TRADERS</div>
+        <div className="hero-copy">
+          <p className="eyebrow">
+            <span>Wholesale rice traders</span>
+          </p>
           <h1>
-            BHR <span>TRADERS</span>
+            <span className="hero-brand">BHR</span>
+            <span className="hero-name">Traders</span>
           </h1>
-          <p>
-            BHR TRADERS is a wholesale rice trading business offering high-quality rice at very competitive and affordable prices. We focus on providing good-quality rice with consistent supply, reliable service, and value for money to our customers.
+          <p className="hero-tag">The leader in rice · Since 1970</p>
+          <p className="hero-lead">
+            Premium grains at honest wholesale prices — consistent supply, reliable service, and value you can count on.
           </p>
           <div className="hero-ctas">
             <a className="btn btn-green" href="#products">

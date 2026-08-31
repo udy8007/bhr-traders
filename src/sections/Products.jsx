@@ -43,6 +43,8 @@ export function Products() {
     setSort("popular");
   }
 
+  const loading = catalogStatus === "loading";
+
   return (
     <section className="section products" id="products">
       <div className="wrap">
@@ -72,16 +74,20 @@ export function Products() {
             <div className="side-block">
               <h4>Categories</h4>
               <div className="cat-list">
-                {categories.map((c) => (
-                  <button
-                    type="button"
-                    key={c.id}
-                    className={cat === c.id ? "on" : ""}
-                    onClick={() => setCat(c.id)}
-                  >
-                    {c.label}
-                  </button>
-                ))}
+                {loading
+                  ? Array.from({ length: 6 }, (_, i) => (
+                      <span className="skel skel-cat" key={"cat-skel-" + i} />
+                    ))
+                  : categories.map((c) => (
+                      <button
+                        type="button"
+                        key={c.id}
+                        className={cat === c.id ? "on" : ""}
+                        onClick={() => setCat(c.id)}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
               </div>
             </div>
             <div className="side-block">
@@ -152,8 +158,23 @@ export function Products() {
                 </div>
               </div>
             </div>
-            <div className={"prod-grid" + (listView ? " list" : "")}>
-              {shown.map((p) => (
+            <div className={"prod-grid" + (listView ? " list" : "")} aria-busy={loading}>
+              {loading
+                ? Array.from({ length: 8 }, (_, i) => (
+                    <article className="shop-card shop-card-skel" key={"prod-skel-" + i} aria-hidden="true">
+                      <div className="shop-photo">
+                        <div className="skel skel-photo" />
+                        <span className="skel skel-wish" />
+                      </div>
+                      <div className="shop-body">
+                        <div className="skel skel-title" />
+                        <div className="skel skel-desc" />
+                        <div className="skel skel-price" />
+                        <div className="skel skel-btn" />
+                      </div>
+                    </article>
+                  ))
+                : shown.map((p) => (
                 <article
                   className="shop-card"
                   key={p.id}
