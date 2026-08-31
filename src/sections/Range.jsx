@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { PHONE } from "../data/site.js";
 
 const RANGE_IMG = "images/product-range-banner.jpg";
@@ -20,81 +19,7 @@ const REASONS = [
   "Trusted by 500+ Businesses"
 ];
 
-const PACKS = [
-  ["New Krishna No. 1", "Boiled rice"],
-  ["New Krishna No. 1", "No. 1 boiled"],
-  ["BHR Classic", "Rajabogam"],
-  ["BHR Bullet", "HMT rice"],
-  ["BHR Original", "Old Raichur steam"],
-  ["Harita Amma", "Ponni"],
-  ["Anil Brand", "Idly rice"],
-  ["Apple", "Old Sona Masoori"],
-  ["BHR RNR", "Double boiled"],
-  ["BHR RNR", "Rice"],
-  ["BHR Bullet No. 1", "HMT rice"]
-];
-
-function RangeZoom({ src, alt, onOpen }) {
-  const box = useRef(null);
-  const [zoom, setZoom] = useState(null);
-
-  function move(e) {
-    const el = box.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-    const y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
-    setZoom({ x, y });
-  }
-
-  return (
-    <button
-      type="button"
-      ref={box}
-      className={"range-zoom" + (zoom ? " on" : "")}
-      onMouseEnter={move}
-      onMouseMove={move}
-      onMouseLeave={() => setZoom(null)}
-      onClick={onOpen}
-      aria-label="Open full product range graphic"
-    >
-      <img className="range-zoom-base" src={src} alt={alt} />
-      <img
-        className="range-zoom-hi"
-        src={src}
-        alt=""
-        aria-hidden="true"
-        style={
-          zoom
-            ? {
-                transformOrigin: zoom.x * 100 + "% " + zoom.y * 100 + "%",
-                transform: "scale(2.4)"
-              }
-            : undefined
-        }
-      />
-      <span className="range-zoom-hint">Hover to zoom · Click to view full size</span>
-    </button>
-  );
-}
-
 export function RangeShow() {
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!open) return;
-    function onKey(e) {
-      if (e.key === "Escape") setOpen(false);
-    }
-    document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-
   const wa = "https://wa.me/919940338654";
 
   return (
@@ -131,16 +56,8 @@ export function RangeShow() {
 
         <div className="range-stage">
           <div className="range-scroll">
-            <RangeZoom src={RANGE_IMG} alt="BHR Traders product range — branded rice packs" onOpen={() => setOpen(true)} />
+            <img src={RANGE_IMG} alt="BHR Traders product range — branded rice packs" />
           </div>
-          <ul className="range-packs" aria-label="Product range varieties">
-            {PACKS.map(([brand, variety], i) => (
-              <li key={brand + variety + i}>
-                <strong>{brand}</strong>
-                <span>{variety}</span>
-              </li>
-            ))}
-          </ul>
           <aside className="range-why">
             <h3>Why choose BHR Traders?</h3>
             <ul>
@@ -168,15 +85,6 @@ export function RangeShow() {
       <div className="range-mobile">
         <img src={RANGE_MOBILE} alt="BHR Traders product range — premium rice packs, benefits and contact" />
       </div>
-
-      {open ? (
-        <div className="range-lightbox" role="dialog" aria-modal="true" aria-label="Product range graphic" onClick={() => setOpen(false)}>
-          <button type="button" className="range-lightbox-close" aria-label="Close">
-            ×
-          </button>
-          <img src={RANGE_IMG} alt="BHR Traders product range — branded rice packs" onClick={(e) => e.stopPropagation()} />
-        </div>
-      ) : null}
     </section>
   );
 }

@@ -1509,33 +1509,7 @@
       align-items: stretch;
     }
     .range-stage .range-scroll { grid-column: 1; grid-row: 1; }
-    .range-stage .range-why { grid-column: 2; grid-row: 1 / span 2; }
-    .range-packs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 8px;
-      list-style: none;
-      grid-column: 1;
-      grid-row: 2;
-    }
-    .range-packs li {
-      background: #fff;
-      border: 1px solid #eadfc8;
-      border-radius: 10px;
-      padding: 10px 12px;
-    }
-    .range-packs strong {
-      display: block;
-      color: #0a3d24;
-      font-size: 13px;
-      font-weight: 800;
-    }
-    .range-packs span {
-      display: block;
-      color: #6a6248;
-      font-size: 12px;
-      margin-top: 2px;
-    }
+    .range-stage .range-why { grid-column: 2; grid-row: 1; }
     .range-scroll {
       overflow: auto;
       border-radius: 16px;
@@ -1543,18 +1517,7 @@
       border: 1px solid #eadfc8;
       box-shadow: 0 18px 48px rgba(10, 61, 36, 0.12);
     }
-    .range-zoom {
-      position: relative;
-      display: block;
-      width: 100%;
-      padding: 0;
-      border: 0;
-      background: #fff;
-      cursor: zoom-in;
-      overflow: hidden;
-    }
-    .range-zoom-base,
-    .range-zoom-hi {
+    .range-scroll img {
       width: 100%;
       min-width: 920px;
       height: auto;
@@ -1562,33 +1525,6 @@
       object-fit: contain;
       filter: contrast(1.1) saturate(1.12) brightness(1.03);
     }
-    .range-zoom-hi {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      min-width: 0;
-      object-fit: contain;
-      pointer-events: none;
-      opacity: 0;
-    }
-    .range-zoom.on .range-zoom-hi { opacity: 1; }
-    .range-zoom.on .range-zoom-base { opacity: 0; }
-    .range-zoom-hint {
-      position: absolute;
-      left: 12px;
-      bottom: 12px;
-      z-index: 2;
-      background: rgba(10, 61, 36, 0.9);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      padding: 7px 10px;
-      border-radius: 999px;
-      pointer-events: none;
-    }
-    .range-zoom.on .range-zoom-hint { opacity: 0; }
     .range-why {
       background: #fff;
       border: 1px solid #eadfc8;
@@ -1658,45 +1594,6 @@
       color: #b08d3e;
     }
     .range-mobile { display: none; }
-    .range-lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 80;
-      background: rgba(6, 22, 14, 0.92);
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      cursor: zoom-out;
-    }
-    .range-lightbox img {
-      max-width: min(1600px, 96vw);
-      max-height: 92vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
-      cursor: default;
-    }
-    .range-lightbox-close {
-      position: absolute;
-      top: 16px;
-      right: 18px;
-      width: 40px;
-      height: 40px;
-      border: 0;
-      border-radius: 50%;
-      background: #fff;
-      color: #0a3d24;
-      font-size: 28px;
-      line-height: 1;
-      cursor: pointer;
-    }
-    @media (hover: none) {
-      .range-zoom { cursor: pointer; }
-      .range-zoom-hi { display: none; }
-      .range-zoom-hint { display: none; }
-    }
     @media (max-width: 900px) {
       .range-show {
         padding: 0 0 88px;
@@ -3119,8 +3016,7 @@
       .pack-grid { grid-template-columns: 1fr 1fr; }
       .range-stage { grid-template-columns: 1fr; }
       .range-stage .range-scroll,
-      .range-stage .range-why,
-      .range-packs { grid-column: 1; grid-row: auto; }
+      .range-stage .range-why { grid-column: 1; grid-row: auto; }
     }
     @media (max-width: 900px) {
       .topbar .wrap { grid-template-columns: 1fr; justify-items: center; }
@@ -3208,8 +3104,7 @@
       .about-photo { height: auto; }
       .range-stage { grid-template-columns: 1fr; }
       .range-stage .range-scroll,
-      .range-stage .range-why,
-      .range-packs { grid-column: 1; grid-row: auto; }
+      .range-stage .range-why { grid-column: 1; grid-row: auto; }
       .range-bar { gap: 10px; padding: 10px 14px; }
       .range-bar h3 { letter-spacing: 0.06em; }
       .svc-card, .prod-grid, .stats .wrap, .foot-grid, .why-grid, .why-kpis, .pdp-grid, .guide-grid, .pack-grid {
