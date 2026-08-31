@@ -11,6 +11,7 @@ import { Hero, Services } from "./sections/Hero.jsx";
 import { Products } from "./sections/Products.jsx";
 import { Guide } from "./sections/GuidePacks.jsx";
 import { About, CtaStats, Shop, Location, Enquiry } from "./sections/Content.jsx";
+import { RangeShow } from "./sections/Range.jsx";
 import { WhyBhr } from "./sections/WhyBhr.jsx";
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
         <Products />
         <Guide />
         <About />
+        <RangeShow />
         <WhyBhr />
         <CtaStats />
         <Shop />

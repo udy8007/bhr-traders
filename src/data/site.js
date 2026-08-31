@@ -20,6 +20,7 @@ export const HOURS_SUNDAY = "Sunday 7:00 AM – 2:00 PM";
 export const NAV_LINKS = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About Us" },
+  { href: "#range", label: "Our Range" },
   { href: "#why", label: "Why BHR" },
   { href: "#products", label: "Products" },
   { href: "#guide", label: "Buying Guide" },
