@@ -169,6 +169,7 @@ create table if not exists public.notification_config (
 
 alter table public.notification_config add column if not exists inbox_cleared_at bigint not null default 0;
 alter table public.notification_config add column if not exists pending_alert_at bigint not null default 0;
+alter table public.notification_config add column if not exists enquiry_alert_at bigint not null default 0;
 
 insert into public.notification_config (id, admin_email, email_enabled, push_enabled, ntfy_topic, ntfy_url)
 values ('default', 'info@bhrtraders.com', true, true, 'bhr-traders', 'https://ntfy.sh')

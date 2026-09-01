@@ -60,7 +60,7 @@ export const API_ENDPOINTS = [
   { group: "Admin ops", path: "/api/admin/scheduler", method: "POST", auth: "admin", note: "Run scheduler tick now." },
   { group: "Admin ops", path: "/api/admin/logs", method: "GET", auth: "admin", note: "Error and audit logs." },
   { group: "Admin ops", path: "/api/admin/bugs", method: "POST", auth: "admin", note: "Report a bug from backoffice." },
-  { group: "Admin ops", path: "/api/cron/orders", method: "GET", auth: "cron", note: "Vercel Cron daily fallback (~2:00 AM IST). Same tick as in-app scheduler." },
+  { group: "Admin ops", path: "/api/cron/orders", method: "GET", auth: "cron", note: "Vercel Cron daily fallback (~2:00 AM IST). Same tick as in-app scheduler (orders, pending enquiries, reports, backup)." },
   { group: "Admin ops", path: "/api/cron/orders", method: "POST", auth: "cron", note: "Same as GET." },
 
   { group: "Notifications", path: "/api/admin/notifications/config", method: "GET", auth: "admin", note: "Email and ntfy settings." },

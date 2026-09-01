@@ -1,4 +1,5 @@
 import { tickScheduledBackup } from "./backup.js";
+import { tickPendingEnquiryAlerts } from "./enquiryAlerts.js";
 import { tickPendingOrderAlerts } from "./orderAlerts.js";
 import { tickScheduledReports } from "./reports.js";
 import { getSupabase } from "./supabase.js";
@@ -107,8 +108,9 @@ export async function runSchedulerTick(source = "cron") {
     return { skipped: true, source, ...publicState(state) };
   }
 
-  const [orders, reports, backup] = await Promise.all([
+  const [orders, enquiries, reports, backup] = await Promise.all([
     tickPendingOrderAlerts(),
+    tickPendingEnquiryAlerts(),
     tickScheduledReports(),
     tickScheduledBackup()
   ]);
@@ -123,6 +125,7 @@ export async function runSchedulerTick(source = "cron") {
     source,
     skipped: false,
     orders,
+    enquiries,
     reports,
     backup,
     ...publicState(saved)

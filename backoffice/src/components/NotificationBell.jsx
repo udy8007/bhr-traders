@@ -19,9 +19,10 @@ function orderIdFrom(row) {
 function targetFor(row) {
   const orderId = orderIdFrom(row);
   if (orderId) return "/sales/orders/" + encodeURIComponent(orderId);
-  if (row.entity === "enquiry" && row.entity_id) {
+  if (row.entity === "enquiry" && row.entity_id && !String(row.entity_id).startsWith("pending-digest-")) {
     return "/sales/enquiries?id=" + encodeURIComponent(row.entity_id);
   }
+  if (row.entity === "enquiries") return "/sales/enquiries";
   if (row.entity === "review" && row.entity_id) {
     return "/sales/reviews?id=" + encodeURIComponent(row.entity_id);
   }

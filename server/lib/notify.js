@@ -34,7 +34,8 @@ export function normalizeConfig(row) {
     ntfy_topic: String(base.ntfy_topic || DEFAULT_CONFIG.ntfy_topic).trim() || "bhr-traders",
     ntfy_url: String(base.ntfy_url || DEFAULT_CONFIG.ntfy_url).replace(/\/$/, ""),
     inbox_cleared_at: Number(base.inbox_cleared_at || 0) || 0,
-    pending_alert_at: Number(base.pending_alert_at || 0) || 0
+    pending_alert_at: Number(base.pending_alert_at || 0) || 0,
+    enquiry_alert_at: Number(base.enquiry_alert_at || 0) || 0
   };
 }
 
@@ -55,12 +56,14 @@ export async function saveNotifyConfig(input) {
     ...current,
     ...(input || {}),
     pending_alert_at:
-      input && input.pending_alert_at != null ? input.pending_alert_at : current.pending_alert_at
+      input && input.pending_alert_at != null ? input.pending_alert_at : current.pending_alert_at,
+    enquiry_alert_at:
+      input && input.enquiry_alert_at != null ? input.enquiry_alert_at : current.enquiry_alert_at
   });
   const supabase = getSupabase();
   let { data, error } = await supabase.from("notification_config").upsert(next).select().single();
-  if (error && /inbox_cleared_at|pending_alert_at|schema cache/i.test(error.message || "")) {
-    const { inbox_cleared_at: _cleared, pending_alert_at: _pending, ...row } = next;
+  if (error && /inbox_cleared_at|pending_alert_at|enquiry_alert_at|schema cache/i.test(error.message || "")) {
+    const { inbox_cleared_at: _cleared, pending_alert_at: _pending, enquiry_alert_at: _enquiry, ...row } = next;
     const retry = await supabase.from("notification_config").upsert(row).select().single();
     data = retry.data;
     error = retry.error;

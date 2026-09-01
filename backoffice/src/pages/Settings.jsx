@@ -397,6 +397,8 @@ export function SchedulerSettings() {
         setRunResult(
           "Done — orders: " +
             (data.orders?.skipped || (data.orders?.ok ? "sent" : "checked")) +
+            ", enquiries: " +
+            (data.enquiries?.skipped || (data.enquiries?.ok ? "sent" : "checked")) +
             ", reports: " +
             (data.reports?.skipped || (data.reports?.ok ? "sent" : "checked")) +
             ", backup: " +
@@ -416,7 +418,7 @@ export function SchedulerSettings() {
     <div className="gform">
       <PageHead
         title="Scheduler"
-        small="Runs pending-order alerts, scheduled reports, and backup checks from the app — no Vercel Pro cron needed."
+        small="Runs pending-order and pending-enquiry alerts, scheduled reports, and backup checks from the app — no Vercel Pro cron needed."
       />
       {error ? <div className="alert alert-warning text-white">{error}</div> : null}
       {!form ? (
