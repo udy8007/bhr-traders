@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "installCommand": "npm install && npm install --prefix backoffice && npm install --prefix server",
+  "installCommand": "npm install && npm install --prefix backoffice && npm install --prefix frontoffice && npm install --prefix server",
   "buildCommand": "npm run build:prod",
   "crons": [
     {

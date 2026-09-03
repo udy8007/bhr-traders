@@ -116,9 +116,24 @@ export function Orders() {
           return;
         }
         extra.remark = t;
+      } else {
+        const note = window.prompt("Optional note for the customer (e.g. Expected delivery tomorrow):", "");
+        if (note === null) return;
+        extra.note = note.trim();
       }
       await api.updateOrder(id, next, extra);
-      setRows((prev) => prev.map((o) => (o.id === id ? { ...o, status: next, ...(extra.remark ? { cancel_remark: extra.remark } : {}) } : o)));
+      setRows((prev) =>
+        prev.map((o) =>
+          o.id === id
+            ? {
+                ...o,
+                status: next,
+                ...(extra.remark ? { cancel_remark: extra.remark } : {}),
+                ...(extra.note !== undefined ? { status_note: extra.note || null } : {})
+              }
+            : o
+        )
+      );
     } catch (e) {
       setError(e.message);
     }

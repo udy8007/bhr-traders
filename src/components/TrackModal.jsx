@@ -184,28 +184,45 @@ export function TrackModal() {
             </div>
 
             {cancelled ? (
-              <p className="track-cancelled">This order was cancelled. Call {PHONE} if you need help.</p>
+              <div className="track-status-note is-cancel">
+                <span className="track-status-note-icon" aria-hidden="true">ℹ️</span>
+                <div>
+                  <strong>Order cancelled</strong>
+                  <p>{order.cancel_remark || "This order was cancelled. Call " + PHONE + " if you need help."}</p>
+                </div>
+              </div>
             ) : pending ? (
               <p className="track-cancelled">Payment is pending. Complete UPI or wait for BHR Traders to confirm this order.</p>
             ) : (
-              <div className="track-journey live" role="list" aria-label="Order progress">
-                <div className="track-rail">
-                  <i style={{ width: progress + "%" }} />
-                </div>
-                {STEP_COPY.map((s, i) => (
-                  <div
-                    key={s.label}
-                    role="listitem"
-                    className={"track-node" + (i < step ? " done" : i === step ? " current" : "")}
-                  >
-                    <span className="track-node-ico">
-                      {i < step ? "✓" : <StepIcon name={s.label} />}
-                    </span>
-                    <strong>{s.label}</strong>
-                    <small>{i === step ? "Current" : s.hint}</small>
+              <>
+                <div className="track-journey live" role="list" aria-label="Order progress">
+                  <div className="track-rail">
+                    <i style={{ width: progress + "%" }} />
                   </div>
-                ))}
-              </div>
+                  {STEP_COPY.map((s, i) => (
+                    <div
+                      key={s.label}
+                      role="listitem"
+                      className={"track-node" + (i < step ? " done" : i === step ? " current" : "")}
+                    >
+                      <span className="track-node-ico">
+                        {i < step ? "✓" : <StepIcon name={s.label} />}
+                      </span>
+                      <strong>{s.label}</strong>
+                      <small>{i === step ? "Current" : s.hint}</small>
+                    </div>
+                  ))}
+                </div>
+                {order.status_note ? (
+                  <div className="track-status-note">
+                    <span className="track-status-note-icon" aria-hidden="true">📋</span>
+                    <div>
+                      <strong>Update from BHR Traders</strong>
+                      <p>{order.status_note}</p>
+                    </div>
+                  </div>
+                ) : null}
+              </>
             )}
 
             <div className="track-facts">

@@ -82,6 +82,8 @@ export async function GET(req) {
       return {
         id: order.id,
         status: order.status,
+        status_note: order.status_note || "",
+        cancel_remark: order.cancel_remark || "",
         total: order.total,
         pay: order.pay,
         created_at: order.created_at,

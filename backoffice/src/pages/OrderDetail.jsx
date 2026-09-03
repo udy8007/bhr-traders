@@ -24,6 +24,9 @@ export function OrderDetail() {
   const [busy, setBusy] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
   const [cancelRemark, setCancelRemark] = useState("");
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState("");
+  const [statusNote, setStatusNote] = useState("");
 
   function load() {
     api.order(id).then((r) => setOrder(r.order)).catch((e) => setError(e.message));
@@ -38,12 +41,35 @@ export function OrderDetail() {
   async function changeStatus(status, extra = {}) {
     try {
       await api.updateOrder(order.id, status, extra);
-      setOrder((prev) => ({ ...prev, status, ...(extra.remark ? { cancel_remark: extra.remark } : {}) }));
+      setOrder((prev) => ({
+        ...prev,
+        status,
+        ...(extra.remark ? { cancel_remark: extra.remark } : {}),
+        ...(extra.note !== undefined ? { status_note: extra.note || null } : {})
+      }));
       setCancelOpen(false);
       setCancelRemark("");
+      setStatusOpen(false);
+      setPendingStatus("");
+      setStatusNote("");
     } catch (e) {
       setError(e.message);
     }
+  }
+
+  function requestStatusChange(status) {
+    if (/cancel/i.test(status)) {
+      requestCancel();
+      return;
+    }
+    setError("");
+    setPendingStatus(status);
+    setStatusNote(status === order.status ? order.status_note || "" : "");
+    setStatusOpen(true);
+  }
+
+  async function confirmStatusChange() {
+    await changeStatus(pendingStatus, { note: statusNote.trim() });
   }
 
   function requestCancel() {
@@ -190,7 +216,7 @@ export function OrderDetail() {
                 type="button"
                 className={"od-step" + (on ? " is-on" : "") + (done ? " is-done" : "")}
                 disabled={cancelled}
-                onClick={() => changeStatus(statusForFlow(step.id, order))}
+                onClick={() => requestStatusChange(statusForFlow(step.id, order))}
               >
                 <span className="od-step-icon">
                   <i className="material-symbols-rounded">{done ? "check" : STEP_ICONS[step.id]}</i>
@@ -204,10 +230,7 @@ export function OrderDetail() {
         <div className="od-status-row">
           <StatusSelect
             value={order.status}
-            onChange={(status) => {
-              if (/cancel/i.test(status)) requestCancel();
-              else changeStatus(status);
-            }}
+            onChange={(status) => requestStatusChange(status)}
           />
           <button type="button" className="od-act danger" disabled={cancelled} onClick={requestCancel}>
             Cancel order
@@ -217,6 +240,33 @@ export function OrderDetail() {
             {busy ? "Deleting…" : "Delete order"}
           </button>
         </div>
+        {statusOpen ? (
+          <div className="od-status-note">
+            <p>Customer note · {pendingStatus}</p>
+            <textarea
+              value={statusNote}
+              onChange={(e) => setStatusNote(e.target.value)}
+              rows={3}
+              placeholder="Optional — e.g. Expected delivery tomorrow 3–6 PM"
+            />
+            <div className="od-status-note-actions">
+              <button type="button" className="od-act primary" onClick={confirmStatusChange}>
+                Update status
+              </button>
+              <button
+                type="button"
+                className="od-act"
+                onClick={() => {
+                  setStatusOpen(false);
+                  setPendingStatus("");
+                  setStatusNote("");
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : null}
         {cancelOpen ? (
           <div className="od-cancel">
             <p>Cancel remark</p>
@@ -271,6 +321,12 @@ export function OrderDetail() {
             <div className="od-notes">
               <p>Customer notes</p>
               <span>{order.notes}</span>
+            </div>
+          ) : null}
+          {order.status_note ? (
+            <div className="od-notes od-notes-status">
+              <p>Status update</p>
+              <span>{order.status_note}</span>
             </div>
           ) : null}
           {order.cancel_remark ? (

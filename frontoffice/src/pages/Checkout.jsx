@@ -6,6 +6,7 @@ import { useCustomer } from "../context/CustomerContext.jsx";
 import { formatInr } from "../lib/packs.js";
 import { GSTIN, UPI_ID, UPI_QR } from "../data/site.js";
 import { logCheckoutStart } from "../lib/visits.js";
+import { api } from "../lib/api.js";
 import { customerToCheckoutInfo, isCheckoutProfileComplete, getMissingCheckoutFields } from "../lib/checkoutProfile.js";
 import { AccountFormField, AccountFormShell, AccountUserChip } from "../components/CustomerAccountUI.jsx";
 
@@ -27,6 +28,7 @@ export function Checkout() {
   const [copied, setCopied] = useState(false);
   const [proof, setProof] = useState("");
   const [orderId, setOrderId] = useState("");
+  const [copiedId, setCopiedId] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -120,7 +122,18 @@ export function Checkout() {
     }
   }
 
-  const titles = [loggedInQuick ? "Delivery address" : needsDetails ? "Your details" : "Pay with UPI", "Pay with UPI", "Order placed"];
+  async function copyOrderId() {
+    if (!orderId) return;
+    try {
+      await navigator.clipboard.writeText(orderId);
+      setCopiedId(true);
+      setTimeout(() => setCopiedId(false), 1600);
+    } catch {
+      ping("Copy the order ID: " + orderId);
+    }
+  }
+
+  const titles = [loggedInQuick ? "Delivery address" : needsDetails ? "Your details" : "Pay with UPI", "Pay with UPI", "Thank you"];
 
   return (
     <MobileLayout title={titles[step - 1]} back hideNav>
@@ -333,18 +346,74 @@ export function Checkout() {
         )}
 
         {step === 3 && (
-          <div className="order-success">
-            <div className="success-icon">✓</div>
-            <h2>Order placed</h2>
-            <p>Your order ID</p>
-            <div className="order-id-box">{orderId}</div>
-            <p className="hint">Keep this ID to track your delivery.</p>
-            <button type="button" className="btn btn-gold btn-block" onClick={() => navigate(isLoggedIn ? "/profile?tab=orders" : "/track", { state: { orderId } })}>
-              {isLoggedIn ? "View my orders" : "Track this order"}
-            </button>
-            <button type="button" className="btn btn-outline btn-block" onClick={() => navigate("/shop")}>
-              Continue shopping
-            </button>
+          <div className="order-success order-success-screen">
+            <div className="order-success-hero-band" aria-hidden="true">
+              <span>🌾</span>
+              <span>🍚</span>
+              <span>✨</span>
+            </div>
+            <div className="order-success-badge-wrap">
+              <div className="order-success-ring" aria-hidden="true" />
+              <div className="success-icon" aria-hidden="true">
+                ✓
+              </div>
+            </div>
+            <div className="order-success-head">
+              <h2>Order placed!</h2>
+              <p>Your wholesale rice order is confirmed</p>
+            </div>
+
+            <div className="order-success-journey" aria-label="Checkout complete">
+              {[
+                { label: "Details", icon: "📍" },
+                { label: "Payment", icon: "💳" },
+                { label: "Done", icon: "✓" }
+              ].map((item) => (
+                <div className="order-success-journey-step done" key={item.label}>
+                  <i aria-hidden="true">✓</i>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="order-id-card">
+              <small>Your order ID</small>
+              <div className="order-success-id-row">
+                <div className="order-id-box">{orderId}</div>
+                <button type="button" className="order-success-copy" onClick={copyOrderId} aria-label="Copy order ID">
+                  {copiedId ? "✓" : "Copy"}
+                </button>
+              </div>
+              <p className="hint">Save this ID — use it to track your delivery anytime.</p>
+            </div>
+
+            <div className="order-success-next">
+              <small>What happens next</small>
+              <div className="order-success-track-strip">
+                {["Confirmed", "Packing", "Delivering", "Delivered"].map((label, i) => (
+                  <span className={"order-success-track-dot" + (i === 0 ? " on" : "")} key={label}>
+                    <i>{i === 0 ? "✓" : i + 1}</i>
+                    <small>{label}</small>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="order-success-actions">
+              <button type="button" className="btn btn-gold btn-block" onClick={() => api.downloadInvoice(orderId)}>
+                📄 Download invoice
+              </button>
+              <button
+                type="button"
+                className="btn btn-gold btn-block"
+                onClick={() => navigate(isLoggedIn ? "/profile?tab=orders" : "/track", { state: { orderId } })}
+              >
+                🚚 {isLoggedIn ? "View my orders" : "Track this order"}
+              </button>
+              <button type="button" className="btn btn-outline btn-block" onClick={() => navigate("/shop")}>
+                Continue shopping
+              </button>
+            </div>
           </div>
         )}
       </div>

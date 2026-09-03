@@ -267,6 +267,13 @@ export function MyOrdersPanel({ orders, loading, reviewKey, setReviewKey, onRelo
 
           <OrderProgressStrip status={order.status} />
 
+          {order.status_note ? (
+            <div className="my-order-status-note">
+              <span aria-hidden="true">📋</span>
+              <p>{order.status_note}</p>
+            </div>
+          ) : null}
+
           <div className="my-order-stats">
             <div className="my-order-stat">
               <small>Total</small>

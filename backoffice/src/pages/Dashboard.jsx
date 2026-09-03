@@ -223,6 +223,10 @@ export function Dashboard() {
           return;
         }
         extra.remark = t;
+      } else {
+        const note = window.prompt("Optional note for the customer (e.g. Expected delivery tomorrow):", "");
+        if (note === null) return;
+        extra.note = note.trim();
       }
       await api.updateOrder(id, status, extra);
       load(true);

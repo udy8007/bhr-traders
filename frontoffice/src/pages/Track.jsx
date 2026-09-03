@@ -96,6 +96,26 @@ export function Track() {
               })}
             </div>
 
+            {order.status_note ? (
+              <div className="track-status-note">
+                <span className="track-status-note-icon" aria-hidden="true">📋</span>
+                <div>
+                  <strong>Update from BHR Traders</strong>
+                  <p>{order.status_note}</p>
+                </div>
+              </div>
+            ) : null}
+
+            {order.cancel_remark ? (
+              <div className="track-status-note is-cancel">
+                <span className="track-status-note-icon" aria-hidden="true">ℹ️</span>
+                <div>
+                  <strong>Order cancelled</strong>
+                  <p>{order.cancel_remark}</p>
+                </div>
+              </div>
+            ) : null}
+
             {order.items?.length > 0 && (
               <div className="track-items">
                 <h3>Items</h3>

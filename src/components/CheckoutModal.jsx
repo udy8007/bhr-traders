@@ -30,12 +30,15 @@ export function CheckoutModal() {
     orderStatus,
     placeOrder,
     downloadInvoice,
-    ping
+    ping,
+    setTrackOpen,
+    setTrackPrefill
   } = useStore();
   const { isLoggedIn, openProfile, customer } = useCustomer();
   const [proof, setProof] = useState("");
   const [proofName, setProofName] = useState("");
   const [copied, setCopied] = useState(false);
+  const [copiedId, setCopiedId] = useState(false);
   const [busy, setBusy] = useState(false);
   const [invoiceReady, setInvoiceReady] = useState(false);
 
@@ -111,6 +114,20 @@ export function CheckoutModal() {
     }
   }
 
+  async function copyOrderId() {
+    if (!orderId) return;
+    try {
+      await navigator.clipboard.writeText(orderId);
+      setCopiedId(true);
+      setTimeout(() => setCopiedId(false), 1600);
+    } catch {
+      ping("Copy the order ID: " + orderId);
+    }
+  }
+
+  const isSuccess = checkoutStep === 3;
+  const isPending = /pending/i.test(orderStatus || "");
+
   return (
     <div
       className="modal show"
@@ -122,36 +139,48 @@ export function CheckoutModal() {
       }}
     >
       <div className="modal-box checkout-box">
-        <div className="checkout-hero">
+        <div className={"checkout-hero" + (isSuccess ? " is-success" : "")}>
           <div className="checkout-hero-copy">
             <small>BHR Traders · Wholesale rice</small>
-            <strong>{checkoutStep === 3 ? "Thank you" : "Place your order"}</strong>
+            <strong>{isSuccess ? "Thank you" : "Place your order"}</strong>
+            {isSuccess ? <span className="checkout-hero-sub">Order confirmed — invoice ready</span> : null}
           </div>
+          {isSuccess ? (
+            <div className="checkout-hero-deco" aria-hidden="true">
+              <span>🌾</span>
+              <span>🍚</span>
+              <span>✨</span>
+            </div>
+          ) : null}
           <button className="modal-close checkout-x" type="button" aria-label="Close" onClick={() => !busy && setCheckoutOpen(false)}>
             ×
           </button>
         </div>
-        <div className="modal-head">
-          <div>
-            <h3 id="chkTitle">{title}</h3>
-            <p className="hint">{hint}</p>
-          </div>
-        </div>
-        <div className="chk-steps">
-          {[
-            { label: "Delivery", icon: "📍" },
-            { label: "Payment", icon: "💳" },
-            { label: "Invoice", icon: "📄" }
-          ].map((step, i) => (
-            <div
-              className={"chk-step" + (i + 1 === checkoutStep ? " on" : "") + (i + 1 < checkoutStep ? " done" : "")}
-              key={step.label}
-            >
-              <i>{i + 1 < checkoutStep ? "✓" : step.icon}</i>
-              {step.label}
+        {!isSuccess ? (
+          <>
+            <div className="modal-head">
+              <div>
+                <h3 id="chkTitle">{title}</h3>
+                <p className="hint">{hint}</p>
+              </div>
             </div>
-          ))}
-        </div>
+            <div className="chk-steps">
+              {[
+                { label: "Delivery", icon: "📍" },
+                { label: "Payment", icon: "💳" },
+                { label: "Invoice", icon: "📄" }
+              ].map((step, i) => (
+                <div
+                  className={"chk-step" + (i + 1 === checkoutStep ? " on" : "") + (i + 1 < checkoutStep ? " done" : "")}
+                  key={step.label}
+                >
+                  <i>{i + 1 < checkoutStep ? "✓" : step.icon}</i>
+                  {step.label}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : null}
 
         {checkoutStep === 1 && needsDetails ? (
           <form
@@ -394,48 +423,96 @@ export function CheckoutModal() {
         ) : null}
 
         {checkoutStep === 3 ? (
-          <div className="chk-success">
-            <div className="chk-success-hero">
+          <div className="chk-success order-success-screen">
+            <div className="order-success-badge-wrap">
+              <div className="order-success-ring" aria-hidden="true" />
               <div className="success-mark" aria-hidden="true">
                 ✓
               </div>
-              <strong>Order placed!</strong>
-              <span>Your invoice is ready to download</span>
             </div>
-            <p>
-              {/pending/i.test(orderStatus || "")
+            <div className="order-success-head">
+              <strong>Order placed!</strong>
+              <span>{isPending ? "Saved — payment pending confirmation" : "Your wholesale rice order is confirmed"}</span>
+            </div>
+
+            <div className="order-success-journey" aria-label="Checkout complete">
+              {[
+                { label: "Delivery", icon: "📍" },
+                { label: "Payment", icon: "💳" },
+                { label: "Invoice", icon: "📄" }
+              ].map((item) => (
+                <div className="order-success-journey-step done" key={item.label}>
+                  <i aria-hidden="true">✓</i>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <p className="order-success-msg">
+              {isPending
                 ? "Thank you. Your order is saved as pending. Keep the order ID — we will confirm after payment."
                 : "Thank you. Your order is confirmed and the invoice PDF is downloading."}
             </p>
-            <div className="oid-card">
-              <small>Transaction / Order ID — use this to track</small>
-              <div className="oid">{orderId}</div>
-              {orderStatus ? <p className="hint" style={{ marginTop: 8 }}>Status: {orderStatus}</p> : null}
+
+            <div className="oid-card order-success-id">
+              <small>Transaction / Order ID</small>
+              <div className="order-success-id-row">
+                <div className="oid">{orderId}</div>
+                <button type="button" className="order-success-copy" onClick={copyOrderId} aria-label="Copy order ID">
+                  {copiedId ? "Copied ✓" : "Copy"}
+                </button>
+              </div>
+              <span className="order-success-id-hint">Use this ID to track your delivery anytime</span>
+              {orderStatus ? <p className="hint order-success-status">Status: {orderStatus}</p> : null}
             </div>
-            <button
-              className="btn btn-gold"
-              type="button"
-              style={{ width: "100%" }}
-              onClick={() => downloadInvoice(orderId)}
-            >
-              {invoiceReady ? "Download invoice again" : "Download invoice PDF"}
-            </button>
-            {isLoggedIn ? (
+
+            <div className="order-success-next">
+              <small>What happens next</small>
+              <div className="order-success-track-strip">
+                {["Confirmed", "Packing", "Delivering", "Delivered"].map((label, i) => (
+                  <span className={"order-success-track-dot" + (i === 0 ? " on" : "")} key={label}>
+                    <i>{i === 0 ? "✓" : i + 1}</i>
+                    <small>{label}</small>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="order-success-actions">
               <button
-                className="btn btn-green"
+                className="btn btn-gold order-success-btn"
                 type="button"
-                style={{ width: "100%", marginTop: 10 }}
+                onClick={() => downloadInvoice(orderId)}
+              >
+                📄 {invoiceReady ? "Download invoice again" : "Download invoice PDF"}
+              </button>
+              <button
+                className="btn btn-green order-success-btn"
+                type="button"
                 onClick={() => {
                   setCheckoutOpen(false);
-                  openProfile("orders");
+                  setTrackPrefill(orderId);
+                  setTrackOpen(true);
                 }}
               >
-                View in my account
+                🚚 Track this order
               </button>
-            ) : null}
-            <button className="btn btn-outline" type="button" style={{ width: "100%", marginTop: 8 }} onClick={() => setCheckoutOpen(false)}>
-              Close
-            </button>
+              {isLoggedIn ? (
+                <button
+                  className="btn btn-outline order-success-btn"
+                  type="button"
+                  onClick={() => {
+                    setCheckoutOpen(false);
+                    openProfile("orders");
+                  }}
+                >
+                  View in my account
+                </button>
+              ) : null}
+              <button className="btn btn-outline order-success-btn subtle" type="button" onClick={() => setCheckoutOpen(false)}>
+                Close
+              </button>
+            </div>
           </div>
         ) : null}
       </div>

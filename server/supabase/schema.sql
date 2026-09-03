@@ -258,6 +258,7 @@ on conflict (id) do nothing;
 alter table public.orders add column if not exists notes text;
 alter table public.orders add column if not exists payment_proof text;
 alter table public.orders add column if not exists cancel_remark text;
+alter table public.orders add column if not exists status_note text;
 
 alter table public.report_schedules enable row level security;
 drop policy if exists "report_schedules_all" on public.report_schedules;

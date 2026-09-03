@@ -67,16 +67,23 @@ export async function PATCH(req, { params }) {
     const prev = await supabase.from("orders").select("*").eq("id", oid).maybeSingle();
     const cancelled = /cancel/i.test(status);
     const remark = String(body.remark || body.cancel_remark || "").trim().slice(0, 800);
+    const note = String(body.note || body.status_note || "").trim().slice(0, 800);
     if (cancelled && !remark) {
       return json({ error: "Please add a cancel remark for the customer." }, 400);
     }
-    const patch = cancelled ? { status, cancel_remark: remark } : { status };
+    const patch = cancelled ? { status, cancel_remark: remark, status_note: null } : { status, status_note: note || null };
     let { data, error } = await supabase.from("orders").update(patch).eq("id", oid).select().single();
     if (error && cancelled && /cancel_remark|schema cache/i.test(error.message || "")) {
       const retry = await supabase.from("orders").update({ status }).eq("id", oid).select().single();
       data = retry.data;
       error = retry.error;
       if (!error && data) data = { ...data, cancel_remark: remark };
+    }
+    if (error && !cancelled && /status_note|schema cache/i.test(error.message || "")) {
+      const retry = await supabase.from("orders").update({ status }).eq("id", oid).select().single();
+      data = retry.data;
+      error = retry.error;
+      if (!error && data) data = { ...data, status_note: note || null };
     }
     if (error) return json({ error: error.message }, 500);
     if (!data) return json({ error: "Order not found." }, 404);
@@ -85,14 +92,14 @@ export async function PATCH(req, { params }) {
       action: "status",
       entity: "order",
       entityId: oid,
-      detail: cancelled ? status + " · " + remark : status,
+      detail: cancelled ? status + " · " + remark : note ? status + " · " + note : status,
       before: snap("order", prev.data),
       after: snap("order", data)
     });
     const prevStatus = String(prev.data?.status || "");
     if (data.email && prevStatus !== status) {
       const copy = mailOrderCopy(status);
-      const remarkText = cancelled ? remark : "";
+      const remarkText = cancelled ? remark : note;
       const { data: itemRows } = await supabase.from("order_items").select("*").eq("order_id", oid);
       const items = itemRows || [];
       const money = mailMoney(data.total);
@@ -101,7 +108,7 @@ export async function PATCH(req, { params }) {
         "Hello " + name + ",",
         "",
         copy.lead,
-        remarkText ? "Remark: " + remarkText : "",
+        remarkText ? (cancelled ? "Remark: " : "Update: ") + remarkText : "",
         "",
         "Order: " + oid,
         "Status: " + status,
@@ -131,7 +138,11 @@ export async function PATCH(req, { params }) {
             escapeHtml(copy.lead) +
             "</p>" +
             (remarkText
-              ? '<p style="margin:0 0 16px;padding:12px 14px;background:#fdecea;border:1px solid #f5c2c0;color:#7f1d1d;font-family:Arial,Helvetica,sans-serif;font-size:14px"><strong>Remark:</strong> ' +
+              ? '<p style="margin:0 0 16px;padding:12px 14px;background:' +
+                (cancelled ? "#fdecea;border:1px solid #f5c2c0;color:#7f1d1d" : "#eef8f2;border:1px solid #bfe8d4;color:#0d5c3a") +
+                ';font-family:Arial,Helvetica,sans-serif;font-size:14px"><strong>' +
+                (cancelled ? "Remark:" : "Update:") +
+                "</strong> " +
                 escapeHtml(remarkText) +
                 "</p>"
               : "") +

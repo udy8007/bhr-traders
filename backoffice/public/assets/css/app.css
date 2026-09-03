@@ -1741,6 +1741,41 @@ body.bhr-graphic .breadcrumb-item .text-dark {
   border-color: #f5c2c0;
   background: #fdecea;
 }
+.od-notes-status {
+  border-color: #bfe8d4;
+  background: #eef8f2;
+}
+.od-status-note {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid #bfe8d4;
+  background: #f4fbf7;
+  border-radius: 14px;
+}
+.od-status-note p {
+  margin: 0 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0d5c3a;
+  font-weight: 700;
+}
+.od-status-note textarea {
+  width: 100%;
+  border: 1px solid #bfe8d4;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  color: #143524;
+  min-height: 84px;
+  resize: vertical;
+}
+.od-status-note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
 .od-cancel {
   margin-top: 14px;
   padding: 14px;
