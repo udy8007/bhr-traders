@@ -1,6 +1,7 @@
 import { GSTIN } from "../data/site.js";
 import { formatInr } from "../lib/packs.js";
 import { useStore } from "../context/StoreContext.jsx";
+import { useCustomer } from "../context/CustomerContext.jsx";
 import { CartIcon } from "./Icons.jsx";
 
 export function Toast() {
@@ -17,8 +18,25 @@ export function CartDrawer() {
     setCartOpen,
     changeQty,
     removeItem,
-    openCheckout
+    openCheckout,
+    setCheckoutInfo
   } = useStore();
+  const { isLoggedIn, customer } = useCustomer();
+
+  function startCheckout() {
+    if (isLoggedIn && customer) {
+      setCheckoutInfo({
+        name: customer.name || "",
+        phone: customer.phone || "",
+        email: customer.email || "",
+        address: customer.address || "",
+        city: customer.city || "",
+        pincode: customer.pincode || "",
+        notes: ""
+      });
+    }
+    openCheckout();
+  }
 
   return (
     <div
@@ -86,7 +104,7 @@ export function CartDrawer() {
             </div>
             <small>Inclusive of GST · GSTIN {GSTIN}</small>
           </div>
-          <button className="btn btn-gold" type="button" style={{ width: "100%" }} disabled={!cart.length} onClick={openCheckout}>
+          <button className="btn btn-gold" type="button" style={{ width: "100%" }} disabled={!cart.length} onClick={startCheckout}>
             Place order
           </button>
         </div>

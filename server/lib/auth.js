@@ -45,16 +45,16 @@ export function passwordsMatch(a, b) {
   return same(a, b);
 }
 
-export function signToken(payload) {
+export function signToken(payload, secretKey) {
   const data = Buffer.from(JSON.stringify(payload)).toString("base64url");
-  const sig = createHmac("sha256", secret()).update(data).digest("base64url");
+  const sig = createHmac("sha256", secretKey || secret()).update(data).digest("base64url");
   return data + "." + sig;
 }
 
-export function verifyToken(token) {
+export function verifyToken(token, secretKey) {
   if (!token || !token.includes(".")) return null;
   const [data, sig] = token.split(".");
-  const expected = createHmac("sha256", secret()).update(data).digest("base64url");
+  const expected = createHmac("sha256", secretKey || secret()).update(data).digest("base64url");
   const a = Buffer.from(sig);
   const b = Buffer.from(expected);
   if (a.length !== b.length || !timingSafeEqual(a, b)) return null;

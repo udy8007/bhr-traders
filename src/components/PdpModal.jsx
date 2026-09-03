@@ -55,21 +55,12 @@ export function PdpModal() {
   const [qty, setQty] = useState(1);
   const [packId, setPackId] = useState("");
   const [live, setLive] = useState([]);
-  const [orderId, setOrderId] = useState("");
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState("");
   const [policyOpen, setPolicyOpen] = useState(false);
   const p = pdpId ? productMap[pdpId] : null;
 
   useEffect(() => {
     setQty(1);
     setPackId("");
-    setMsg("");
-    setComment("");
-    setRating(5);
-    setOrderId("");
     setLive([]);
     setPolicyOpen(false);
   }, [pdpId]);
@@ -97,30 +88,6 @@ export function PdpModal() {
   const avg = live.length
     ? Math.round((live.reduce((n, r) => n + Number(r.rating || 5), 0) / live.length) * 10) / 10
     : 0;
-
-  async function submitReview(e) {
-    e.preventDefault();
-    setBusy(true);
-    setMsg("");
-    try {
-      const res = await api.createReview({
-        productId: p.id,
-        productTitle: p.title,
-        orderId,
-        rating,
-        comment
-      });
-      setLive((prev) => [res.review, ...prev]);
-      setOrderId("");
-      setComment("");
-      setRating(5);
-      setMsg("Thank you. Your review is live.");
-    } catch (err) {
-      setMsg(err.message);
-    } finally {
-      setBusy(false);
-    }
-  }
 
   return (
     <div
@@ -228,21 +195,7 @@ export function PdpModal() {
             </div>
             <div className="pdp-block">
               <h3>Customer reviews</h3>
-              <form className="pdp-review-form" onSubmit={submitReview}>
-                <p className="pdp-review-label">Write a review</p>
-                <p className="pdp-review-hint">Only customers who purchased this variety can post. Enter your order ID.</p>
-                <div className="pdp-star-pick" role="radiogroup" aria-label="Star rating">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button type="button" key={n} className={"pdp-star-btn" + (n <= rating ? " on" : "")} onClick={() => setRating(n)} aria-label={n + " stars"}>
-                      ★
-                    </button>
-                  ))}
-                </div>
-                <input required placeholder="Order ID (e.g. BHR-1234)" value={orderId} onChange={(e) => setOrderId(e.target.value)} />
-                <textarea required rows={3} placeholder="Your comment" value={comment} onChange={(e) => setComment(e.target.value)} />
-                {msg ? <p className={"pdp-review-msg" + (msg.toLowerCase().includes("thank") ? "" : " err")}>{msg}</p> : null}
-                <button className="btn btn-green" type="submit" disabled={busy}>{busy ? "Saving…" : "Submit review"}</button>
-              </form>
+              <p className="pdp-review-hint">Reviews are posted from <strong>My account → My orders</strong> after you sign in.</p>
               <div className="pdp-reviews">
                 {!reviews.length ? (
                   <p className="pdp-review-empty">No reviews yet for this product.</p>

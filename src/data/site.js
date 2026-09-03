@@ -323,3 +323,19 @@ export const PAY_LABELS = {
   upi: "UPI",
   bank: "Bank transfer"
 };
+
+export const CATEGORY_STYLE = {
+  all: { emoji: "🌾", bg: "#FFF3E0", ring: "#FF9800", label: "All" },
+  boiled: { emoji: "🍚", bg: "#FFEBEE", ring: "#E53935", label: "Boiled" },
+  raw: { emoji: "✨", bg: "#FFF8E1", ring: "#FFB300", label: "Raw" },
+  steam: { emoji: "💨", bg: "#E0F7FA", ring: "#00ACC1", label: "Steam" },
+  idly: { emoji: "🥞", bg: "#F3E5F5", ring: "#AB47BC", label: "Idly" },
+  biriyani: { emoji: "👑", bg: "#FCE4EC", ring: "#EC407A", label: "Biryani" },
+  broken: { emoji: "🌿", bg: "#E8F5E9", ring: "#66BB6A", label: "Broken" },
+  millets: { emoji: "🌱", bg: "#F1F8E9", ring: "#7CB342", label: "Millets" },
+  dhall: { emoji: "🫘", bg: "#FFF3E0", ring: "#FB8C00", label: "Dhall" }
+};
+
+export function categoryStyle(id) {
+  return CATEGORY_STYLE[id] || { emoji: "🌾", bg: "#F5F5F5", ring: "#9E9E9E", label: id };
+}

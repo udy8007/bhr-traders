@@ -1,4 +1,6 @@
 import { snap, writeAudit } from "../../../server/lib/logs.js";
+import { verifyCustomerToken } from "../../../server/lib/customerAuth.js";
+import { getToken } from "../../../server/lib/auth.js";
 import { escapeHtml, mailFacts, mailItemsTable, mailMoney, mailSectionLabel, mailStatStrip, wrapHtml } from "../../../server/lib/mail.js";
 import { queueShopEvent } from "../../../server/lib/notify.js";
 import { getSupabase, json, options } from "../../../server/lib/supabase.js";
@@ -29,7 +31,7 @@ export async function POST(req) {
     if (!items.length) return json({ error: "Cart is empty." }, 400);
     const name = String(body.name || "").trim();
     const phone = String(body.phone || "").trim();
-    const email = String(body.email || "").trim();
+    let email = String(body.email || "").trim();
     const address = String(body.address || "").trim();
     const city = String(body.city || "").trim();
     const pincode = String(body.pincode || "").trim();
@@ -37,6 +39,8 @@ export async function POST(req) {
     if (!name || !phone || !email || !address || !city || !pincode) {
       return json({ error: "Delivery details are required." }, 400);
     }
+
+    const customerAuth = verifyCustomerToken(getToken(req));
 
     const pay = String(body.pay || "upi");
     const skipPayment = Boolean(body.skipPayment || body.skip_payment);
@@ -66,7 +70,8 @@ export async function POST(req) {
       notes,
       payment_proof,
       total,
-      status
+      status,
+      customer_id: customerAuth?.sub || null
     };
     let { error: orderErr } = await supabase.from("orders").insert(row);
     if (orderErr && /notes|payment_proof|schema cache/i.test(orderErr.message || "")) {

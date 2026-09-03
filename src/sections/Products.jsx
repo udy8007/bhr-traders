@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { catalogPriceBounds, cartLineId, defaultPack, formatInr, listingPrice } from "../lib/packs.js";
+import { categoryStyle } from "../data/site.js";
 import { useStore } from "../context/StoreContext.jsx";
 
 export function Products() {
@@ -174,15 +175,27 @@ export function Products() {
                       </div>
                     </article>
                   ))
-                : shown.map((p) => (
+                : shown.map((p) => {
+                const catStr = typeof p.cats === "string" ? p.cats : "";
+                const cat = catStr.split(",")[0]?.trim() || p.cat || "all";
+                const style = categoryStyle(cat);
+
+                return (
                 <article
-                  className="shop-card"
+                  className="shop-card shop-card-graphic"
                   key={p.id}
+                  style={{ "--cat-color": style.ring, "--cat-bg": style.bg }}
                   onClick={() => openPdp(p.id)}
                 >
                   <div className="shop-photo">
+                    <span className="shop-photo-bg" aria-hidden="true" />
+                    <span className="shop-photo-ring" aria-hidden="true" />
                     <span className="offer-tag">80% OFF</span>
-                    <img src={p.img} alt={p.title} />
+                    <span className="shop-cat-tag" style={{ background: style.ring }}>
+                      {style.emoji}
+                    </span>
+                    <img src={p.img} alt={p.title} loading="lazy" />
+                    <div className="shop-photo-glow" style={{ background: style.ring }} aria-hidden="true" />
                     <button
                       className={"wish" + (wish[p.id] ? " on" : "")}
                       type="button"
@@ -194,6 +207,26 @@ export function Products() {
                       }}
                     >
                       {wish[p.id] ? "♥" : "♡"}
+                    </button>
+                    <button
+                      className="shop-photo-add"
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const pack = defaultPack(p);
+                        addToCart({
+                          id: cartLineId(p.id, pack.id),
+                          productId: p.id,
+                          packId: pack.id,
+                          packLabel: pack.label,
+                          title: p.title,
+                          price: pack.price,
+                          img: p.img,
+                          qty: 1
+                        });
+                      }}
+                    >
+                      ADD
                     </button>
                   </div>
                   <div className="shop-body">
@@ -227,7 +260,8 @@ export function Products() {
                     </button>
                   </div>
                 </article>
-              ))}
+              );
+              })}
             </div>
           </div>
         </div>

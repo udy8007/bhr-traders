@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { EMAIL, MARQUEE, NAV_LINKS, PHONE } from "../data/site.js";
 import { useStore } from "../context/StoreContext.jsx";
-import { CartIcon, LeafIcon, TrackIcon } from "./Icons.jsx";
+import { CustomerAccountMenu } from "./CustomerAccountMenu.jsx";
+import { CartIcon, LeafIcon } from "./Icons.jsx";
 
 export function Topbar() {
   return (
@@ -63,7 +64,7 @@ function sectionInView() {
 }
 
 export function Navbar() {
-  const { cartCount, setCartOpen, setTrackOpen, menuOpen, setMenuOpen } = useStore();
+  const { cartCount, setCartOpen, menuOpen, setMenuOpen } = useStore();
   const [activeHref, setActiveHref] = useState(hashToHref);
 
   useEffect(() => {
@@ -126,17 +127,13 @@ export function Navbar() {
             ))}
           </ul>
           <div className="nav-actions">
+            <CustomerAccountMenu />
             <button
-              className="btn btn-outline track-btn"
+              className="btn btn-green cart-btn"
               type="button"
-              aria-label="Track order"
-              title="Track order"
-              onClick={() => setTrackOpen(true)}
+              aria-label="Open cart"
+              onClick={() => setCartOpen(true)}
             >
-              <TrackIcon />
-              Track
-            </button>
-            <button className="btn btn-green cart-btn" type="button" aria-label="Open cart" onClick={() => setCartOpen(true)}>
               <CartIcon />
               Cart
               <span className="cart-badge">{cartCount}</span>
