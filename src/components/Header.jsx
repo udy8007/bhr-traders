@@ -1,20 +1,43 @@
 import { useEffect, useState } from "react";
 import { EMAIL, MARQUEE, NAV_LINKS, PHONE } from "../data/site.js";
 import { useStore } from "../context/StoreContext.jsx";
+import { useCustomer } from "../context/CustomerContext.jsx";
 import { CustomerAccountMenu } from "./CustomerAccountMenu.jsx";
 import { CartIcon, LeafIcon } from "./Icons.jsx";
 
+function firstName(name) {
+  const part = String(name || "").trim().split(/\s+/)[0];
+  return part || "there";
+}
+
 export function Topbar() {
+  const { isLoggedIn, customer, openProfile } = useCustomer();
+  const welcome = isLoggedIn && customer?.name;
+
   return (
     <div className="topbar">
       <div className="wrap">
         <span className="topbar-item">
           <LeafIcon />
-          Welcome to BHR TRADERS
+          {welcome ? "Welcome, " + firstName(customer.name) : "Welcome to BHR TRADERS"}
         </span>
         <span className="topbar-item center">
           <LeafIcon />
-          Trusted Quality, Delivered with Care
+          {welcome ? (
+            <>
+              Signed in as {customer.name}
+              {!customer.address ? (
+                <>
+                  {" · "}
+                  <button type="button" className="topbar-link" onClick={() => openProfile("address")}>
+                    Add delivery address
+                  </button>
+                </>
+              ) : null}
+            </>
+          ) : (
+            "Trusted Quality, Delivered with Care"
+          )}
         </span>
         <span className="topbar-item right">
           <a className="topbar-item" href={"mailto:" + EMAIL}>

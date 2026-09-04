@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { MobileLayout } from "../layout/MobileLayout.jsx";
 import { api } from "../lib/api.js";
 import { useCustomer } from "../context/CustomerContext.jsx";
-import { MyOrdersPanel, ProfileTabHero, AccountFormField, AccountFormShell, AccountFormActions, AccountUserChip, PROFILE_TAB_META } from "../components/CustomerAccountUI.jsx";
+import { MyOrdersPanel, AccountFormField, AccountFormShell, AccountFormActions, AccountUserChip, PROFILE_TAB_META } from "../components/CustomerAccountUI.jsx";
 
 export function Profile() {
   const { customer, isLoggedIn, openLogin, logout, updateProfile } = useCustomer();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [tab, setTab] = useState(() => searchParams.get("tab") || "profile");
   const [profile, setProfile] = useState({ name: "", phone: "", address: "", city: "", pincode: "" });
@@ -106,8 +107,6 @@ export function Profile() {
     setMsg("");
   }
 
-  const tabLabels = Object.fromEntries(Object.entries(PROFILE_TAB_META).map(([k, v]) => [k, v.title]));
-
   if (!isLoggedIn) {
     return (
       <MobileLayout title="Profile">
@@ -126,10 +125,12 @@ export function Profile() {
   }
 
   return (
-    <MobileLayout title={tabLabels[tab] || "My profile"}>
+    <MobileLayout
+      variant="profile"
+      profileSubtitle={(PROFILE_TAB_META[tab] || PROFILE_TAB_META.profile).sub}
+      hideNav={false}
+    >
       <div className="profile-page">
-        <ProfileTabHero tab={tab} customer={customer} />
-
         <div className="profile-tabs profile-tabs-icons profile-tabs-grid">
           <button type="button" className={tab === "profile" ? "on" : ""} onClick={() => switchTab("profile")}>
             <span aria-hidden="true">👤</span> Profile
@@ -203,6 +204,17 @@ export function Profile() {
           </form>
         ) : (
           <>
+            {location.state?.justPlaced ? (
+              <div className="track-placed-banner profile-placed-banner">
+                <span aria-hidden="true">✓</span>
+                <div>
+                  <strong>Order placed!</strong>
+                  <p>
+                    {location.state.orderId ? "Order " + location.state.orderId + " is confirmed." : "Your order is confirmed."}
+                  </p>
+                </div>
+              </div>
+            ) : null}
             <MyOrdersPanel orders={orders} loading={loading} reviewKey={reviewKey} setReviewKey={setReviewKey} onReload={reloadOrders} />
             {!loading && !orders.length ? (
               <Link to="/shop" className="btn btn-accent btn-block account-shop-link">

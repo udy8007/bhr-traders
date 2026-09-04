@@ -6,9 +6,9 @@ import { useCustomer } from "../context/CustomerContext.jsx";
 import { formatInr } from "../lib/packs.js";
 import { GSTIN, UPI_ID, UPI_QR } from "../data/site.js";
 import { logCheckoutStart } from "../lib/visits.js";
-import { api } from "../lib/api.js";
-import { customerToCheckoutInfo, isCheckoutProfileComplete, getMissingCheckoutFields } from "../lib/checkoutProfile.js";
-import { AccountFormField, AccountFormShell, AccountUserChip } from "../components/CustomerAccountUI.jsx";
+import { customerToCheckoutInfo } from "../lib/checkoutProfile.js";
+import { AccountFormField, AccountFormShell } from "../components/CustomerAccountUI.jsx";
+import { CheckoutLoginGate } from "../components/CheckoutLoginGate.jsx";
 
 function readImage(file) {
   return new Promise((resolve, reject) => {
@@ -19,16 +19,20 @@ function readImage(file) {
   });
 }
 
+const CHECKOUT_STEPS = [
+  { label: "Delivery", icon: "📍" },
+  { label: "Payment", icon: "💳" },
+  { label: "Invoice", icon: "📄" }
+];
+
 export function Checkout() {
   const { cart, cartSum, placeOrder, ping } = useStore();
-  const { isLoggedIn, customer } = useCustomer();
+  const { isLoggedIn, customer, openLogin } = useCustomer();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const [proof, setProof] = useState("");
-  const [orderId, setOrderId] = useState("");
-  const [copiedId, setCopiedId] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -40,37 +44,33 @@ export function Checkout() {
     pay: "upi"
   });
 
-  const savedInfo = customerToCheckoutInfo(customer);
-  const profileComplete = isLoggedIn && isCheckoutProfileComplete(savedInfo);
-  const needsDetails = !profileComplete;
-  const missingFields = isLoggedIn ? getMissingCheckoutFields(savedInfo) : ["name", "phone", "email", "address", "city", "pincode"];
-  const loggedInQuick = isLoggedIn && missingFields.length > 0 && missingFields.length < 6;
-
   useEffect(() => {
-    if (!cart.length && step < 3) navigate("/cart", { replace: true });
-  }, [cart.length, step, navigate]);
+    if (!cart.length) navigate("/cart", { replace: true });
+  }, [cart.length, navigate]);
 
   useEffect(() => {
     if (step === 1) logCheckoutStart();
   }, [step]);
 
   useEffect(() => {
-    if (!isLoggedIn || !customer) return;
-    setForm((f) => ({
-      ...f,
-      name: customer.name || f.name,
-      phone: customer.phone || f.phone,
-      email: customer.email || f.email,
-      address: customer.address || f.address,
-      city: customer.city || f.city,
-      pincode: customer.pincode || f.pincode
-    }));
-  }, [isLoggedIn, customer]);
+    if (!isLoggedIn && cart.length) {
+      openLogin({ hint: "Sign in or register to place your order." });
+    }
+  }, [isLoggedIn, cart.length, openLogin]);
 
   useEffect(() => {
-    if (!profileComplete || step !== 1) return;
-    setStep(2);
-  }, [profileComplete, step]);
+    if (!customer) return;
+    const saved = customerToCheckoutInfo(customer);
+    setForm((f) => ({
+      ...f,
+      name: saved.name || f.name,
+      phone: saved.phone || f.phone,
+      email: saved.email || f.email,
+      address: saved.address || f.address,
+      city: saved.city || f.city,
+      pincode: saved.pincode || f.pincode
+    }));
+  }, [customer]);
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -117,134 +117,173 @@ export function Checkout() {
     const order = await placeOrder(form, opts);
     setBusy(false);
     if (order) {
-      setOrderId(order.id);
-      setStep(3);
+      navigate(isLoggedIn ? "/profile?tab=orders" : "/track", {
+        replace: true,
+        state: { orderId: order.id, justPlaced: true }
+      });
     }
   }
 
-  async function copyOrderId() {
-    if (!orderId) return;
-    try {
-      await navigator.clipboard.writeText(orderId);
-      setCopiedId(true);
-      setTimeout(() => setCopiedId(false), 1600);
-    } catch {
-      ping("Copy the order ID: " + orderId);
-    }
+  function goBack() {
+    if (step > 1) setStep(1);
+    else navigate(-1);
   }
 
-  const titles = [loggedInQuick ? "Delivery address" : needsDetails ? "Your details" : "Pay with UPI", "Pay with UPI", "Thank you"];
+  const title = !isLoggedIn ? "Sign in required" : step === 2 ? "Pay with UPI" : "Your details";
+  const hint = !isLoggedIn
+    ? "Sign in or create an account to continue checkout."
+    : step === 1
+      ? "Confirm delivery details for your order. Notes are optional."
+      : "Scan the QR, pay, and attach your payment screenshot to place the order.";
 
   return (
-    <MobileLayout title={titles[step - 1]} back hideNav>
-      <div className="checkout-page">
-        {step === 1 && needsDetails && (
-          <form className="checkout-form checkout-details-form" onSubmit={submitDetails}>
+    <MobileLayout variant="checkout" hideNav>
+      <div className="checkout-page-shell">
+        <div className="checkout-hero">
+          <div className="checkout-hero-deco" aria-hidden="true">
+            <span className="checkout-hero-grain checkout-hero-grain-a">🌾</span>
+            <span className="checkout-hero-grain checkout-hero-grain-b">🍚</span>
+            <span className="checkout-hero-grain checkout-hero-grain-c">✨</span>
+          </div>
+          <button type="button" className="checkout-back" aria-label="Go back" onClick={goBack}>
+            ←
+          </button>
+          <div className="checkout-hero-copy">
+            <small>BHR Traders · Wholesale rice</small>
+            <strong>Place your order</strong>
+          </div>
+        </div>
+
+        <div className="checkout-head">
+          <div className="checkout-head-badge" aria-hidden="true">
+            {step === 2 ? "💳" : "📍"}
+          </div>
+          <div>
+            <h2>{title}</h2>
+            <p>{hint}</p>
+          </div>
+        </div>
+
+        <div className={"chk-steps chk-steps-" + step} aria-label="Checkout progress">
+          {CHECKOUT_STEPS.map((item, i) => (
+            <div className={"chk-step" + (i + 1 === step ? " on" : "") + (i + 1 < step ? " done" : "")} key={item.label}>
+              <i aria-hidden="true">{item.icon}</i>
+              {item.label}
+            </div>
+          ))}
+        </div>
+
+        {step === 1 && !isLoggedIn ? (
+          <CheckoutLoginGate
+            cartCount={cart.length}
+            cartSum={cartSum}
+            onSignIn={(mode) =>
+              openLogin({
+                mode,
+                hint: "Sign in or register to place your order."
+              })
+            }
+          />
+        ) : null}
+
+        {step === 1 && isLoggedIn ? (
+          <form className="checkout-details-form" onSubmit={submitDetails}>
             <div className="order-total-pill">
-              {cart.length} items · {formatInr(cartSum)}
+              <span className="order-total-pill-icon" aria-hidden="true">🛒</span>
+              <span className="order-total-pill-copy">
+                <strong>{formatInr(cartSum)}</strong>
+                <small>{cart.length} item{cart.length === 1 ? "" : "s"} in cart</small>
+              </span>
             </div>
 
             <AccountFormShell
-              lead={
-                loggedInQuick
-                  ? "You're signed in — just add what's missing, then continue."
-                  : isLoggedIn
-                    ? "Complete delivery details or save them in Delivery option."
-                    : "Tell us where to deliver."
-              }
+              lead="Confirm your delivery details below."
               footer={
                 <button type="submit" className="btn btn-gold btn-block account-form-submit" disabled={busy}>
-                  Continue
+                  {form.pay === "upi" ? "Continue to payment" : busy ? "Placing order…" : "Place order"}
                 </button>
               }
             >
-              {isLoggedIn ? <AccountUserChip customer={customer} /> : null}
-
-              {loggedInQuick && missingFields.includes("address") ? (
-                <div className="chk-saved-hint">
-                  Delivery address not saved yet.{" "}
-                  <button type="button" className="link-inline" onClick={() => navigate("/profile?tab=address")}>
-                    Save in account →
-                  </button>
-                </div>
-              ) : null}
-
-              {missingFields.includes("name") ? (
-                <AccountFormField icon="👤" label="Full name" required>
-                  <input value={form.name} onChange={(e) => update("name", e.target.value)} required />
+              <AccountFormField icon="👤" label="Full name" required>
+                <input value={form.name} onChange={(e) => update("name", e.target.value)} required placeholder="Your name" />
+              </AccountFormField>
+              <AccountFormField icon="📱" label="Phone" required>
+                <input type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} required placeholder="+91" />
+              </AccountFormField>
+              <AccountFormField icon="✉️" label="Email" required>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => update("email", e.target.value)}
+                  required
+                  placeholder="you@email.com"
+                  readOnly={Boolean(customer?.email)}
+                  className={customer?.email ? "is-readonly" : ""}
+                />
+              </AccountFormField>
+              <AccountFormField icon="🏠" label="Delivery address" required>
+                <textarea rows={3} value={form.address} onChange={(e) => update("address", e.target.value)} required placeholder="Door no, street, area, landmark" />
+              </AccountFormField>
+              <div className="account-form-row">
+                <AccountFormField icon="🌆" label="City" required>
+                  <input value={form.city} onChange={(e) => update("city", e.target.value)} required placeholder="Chennai" />
                 </AccountFormField>
-              ) : null}
-              {missingFields.includes("phone") ? (
-                <AccountFormField icon="📱" label="Phone" required>
-                  <input type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} required />
+                <AccountFormField icon="📮" label="Pincode" required>
+                  <input inputMode="numeric" pattern="[0-9]{6}" value={form.pincode} onChange={(e) => update("pincode", e.target.value)} required placeholder="600040" />
                 </AccountFormField>
-              ) : null}
-              {missingFields.includes("email") ? (
-                <AccountFormField icon="✉️" label="Email" required>
-                  <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} required readOnly={!!customer?.email} className={customer?.email ? "is-readonly" : ""} />
-                </AccountFormField>
-              ) : null}
-              {missingFields.includes("address") ? (
-                <AccountFormField icon="🏠" label="Delivery address" required>
-                  <textarea rows={3} value={form.address} onChange={(e) => update("address", e.target.value)} required autoFocus={loggedInQuick} />
-                </AccountFormField>
-              ) : null}
-              {(missingFields.includes("city") || missingFields.includes("pincode")) && (
-                <div className="account-form-row">
-                  {missingFields.includes("city") ? (
-                    <AccountFormField icon="🌆" label="City" required>
-                      <input value={form.city} onChange={(e) => update("city", e.target.value)} required />
-                    </AccountFormField>
-                  ) : null}
-                  {missingFields.includes("pincode") ? (
-                    <AccountFormField icon="📮" label="Pincode" required>
-                      <input inputMode="numeric" pattern="[0-9]{6}" value={form.pincode} onChange={(e) => update("pincode", e.target.value)} required />
-                    </AccountFormField>
-                  ) : null}
-                </div>
-              )}
+              </div>
               <AccountFormField icon="📝" label="Notes" hint="Optional">
-                <textarea rows={2} value={form.notes} onChange={(e) => update("notes", e.target.value)} />
+                <textarea rows={2} value={form.notes} onChange={(e) => update("notes", e.target.value)} placeholder="Delivery timing, shop name, GST needs…" />
               </AccountFormField>
 
               <fieldset className="pay-options">
                 <legend>Payment method</legend>
-                <label className="radio-row">
-                  <input type="radio" name="pay" checked={form.pay === "upi"} onChange={() => update("pay", "upi")} />
-                  UPI
-                </label>
-                <label className="radio-row">
-                  <input type="radio" name="pay" checked={form.pay === "cod"} onChange={() => update("pay", "cod")} />
-                  Cash on delivery
-                </label>
+                <div className="pay-option-grid">
+                  <label className={"pay-option-card" + (form.pay === "upi" ? " on" : "")}>
+                    <input type="radio" name="pay" checked={form.pay === "upi"} onChange={() => update("pay", "upi")} />
+                    <span className="pay-option-icon upi" aria-hidden="true">📱</span>
+                    <span className="pay-option-text">
+                      <strong>UPI</strong>
+                      <small>Scan QR & pay instantly</small>
+                    </span>
+                    <span className="pay-option-check" aria-hidden="true">✓</span>
+                  </label>
+                  <label className={"pay-option-card" + (form.pay === "cod" ? " on" : "")}>
+                    <input type="radio" name="pay" checked={form.pay === "cod"} onChange={() => update("pay", "cod")} />
+                    <span className="pay-option-icon cod" aria-hidden="true">💵</span>
+                    <span className="pay-option-text">
+                      <strong>Cash on delivery</strong>
+                      <small>Pay when order arrives</small>
+                    </span>
+                    <span className="pay-option-check" aria-hidden="true">✓</span>
+                  </label>
+                </div>
               </fieldset>
               <small className="gst-note">GSTIN {GSTIN}</small>
             </AccountFormShell>
           </form>
-        )}
+        ) : null}
 
-        {step === 2 && (
+        {step === 2 ? (
           <div className="upi-panel checkout-pay-form">
-            {profileComplete ? (
-              <div className="chk-delivery-card">
-                <div className="chk-delivery-icon" aria-hidden="true">
-                  🚚
-                </div>
-                <div className="chk-delivery-body">
-                  <div className="chk-delivery-head">
-                    <strong>Delivering to your saved address</strong>
-                    <button type="button" className="link-inline" onClick={() => navigate("/profile?tab=address")}>
-                      Edit
-                    </button>
-                  </div>
-                  <p>
-                    {form.name} · {form.phone}
-                    <br />
-                    {form.address}, {form.city} – {form.pincode}
-                  </p>
-                </div>
+            <div className="chk-delivery-card">
+              <div className="chk-delivery-icon" aria-hidden="true">
+                🚚
               </div>
-            ) : null}
+              <div className="chk-delivery-body">
+                <div className="chk-delivery-head">
+                  <strong>Delivering to</strong>
+                  <button type="button" className="link-inline" onClick={() => setStep(1)}>
+                    Edit
+                  </button>
+                </div>
+                <p>
+                  {form.name} · {form.phone}
+                  <br />
+                  {form.address}, {form.city} – {form.pincode}
+                </p>
+              </div>
+            </div>
 
             <div className="chk-order-card">
               <div className="chk-card-head">
@@ -337,85 +376,11 @@ export function Checkout() {
             >
               {busy ? "Placing order…" : proof ? "Place order ✓" : "Attach screenshot to continue"}
             </button>
-            {profileComplete ? (
-              <button type="button" className="btn btn-outline btn-block" disabled={busy} onClick={() => finish({ pay: "cod", skipPayment: true })}>
-                Cash on delivery
-              </button>
-            ) : null}
+            <button type="button" className="btn btn-outline btn-block" disabled={busy} onClick={() => finish({ pay: "cod", skipPayment: true })}>
+              Cash on delivery
+            </button>
           </div>
-        )}
-
-        {step === 3 && (
-          <div className="order-success order-success-screen">
-            <div className="order-success-hero-band" aria-hidden="true">
-              <span>🌾</span>
-              <span>🍚</span>
-              <span>✨</span>
-            </div>
-            <div className="order-success-badge-wrap">
-              <div className="order-success-ring" aria-hidden="true" />
-              <div className="success-icon" aria-hidden="true">
-                ✓
-              </div>
-            </div>
-            <div className="order-success-head">
-              <h2>Order placed!</h2>
-              <p>Your wholesale rice order is confirmed</p>
-            </div>
-
-            <div className="order-success-journey" aria-label="Checkout complete">
-              {[
-                { label: "Details", icon: "📍" },
-                { label: "Payment", icon: "💳" },
-                { label: "Done", icon: "✓" }
-              ].map((item) => (
-                <div className="order-success-journey-step done" key={item.label}>
-                  <i aria-hidden="true">✓</i>
-                  <span>{item.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="order-id-card">
-              <small>Your order ID</small>
-              <div className="order-success-id-row">
-                <div className="order-id-box">{orderId}</div>
-                <button type="button" className="order-success-copy" onClick={copyOrderId} aria-label="Copy order ID">
-                  {copiedId ? "✓" : "Copy"}
-                </button>
-              </div>
-              <p className="hint">Save this ID — use it to track your delivery anytime.</p>
-            </div>
-
-            <div className="order-success-next">
-              <small>What happens next</small>
-              <div className="order-success-track-strip">
-                {["Confirmed", "Packing", "Delivering", "Delivered"].map((label, i) => (
-                  <span className={"order-success-track-dot" + (i === 0 ? " on" : "")} key={label}>
-                    <i>{i === 0 ? "✓" : i + 1}</i>
-                    <small>{label}</small>
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="order-success-actions">
-              <button type="button" className="btn btn-gold btn-block" onClick={() => api.downloadInvoice(orderId)}>
-                📄 Download invoice
-              </button>
-              <button
-                type="button"
-                className="btn btn-gold btn-block"
-                onClick={() => navigate(isLoggedIn ? "/profile?tab=orders" : "/track", { state: { orderId } })}
-              >
-                🚚 {isLoggedIn ? "View my orders" : "Track this order"}
-              </button>
-              <button type="button" className="btn btn-outline btn-block" onClick={() => navigate("/shop")}>
-                Continue shopping
-              </button>
-            </div>
-          </div>
-        )}
+        ) : null}
       </div>
     </MobileLayout>
   );

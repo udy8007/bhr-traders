@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Children, cloneElement, isValidElement, useState } from "react";
 import { api } from "../lib/api.js";
 import { formatInr } from "../lib/packs.js";
 import { orderStepIndex, statusTone } from "../lib/orderStatus.js";
@@ -75,6 +75,16 @@ export function AccountUserChip({ customer }) {
   );
 }
 
+function withAccountFieldInputClass(children) {
+  return Children.map(children, (child) => {
+    if (!isValidElement(child)) return child;
+    const prev = child.props.className || "";
+    return cloneElement(child, {
+      className: [prev, "account-field-input"].filter(Boolean).join(" ")
+    });
+  });
+}
+
 export function AccountFormField({ icon, label, required, hint, children }) {
   return (
     <label className="account-field">
@@ -86,7 +96,7 @@ export function AccountFormField({ icon, label, required, hint, children }) {
         <span className="account-field-icon" aria-hidden="true">
           {icon}
         </span>
-        {children}
+        {withAccountFieldInputClass(children)}
       </div>
       {hint ? <small className="account-field-hint">{hint}</small> : null}
     </label>
@@ -266,6 +276,16 @@ export function MyOrdersPanel({ orders, loading, reviewKey, setReviewKey, onRelo
             </div>
           ) : null}
 
+          {order.cancel_remark || /cancelled/i.test(order.status || "") ? (
+            <div className="my-order-status-note is-cancel">
+              <span aria-hidden="true">ℹ️</span>
+              <div>
+                <strong>Cancel reason</strong>
+                <p>{order.cancel_remark || "This order was cancelled. Contact us if you need help."}</p>
+              </div>
+            </div>
+          ) : null}
+
           <div className="my-order-stats">
             <div className="my-order-stat">
               <small>Total</small>
@@ -279,6 +299,15 @@ export function MyOrdersPanel({ orders, loading, reviewKey, setReviewKey, onRelo
               <small>Items</small>
               <strong>{order.items.length}</strong>
             </div>
+          </div>
+
+          <div className="my-order-actions">
+            <button type="button" className="btn-invoice-pill" onClick={() => api.downloadInvoice(order.id)}>
+              <span className="btn-invoice-pill-icon" aria-hidden="true">
+                📄
+              </span>
+              Download invoice
+            </button>
           </div>
 
           <ul className="my-order-items">

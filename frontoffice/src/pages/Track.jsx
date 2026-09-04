@@ -51,6 +51,16 @@ export function Track() {
   return (
     <MobileLayout title="Track order">
       <div className="track-page">
+        {location.state?.justPlaced ? (
+          <div className="track-placed-banner">
+            <span aria-hidden="true">✓</span>
+            <div>
+              <strong>Order placed!</strong>
+              <p>Your order is confirmed. Track delivery status below.</p>
+            </div>
+          </div>
+        ) : null}
+
         <form
           className="track-form"
           onSubmit={(e) => {

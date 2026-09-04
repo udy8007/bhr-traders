@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { MobileLayout } from "../layout/MobileLayout.jsx";
+import { BusinessInfoCard } from "../components/BusinessInfoCard.jsx";
 import { useStore } from "../context/StoreContext.jsx";
-import { ADDRESS, EMAIL, GSTIN, HOURS_SUNDAY, HOURS_WEEKDAY, MAP_QUERY, PHONE, PHONE_2 } from "../data/site.js";
+import { MAP_QUERY } from "../data/site.js";
 
 export function Contact() {
   const { saveEnquiry } = useStore();
@@ -29,39 +30,17 @@ export function Contact() {
 
   return (
     <MobileLayout title="Contact">
-      <section className="contact-hero">
-        <img src="/images/shop-exterior.jpg" alt="BHR Traders shop" />
-      </section>
+      <section className="section-pad contact-page">
+        <BusinessInfoCard />
 
-      <section className="section-pad contact-cards">
-        <a href={"tel:" + PHONE.replace(/\s/g, "")} className="contact-card">
-          <span className="contact-label">Call</span>
-          <strong>{PHONE}</strong>
-        </a>
-        <a href={"tel:" + PHONE_2.replace(/\s/g, "")} className="contact-card">
-          <span className="contact-label">Alternate</span>
-          <strong>{PHONE_2}</strong>
-        </a>
-        <a href={"mailto:" + EMAIL} className="contact-card">
-          <span className="contact-label">Email</span>
-          <strong>{EMAIL}</strong>
-        </a>
-        <a
-          href={"https://www.google.com/maps/search/?api=1&query=" + MAP_QUERY}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="contact-card"
-        >
-          <span className="contact-label">Address</span>
-          <strong>{ADDRESS}</strong>
-        </a>
-      </section>
-
-      <section className="section-pad">
-        <h2>Store hours</h2>
-        <p>{HOURS_WEEKDAY}</p>
-        <p>{HOURS_SUNDAY}</p>
-        <p className="gst-note">GSTIN {GSTIN}</p>
+        <div className="contact-map">
+          <iframe
+            title="BHR TRADERS location in Anna Nagar West, Chennai"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            src={"https://maps.google.com/maps?q=" + MAP_QUERY + "&z=15&output=embed"}
+          />
+        </div>
       </section>
 
       <section className="section-pad">

@@ -33,6 +33,39 @@ function starChars(n) {
   return "★".repeat(r) + "☆".repeat(5 - r);
 }
 
+function formatReviewDate(value) {
+  if (!value) return "";
+  try {
+    return new Date(value).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  } catch {
+    return "";
+  }
+}
+
+function reviewerLetter(name) {
+  return String(name || "C").trim().charAt(0).toUpperCase();
+}
+
+function ReviewStars({ rating }) {
+  const r = Math.max(1, Math.min(5, Number(rating) || 5));
+  return (
+    <div className="pdp-review-stars" aria-label={r + " out of 5 stars"}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <span key={n} className={n <= r ? "on" : ""} aria-hidden="true">
+          ★
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function reviewerDisplayName(review) {
+  const name = String(review.name || "").trim();
+  if (name) return name;
+  if (review.city) return "Customer · " + review.city;
+  return "Verified customer";
+}
+
 function PdpHero({ product }) {
   const [active, setActive] = useState(false);
   const catStr = typeof product.cats === "string" ? product.cats : "";
@@ -267,9 +300,32 @@ export function ProductDetail() {
               ) : (
                 reviews.map((r) => (
                   <article className="pdp-review-card" key={r.id || r.orderId + r.comment}>
-                    <div className="pdp-stars">{r.stars || starChars(r.rating)}</div>
-                    <q>{r.comment || r.text}</q>
-                    <strong>{r.orderId || "Verified purchase"}</strong>
+                    <div className="pdp-review-glow" aria-hidden="true" />
+                    <div className="pdp-review-card-top">
+                      <div className="pdp-review-card-meta">
+                        <ReviewStars rating={r.rating} />
+                        <div className="pdp-review-who">
+                          <strong>{reviewerDisplayName(r)}</strong>
+                          <span>{formatReviewDate(r.created_at)}</span>
+                        </div>
+                      </div>
+                      <div className="pdp-review-avatar" aria-hidden="true">
+                        {reviewerLetter(r.name)}
+                      </div>
+                    </div>
+                    <blockquote className="pdp-review-body">
+                      <span className="pdp-review-quote-mark" aria-hidden="true">
+                        “
+                      </span>
+                      {r.comment || r.text}
+                    </blockquote>
+                    {r.orderId ? (
+                      <div className="pdp-review-foot">
+                        <span className="pdp-review-order">
+                          <i aria-hidden="true">✓</i> Verified · Order {r.orderId}
+                        </span>
+                      </div>
+                    ) : null}
                   </article>
                 ))
               )}

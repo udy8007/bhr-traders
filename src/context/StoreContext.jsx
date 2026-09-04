@@ -127,10 +127,15 @@ export function StoreProvider({ children }) {
   }, [closePdp]);
 
   const addToCart = useCallback((item) => {
+    const addQty = Math.max(1, Number(item.qty) || 1);
+    let merged = false;
+    let totalQty = addQty;
     setCart((prev) => {
       const found = prev.find((i) => i.id === item.id);
       if (found) {
-        return prev.map((i) => (i.id === item.id ? { ...i, qty: i.qty + (item.qty || 1) } : i));
+        merged = true;
+        totalQty = found.qty + addQty;
+        return prev.map((i) => (i.id === item.id ? { ...i, qty: totalQty } : i));
       }
       return [
         ...prev,
@@ -142,11 +147,15 @@ export function StoreProvider({ children }) {
           title: item.title,
           price: item.price,
           img: item.img,
-          qty: item.qty || 1
+          qty: addQty
         }
       ];
     });
-    ping(item.title + " added to cart");
+    ping(
+      merged
+        ? item.title + " — now " + totalQty + " bag" + (totalQty === 1 ? "" : "s") + " in cart"
+        : addQty + " bag" + (addQty === 1 ? "" : "s") + " of " + item.title + " added to cart"
+    );
   }, [ping]);
 
   const changeQty = useCallback((id, delta) => {
@@ -183,8 +192,9 @@ export function StoreProvider({ children }) {
   }, [orderId, ping]);
 
   const placeOrder = useCallback(async (opts = {}) => {
-    if (!cart.length || !checkoutInfo) {
-      ping("Your cart is empty.");
+    const info = opts.checkoutInfo || checkoutInfo;
+    if (!cart.length || !info) {
+      ping("Add delivery details and items before placing the order.");
       return false;
     }
     const pay = typeof opts === "string" ? opts : opts.pay || "upi";
@@ -192,7 +202,7 @@ export function StoreProvider({ children }) {
     const skipPayment = Boolean(opts.skipPayment);
     try {
       const res = await api.createOrder({
-        ...checkoutInfo,
+        ...info,
         pay,
         paymentProof,
         skipPayment,
@@ -208,7 +218,7 @@ export function StoreProvider({ children }) {
       setOrderStatus(res.order.status || "");
       setCheckoutStep(3);
       logCheckoutComplete();
-      ping(skipPayment ? "Order saved as pending. Invoice downloading…" : "Order placed. Invoice downloading…");
+      ping(pay === "cod" || !skipPayment ? "Order placed. Invoice downloading…" : "Order saved as pending. Invoice downloading…");
       try {
         await api.downloadInvoice(res.order.id);
       } catch (err) {

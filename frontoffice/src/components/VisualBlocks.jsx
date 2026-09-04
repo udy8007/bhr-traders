@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { categoryStyle } from "../data/site.js";
+import { CategoryIcon } from "./CategoryIcon.jsx";
 import { useStore } from "../context/StoreContext.jsx";
 import { formatInr } from "../lib/packs.js";
 
@@ -13,10 +14,14 @@ export function CategoryScroller({ categories, active, onSelect, linkBase = "/sh
           const isOn = active === c.id;
           const inner = (
             <div
-              className={"cat-circle" + (isOn ? " on" : "")}
-              style={{ background: style.bg, boxShadow: isOn ? "0 0 0 3px " + style.ring : undefined }}
+              className={"cat-circle-wrap" + (isOn ? " on" : "")}
+              style={isOn ? { "--cat-ring": style.ring } : undefined}
             >
-              <span className="cat-emoji">{style.emoji}</span>
+              <div className="cat-circle" style={{ background: style.bg }}>
+                <span className="cat-icon-wrap">
+                  <CategoryIcon id={c.id} size={34} />
+                </span>
+              </div>
             </div>
           );
           return (

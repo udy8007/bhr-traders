@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { defaultPack, formatInr, listingPrice } from "../lib/packs.js";
 import { categoryStyle } from "../data/site.js";
+import { CategoryIcon } from "./CategoryIcon.jsx";
 
 function AddButton({ onClick, className = "", label = "ADD" }) {
   return (
@@ -37,7 +38,8 @@ export function ProductCard({ product, onAdd, layout = "grid", rank, wishlisted,
             <span className="shop-vivid-bg" aria-hidden="true" />
             <span className="shop-vivid-ring" aria-hidden="true" />
             <span className="shop-vivid-tag" style={{ background: style.ring }}>
-              {style.emoji} {style.label}
+              <CategoryIcon id={cat} size={12} className="shop-vivid-tag-ico" />
+              {style.label}
             </span>
             {onWishlist ? (
               <button
@@ -55,6 +57,7 @@ export function ProductCard({ product, onAdd, layout = "grid", rank, wishlisted,
             ) : null}
             <img src={product.img} alt={product.title} loading="lazy" />
             <div className="img-hover-glow" style={{ background: style.ring }} />
+            <AddButton onClick={() => onAdd(product)} className="psc-add-float" />
           </div>
           <div className="shop-vivid-body">
             <h3>{product.title}</h3>
@@ -62,18 +65,6 @@ export function ProductCard({ product, onAdd, layout = "grid", rank, wishlisted,
             <div className="shop-vivid-price">{priceLabel}</div>
           </div>
         </Link>
-        <button
-          type="button"
-          className="shop-vivid-cart"
-          onClick={() => onAdd(product)}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="9" cy="20" r="1.3" />
-            <circle cx="18" cy="20" r="1.3" />
-            <path d="M3 4h2l2.2 11h11.4L21 8H7" />
-          </svg>
-          Add to Cart
-        </button>
       </article>
     );
   }
@@ -94,7 +85,8 @@ export function ProductCard({ product, onAdd, layout = "grid", rank, wishlisted,
         <Link to={"/product/" + product.id} className="bs-main">
           <div className="bs-text">
             <span className="bs-cat-pill" style={{ background: style.bg, color: style.ring }}>
-              {style.emoji} {style.label}
+              <CategoryIcon id={cat} size={14} className="bs-cat-ico" />
+              {style.label}
             </span>
             <h3>{product.title}</h3>
             <p>{product.short}</p>
@@ -142,44 +134,53 @@ export function ProductCard({ product, onAdd, layout = "grid", rank, wishlisted,
 
   if (layout === "scroll") {
     return (
-      <article className="product-scroll-card product-card-interactive">
-        <Link to={"/product/" + product.id} className="psc-link">
-          <div className="psc-img">
-            <img src={product.img} alt={product.title} loading="lazy" />
+      <article
+        className="product-scroll-card product-card-interactive"
+        style={{ "--cat-color": style.ring, "--cat-bg": style.bg }}
+      >
+        <div className="psc-photo-wrap">
+          <Link to={"/product/" + product.id} className="psc-photo-link">
+            <span className="shop-vivid-bg" aria-hidden="true" />
+            <span className="shop-vivid-ring" aria-hidden="true" />
             <span className="psc-badge" style={{ background: style.ring }}>
-              {style.emoji}
+              <CategoryIcon id={cat} size={16} />
             </span>
+            <img src={product.img} alt={product.title} loading="lazy" />
             <div className="img-hover-glow" style={{ background: style.ring }} />
-          </div>
-          <h3>{product.title}</h3>
-        </Link>
-        <div className="psc-actions">
-          <span className="psc-price">{formatInr(price)}</span>
-          <AddButton onClick={() => onAdd(product)} />
+          </Link>
+          <AddButton onClick={() => onAdd(product)} className="psc-add-float" />
         </div>
+        <Link to={"/product/" + product.id} className="psc-link">
+          <h3>{product.title}</h3>
+          <span className="psc-price">{formatInr(price)}</span>
+        </Link>
       </article>
     );
   }
 
   return (
-    <article className="product-card product-card-interactive">
-      <Link to={"/product/" + product.id} className="product-card-link">
-        <div className="product-img-wrap">
-          <img src={product.img} alt={product.title} loading="lazy" />
-          <span className="card-badge" style={{ background: style.ring }}>
-            {style.emoji}
+    <article
+      className="product-card product-card-interactive"
+      style={{ "--cat-color": style.ring, "--cat-bg": style.bg }}
+    >
+      <div className="psc-photo-wrap product-card-photo">
+        <Link to={"/product/" + product.id} className="psc-photo-link">
+          <span className="shop-vivid-bg" aria-hidden="true" />
+          <span className="shop-vivid-ring" aria-hidden="true" />
+          <span className="psc-badge" style={{ background: style.ring }}>
+            <CategoryIcon id={cat} size={16} />
           </span>
+          <img src={product.img} alt={product.title} loading="lazy" />
           <div className="img-hover-glow" style={{ background: style.ring }} />
-        </div>
+        </Link>
+        <AddButton onClick={() => onAdd(product)} className="psc-add-float" />
+      </div>
+      <Link to={"/product/" + product.id} className="product-card-link">
         <div className="product-info">
           <h3>{product.title}</h3>
           <div className="product-price">{formatInr(price)}</div>
-          <span className="product-rating-sm">★ 4.8</span>
         </div>
       </Link>
-      <div className="product-card-foot">
-        <AddButton onClick={() => onAdd(product)} className="psc-add-wide" />
-      </div>
     </article>
   );
 }

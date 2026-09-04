@@ -1,4 +1,5 @@
 export const SITE_NAME = "BHR TRADERS";
+export const TAGLINE = "Premium Quality Rice Wholesaler";
 export const PHONE = "+91 99403 38654";
 export const PHONE_2 = "+91 99403 39654";
 export const EMAIL = "info@bhrtraders.com";
@@ -11,6 +12,8 @@ export const MAP_QUERY =
   "No.+66,+Kannagi+Nagar,+PadiKuppam+Main+Road,+Anna+Nagar+West,+Chennai+600040";
 export const HOURS_WEEKDAY = "Mon–Sat 7:00 AM – 9:00 PM";
 export const HOURS_SUNDAY = "Sun 7:00 AM – 2:00 PM";
+export const HOURS_WEEKDAY_FULL = "Monday to Saturday 7:00 AM – 9:00 PM";
+export const HOURS_SUNDAY_FULL = "Sunday 7:00 AM – 2:00 PM";
 export const LOCATION_LABEL = "Anna Nagar West, Chennai";
 
 export const PROMOS = [

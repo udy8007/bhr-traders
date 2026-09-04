@@ -9,6 +9,7 @@ export function CustomerProvider({ children }) {
   const [token, setToken] = useState(() => loadToken());
   const [loginOpen, setLoginOpen] = useState(false);
   const [loginHint, setLoginHint] = useState("");
+  const [loginMode, setLoginMode] = useState("signin");
   const [loginCallback, setLoginCallback] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profileTab, setProfileTab] = useState("profile");
@@ -34,8 +35,9 @@ export function CustomerProvider({ children }) {
       });
   }, [token]);
 
-  const openLogin = useCallback(({ hint, onDone } = {}) => {
+  const openLogin = useCallback(({ hint, onDone, mode } = {}) => {
     setLoginHint(hint || "");
+    setLoginMode(mode === "register" ? "register" : "signin");
     setLoginCallback(() => onDone || null);
     setLoginOpen(true);
   }, []);
@@ -43,6 +45,7 @@ export function CustomerProvider({ children }) {
   const closeLogin = useCallback(() => {
     setLoginOpen(false);
     setLoginHint("");
+    setLoginMode("signin");
     setLoginCallback(null);
   }, []);
 
@@ -107,6 +110,7 @@ export function CustomerProvider({ children }) {
         isLoggedIn,
         loginOpen,
         loginHint,
+        loginMode,
         profileOpen,
         setProfileOpen,
         profileTab,

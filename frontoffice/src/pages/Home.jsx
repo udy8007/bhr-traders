@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { MobileLayout } from "../layout/MobileLayout.jsx";
+import { BusinessInfoCard } from "../components/BusinessInfoCard.jsx";
 import { CategoryScroller, PromoCarousel, StatsStrip } from "../components/VisualBlocks.jsx";
-import { PROMOS, STATS, WHY_BUY, PHONE, HOURS_WEEKDAY } from "../data/site.js";
+import { PROMOS, STATS, WHY_BUY, PHONE } from "../data/site.js";
 import { useStore } from "../context/StoreContext.jsx";
 import { ProductCard } from "../components/ProductCard.jsx";
 import { api } from "../lib/api.js";
@@ -163,14 +164,8 @@ export function Home() {
         </div>
       </section>
 
-      <section className="cta-vivid">
-        <div className="cta-vivid-bg" />
-        <h3>Need help choosing?</h3>
-        <p>Our team picks the right variety for hotels, messes & homes.</p>
-        <a href={"tel:" + PHONE.replace(/\s/g, "")} className="btn btn-white">
-          📞 {PHONE}
-        </a>
-        <small>{HOURS_WEEKDAY}</small>
+      <section className="home-section home-contact">
+        <BusinessInfoCard />
       </section>
     </MobileLayout>
   );

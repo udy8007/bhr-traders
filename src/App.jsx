@@ -7,6 +7,7 @@ import { Topbar, Navbar } from "./components/Header.jsx";
 import { Footer } from "./components/Footer.jsx";
 import { CartDrawer, Toast } from "./components/CartDrawer.jsx";
 import { CheckoutModal } from "./components/CheckoutModal.jsx";
+import { TrackModal } from "./components/TrackModal.jsx";
 import { PdpModal } from "./components/PdpModal.jsx";
 import { Hero, Services } from "./sections/Hero.jsx";
 import { Products } from "./sections/Products.jsx";
@@ -43,6 +44,7 @@ export default function App() {
         <CartDrawer />
         <PdpModal />
         <CheckoutModal />
+        <TrackModal />
         <CustomerLoginModal />
         <CustomerProfileModal />
         <Toast />

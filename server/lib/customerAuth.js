@@ -4,6 +4,7 @@ import { getToken, signToken, verifyToken } from "./auth.js";
 const SALT_LEN = 16;
 const KEY_LEN = 64;
 const MIN_PASSWORD_LEN = 6;
+const MAX_LOGIN_ATTEMPTS = Number(process.env.CUSTOMER_MAX_LOGIN_ATTEMPTS || 5);
 
 function customerSecret() {
   return process.env.CUSTOMER_JWT_SECRET || process.env.ADMIN_JWT_SECRET || "bhr-traders-customer-dev-secret";
@@ -67,7 +68,67 @@ export function mapCustomer(row) {
     phone: row.phone || "",
     address: row.address || "",
     city: row.city || "",
-    pincode: row.pincode || ""
+    pincode: row.pincode || "",
+    locked: Boolean(row.locked_at)
+  };
+}
+
+function isAccountLocked(row) {
+  return Boolean(row?.locked_at);
+}
+
+function lockedAccountError(row) {
+  const err = new Error(
+    "Your account is locked after too many failed sign-in attempts. Request admin help to unlock it."
+  );
+  err.status = 403;
+  err.code = "ACCOUNT_LOCKED";
+  err.field = "password";
+  err.customerId = row?.id || null;
+  err.unlockRequested = Boolean(row?.unlock_requested_at);
+  return err;
+}
+
+function invalidLoginError(attemptsRemaining) {
+  const err = new Error(
+    attemptsRemaining > 0
+      ? "Invalid email or password. " + attemptsRemaining + " attempt(s) remaining before your account is locked."
+      : "Invalid email or password."
+  );
+  err.status = 401;
+  err.field = "password";
+  err.attemptsRemaining = attemptsRemaining;
+  return err;
+}
+
+async function resetLoginAttempts(supabase, customerId) {
+  await supabase
+    .from("customers")
+    .update({
+      failed_login_attempts: 0,
+      locked_at: null,
+      lock_reason: null,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", customerId);
+}
+
+async function recordFailedLogin(supabase, row) {
+  const nextAttempts = Number(row.failed_login_attempts || 0) + 1;
+  const patch = {
+    failed_login_attempts: nextAttempts,
+    updated_at: new Date().toISOString()
+  };
+  if (nextAttempts >= MAX_LOGIN_ATTEMPTS) {
+    patch.locked_at = new Date().toISOString();
+    patch.lock_reason = "too_many_failed_logins";
+  }
+  const { error } = await supabase.from("customers").update(patch).eq("id", row.id);
+  if (error) throw Object.assign(new Error(error.message), { status: 500 });
+  return {
+    attempts: nextAttempts,
+    locked: nextAttempts >= MAX_LOGIN_ATTEMPTS,
+    attemptsRemaining: Math.max(0, MAX_LOGIN_ATTEMPTS - nextAttempts)
   };
 }
 
@@ -203,11 +264,110 @@ export async function loginCustomer(supabase, body = {}) {
   if (!row || !row.password_hash) {
     throw Object.assign(new Error("Invalid email or password."), { status: 401 });
   }
+  if (isAccountLocked(row)) {
+    throw lockedAccountError(row);
+  }
   if (!verifyPassword(password, row.password_hash)) {
-    throw Object.assign(new Error("Invalid email or password."), { status: 401 });
+    const result = await recordFailedLogin(supabase, row);
+    if (result.locked) {
+      const lockedRow = { ...row, locked_at: new Date().toISOString(), unlock_requested_at: row.unlock_requested_at };
+      throw lockedAccountError(lockedRow);
+    }
+    throw invalidLoginError(result.attemptsRemaining);
   }
 
+  await resetLoginAttempts(supabase, row.id);
+
   return { token: signCustomerToken(row), customer: mapCustomer(row) };
+}
+
+export async function requestAccountUnlock(supabase, body = {}) {
+  const email = normalizeEmail(body.email);
+  const name = String(body.name || "").trim();
+  const phone = normalizePhone(body.phone);
+  const note = String(body.message || "").trim();
+
+  if (!validEmail(email)) {
+    throw Object.assign(new Error("Enter a valid email address."), { status: 400, field: "email" });
+  }
+  if (!supabase) {
+    return { ok: true, message: "Unlock request sent to admin." };
+  }
+
+  const { data: row, error } = await supabase.from("customers").select("*").eq("email", email).maybeSingle();
+  if (error) throw Object.assign(new Error(error.message), { status: 500 });
+  if (!row) {
+    throw Object.assign(new Error("No account found for this email."), { status: 404, field: "email" });
+  }
+  if (!isAccountLocked(row)) {
+    throw Object.assign(new Error("This account is not locked."), { status: 400 });
+  }
+
+  const now = new Date().toISOString();
+  const { error: updateErr } = await supabase
+    .from("customers")
+    .update({ unlock_requested_at: now, updated_at: now })
+    .eq("id", row.id);
+  if (updateErr) throw Object.assign(new Error(updateErr.message), { status: 500 });
+
+  return {
+    ok: true,
+    message: "Unlock request sent. Our team will contact you shortly.",
+    customer: {
+      id: row.id,
+      email: row.email,
+      name: row.name || name,
+      phone: row.phone || phone
+    }
+  };
+}
+
+export async function listCustomerAccounts(supabase) {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("customers")
+    .select("id, email, name, phone, failed_login_attempts, locked_at, lock_reason, unlock_requested_at, created_at, updated_at")
+    .not("password_hash", "is", null)
+    .order("updated_at", { ascending: false });
+  if (error) throw Object.assign(new Error(error.message), { status: 500 });
+  return (data || []).map((row) => ({
+    id: row.id,
+    email: row.email,
+    name: row.name || "",
+    phone: row.phone || "",
+    failedLoginAttempts: Number(row.failed_login_attempts || 0),
+    locked: Boolean(row.locked_at),
+    lockedAt: row.locked_at,
+    lockReason: row.lock_reason || "",
+    unlockRequestedAt: row.unlock_requested_at,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  }));
+}
+
+export async function unlockCustomerAccount(supabase, customerId) {
+  if (!customerId) {
+    throw Object.assign(new Error("Customer id is required."), { status: 400 });
+  }
+  if (!supabase) return { ok: true };
+
+  const { data: row, error } = await supabase.from("customers").select("id, email, locked_at").eq("id", customerId).maybeSingle();
+  if (error) throw Object.assign(new Error(error.message), { status: 500 });
+  if (!row) throw Object.assign(new Error("Account not found."), { status: 404 });
+
+  const { error: updateErr } = await supabase
+    .from("customers")
+    .update({
+      failed_login_attempts: 0,
+      locked_at: null,
+      lock_reason: null,
+      unlock_requested_at: null,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", customerId);
+  if (updateErr) throw Object.assign(new Error(updateErr.message), { status: 500 });
+
+  return { ok: true, email: row.email };
 }
 
 export async function changeCustomerPassword(supabase, customerId, currentPassword, newPassword) {

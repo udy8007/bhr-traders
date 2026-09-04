@@ -7,6 +7,7 @@ import { Categories, Packs } from "./pages/Master.jsx";
 import { Products } from "./pages/Products.jsx";
 import { ProductForm } from "./pages/ProductForm.jsx";
 import { Customers, Enquiries, Orders } from "./pages/Sales.jsx";
+import { AppAccounts } from "./pages/Accounts.jsx";
 import { OrderDetail } from "./pages/OrderDetail.jsx";
 import { CustomerReviews } from "./pages/Reviews.jsx";
 import { Analytics } from "./pages/Analytics.jsx";
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="sales/orders/:id" element={<OrderDetail />} />
             <Route path="sales/enquiries" element={<Enquiries />} />
             <Route path="sales/customers" element={<Customers />} />
+            <Route path="sales/accounts" element={<AppAccounts />} />
             <Route path="sales/reviews" element={<CustomerReviews />} />
             <Route path="reports" element={<Analytics />} />
             <Route path="reports/download" element={<DownloadReport />} />

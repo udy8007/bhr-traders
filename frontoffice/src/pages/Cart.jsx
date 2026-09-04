@@ -34,18 +34,20 @@ export function Cart() {
                 <div className="cart-item-body">
                   <h3>{i.title}</h3>
                   <div className="meta">{i.packLabel ? i.packLabel + " · " : ""}{formatInr(i.price)} / bag</div>
-                  <div className="qty-box">
-                    <button type="button" onClick={() => changeQty(i.id, -1)}>
-                      −
-                    </button>
-                    <span>{i.qty}</span>
-                    <button type="button" onClick={() => changeQty(i.id, 1)}>
-                      +
+                  <div className="cart-item-actions">
+                    <div className="qty-box">
+                      <button type="button" onClick={() => changeQty(i.id, -1)}>
+                        −
+                      </button>
+                      <span>{i.qty}</span>
+                      <button type="button" onClick={() => changeQty(i.id, 1)}>
+                        +
+                      </button>
+                    </div>
+                    <button type="button" className="link-danger" onClick={() => removeItem(i.id)}>
+                      Remove
                     </button>
                   </div>
-                  <button type="button" className="link-danger" onClick={() => removeItem(i.id)}>
-                    Remove
-                  </button>
                 </div>
                 <div className="cart-line-total">{formatInr(i.price * i.qty)}</div>
               </div>

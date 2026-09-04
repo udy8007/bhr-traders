@@ -14,6 +14,7 @@ const MENU = [
   { type: "link", to: "/sales/orders", icon: "receipt_long", label: "Orders" },
   { type: "link", to: "/sales/enquiries", icon: "mail", label: "Enquiries" },
   { type: "link", to: "/sales/customers", icon: "group", label: "Customers" },
+  { type: "link", to: "/sales/accounts", icon: "manage_accounts", label: "App accounts" },
   { type: "link", to: "/sales/reviews", icon: "star", label: "Customer reviews" },
   { type: "label", label: "Reports" },
   { type: "link", to: "/reports", icon: "bar_chart", label: "Analytics", end: true },

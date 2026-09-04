@@ -4,8 +4,9 @@ import { useStore } from "../context/StoreContext.jsx";
 import { useCustomer } from "../context/CustomerContext.jsx";
 import { logCheckoutStart } from "../lib/visits.js";
 import { formatInr } from "../lib/packs.js";
-import { customerToCheckoutInfo, isCheckoutProfileComplete, getMissingCheckoutFields, mergeCheckoutInfo } from "../lib/checkoutProfile.js";
-import { AccountFormField, AccountFormShell, AccountUserChip } from "./CustomerAccountUI.jsx";
+import { customerToCheckoutInfo, mergeCheckoutInfo } from "../lib/checkoutProfile.js";
+import { AccountFormField, AccountFormShell } from "./CustomerAccountUI.jsx";
+import { CheckoutLoginGate } from "./CheckoutLoginGate.jsx";
 
 function readImage(file) {
   return new Promise((resolve, reject) => {
@@ -34,34 +35,34 @@ export function CheckoutModal() {
     setTrackOpen,
     setTrackPrefill
   } = useStore();
-  const { isLoggedIn, openProfile, customer } = useCustomer();
+  const { isLoggedIn, openProfile, customer, openLogin } = useCustomer();
   const [proof, setProof] = useState("");
   const [proofName, setProofName] = useState("");
   const [copied, setCopied] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
   const [busy, setBusy] = useState(false);
   const [invoiceReady, setInvoiceReady] = useState(false);
+  const [payMethod, setPayMethod] = useState("upi");
 
   const savedInfo = customerToCheckoutInfo(customer);
-  const profileComplete = isLoggedIn && isCheckoutProfileComplete(savedInfo);
-  const needsDetails = !profileComplete;
-  const missingFields = isLoggedIn ? getMissingCheckoutFields(savedInfo) : ["name", "phone", "email", "address", "city", "pincode"];
-  const loggedInQuick = isLoggedIn && missingFields.length > 0 && missingFields.length < 6;
 
   useEffect(() => {
     if (!checkoutOpen) return;
     if (isLoggedIn && customer) {
-      const info = customerToCheckoutInfo(customer);
-      setCheckoutInfo(info);
-      setCheckoutStep(isCheckoutProfileComplete(info) ? 2 : 1);
-    } else {
-      setCheckoutStep(1);
+      setCheckoutInfo(customerToCheckoutInfo(customer));
     }
+    setCheckoutStep(1);
   }, [checkoutOpen, isLoggedIn, customer, setCheckoutInfo, setCheckoutStep]);
 
   useEffect(() => {
     if (checkoutOpen && checkoutStep < 3) logCheckoutStart();
   }, [checkoutOpen, checkoutStep]);
+
+  useEffect(() => {
+    if (checkoutOpen && checkoutStep === 1 && !isLoggedIn) {
+      openLogin({ hint: "Sign in or register to place your order." });
+    }
+  }, [checkoutOpen, checkoutStep, isLoggedIn, openLogin]);
 
   useEffect(() => {
     if (!checkoutOpen) {
@@ -70,25 +71,22 @@ export function CheckoutModal() {
       setCopied(false);
       setBusy(false);
       setInvoiceReady(false);
+      setPayMethod("upi");
     }
   }, [checkoutOpen]);
 
   if (!checkoutOpen) return null;
 
   const title =
-    checkoutStep === 3 ? "Order placed" : checkoutStep === 2 ? "Pay with UPI" : loggedInQuick ? "Delivery address" : "Your details";
+    checkoutStep === 3 ? "Order placed" : checkoutStep === 2 ? "Pay with UPI" : !isLoggedIn ? "Sign in required" : "Your details";
   const hint =
-    checkoutStep === 1
-      ? loggedInQuick
-        ? "You're signed in — just add what's missing below, then continue to payment."
-        : isLoggedIn
-          ? "Complete delivery details below, or save them in your profile to skip this step next time."
-          : "Tell us where to deliver. Notes are optional."
-      : checkoutStep === 2
-        ? profileComplete
-          ? "Your saved delivery details are used. Scan the QR, pay, and attach your payment screenshot to place the order."
-          : "Scan the QR or pay to the UPI ID, then attach your payment screenshot to place the order."
-        : "Your invoice PDF is downloading. Keep the order ID for tracking.";
+    checkoutStep === 1 && !isLoggedIn
+      ? "Sign in or create an account to continue checkout."
+      : checkoutStep === 1
+        ? "Confirm delivery details for your order. Notes are optional."
+        : checkoutStep === 2
+          ? "Scan the QR or pay to the UPI ID, then attach your payment screenshot to place the order."
+          : "Your invoice PDF is downloading. Keep the order ID for tracking.";
 
   async function onProof(file) {
     if (!file) return;
@@ -125,6 +123,16 @@ export function CheckoutModal() {
     }
   }
 
+  async function placeCodOrder() {
+    setBusy(true);
+    try {
+      const ok = await placeOrder({ pay: "cod", skipPayment: true });
+      if (ok) setInvoiceReady(true);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const isSuccess = checkoutStep === 3;
   const isPending = /pending/i.test(orderStatus || "");
 
@@ -140,31 +148,32 @@ export function CheckoutModal() {
     >
       <div className="modal-box checkout-box">
         <div className={"checkout-hero" + (isSuccess ? " is-success" : "")}>
+          <div className="checkout-hero-deco" aria-hidden="true">
+            <span className="checkout-hero-grain checkout-hero-grain-a">🌾</span>
+            <span className="checkout-hero-grain checkout-hero-grain-b">🍚</span>
+            <span className="checkout-hero-grain checkout-hero-grain-c">✨</span>
+          </div>
           <div className="checkout-hero-copy">
             <small>BHR Traders · Wholesale rice</small>
             <strong>{isSuccess ? "Thank you" : "Place your order"}</strong>
             {isSuccess ? <span className="checkout-hero-sub">Order confirmed — invoice ready</span> : null}
           </div>
-          {isSuccess ? (
-            <div className="checkout-hero-deco" aria-hidden="true">
-              <span>🌾</span>
-              <span>🍚</span>
-              <span>✨</span>
-            </div>
-          ) : null}
           <button className="modal-close checkout-x" type="button" aria-label="Close" onClick={() => !busy && setCheckoutOpen(false)}>
             ×
           </button>
         </div>
         {!isSuccess ? (
           <>
-            <div className="modal-head">
+            <div className="modal-head checkout-modal-head">
+              <div className="checkout-head-badge" aria-hidden="true">
+                {checkoutStep === 2 ? "💳" : "📍"}
+              </div>
               <div>
                 <h3 id="chkTitle">{title}</h3>
                 <p className="hint">{hint}</p>
               </div>
             </div>
-            <div className="chk-steps">
+            <div className={"chk-steps chk-steps-" + checkoutStep}>
               {[
                 { label: "Delivery", icon: "📍" },
                 { label: "Payment", icon: "💳" },
@@ -174,7 +183,7 @@ export function CheckoutModal() {
                   className={"chk-step" + (i + 1 === checkoutStep ? " on" : "") + (i + 1 < checkoutStep ? " done" : "")}
                   key={step.label}
                 >
-                  <i>{i + 1 < checkoutStep ? "✓" : step.icon}</i>
+                  <i aria-hidden="true">{step.icon}</i>
                   {step.label}
                 </div>
               ))}
@@ -182,87 +191,117 @@ export function CheckoutModal() {
           </>
         ) : null}
 
-        {checkoutStep === 1 && needsDetails ? (
+        {checkoutStep === 1 && !isLoggedIn ? (
+          <CheckoutLoginGate
+            cartCount={cart.length}
+            cartSum={cartSum}
+            onSignIn={(mode) =>
+              openLogin({
+                mode,
+                hint: "Sign in or register to place your order."
+              })
+            }
+          />
+        ) : null}
+
+        {checkoutStep === 1 && isLoggedIn ? (
           <form
             className="checkout-details-form"
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               const fd = new FormData(e.target);
               const patch = {
-                name: fd.has("name") ? String(fd.get("name")) : undefined,
-                phone: fd.has("phone") ? String(fd.get("phone")) : undefined,
-                email: fd.has("email") ? String(fd.get("email")) : undefined,
-                address: fd.has("address") ? String(fd.get("address")) : undefined,
-                city: fd.has("city") ? String(fd.get("city")) : undefined,
-                pincode: fd.has("pincode") ? String(fd.get("pincode")) : undefined,
+                name: String(fd.get("name") || "").trim(),
+                phone: String(fd.get("phone") || "").trim(),
+                email: String(fd.get("email") || "").trim(),
+                address: String(fd.get("address") || "").trim(),
+                city: String(fd.get("city") || "").trim(),
+                pincode: String(fd.get("pincode") || "").trim(),
                 notes: String(fd.get("notes") || "").trim()
               };
-              setCheckoutInfo(mergeCheckoutInfo(savedInfo || checkoutInfo, patch));
+              const pay = String(fd.get("pay") || "upi");
+              const merged = mergeCheckoutInfo(savedInfo || checkoutInfo, patch);
+              setPayMethod(pay);
+              setCheckoutInfo(merged);
+              if (pay === "cod") {
+                setBusy(true);
+                try {
+                  const ok = await placeOrder({ pay: "cod", skipPayment: true, checkoutInfo: merged });
+                  if (ok) setInvoiceReady(true);
+                } finally {
+                  setBusy(false);
+                }
+                return;
+              }
               setCheckoutStep(2);
             }}
           >
+            <div className="order-total-pill">
+              <span className="order-total-pill-icon" aria-hidden="true">
+                🛒
+              </span>
+              <span className="order-total-pill-copy">
+                <strong>{formatInr(cartSum)}</strong>
+                <small>
+                  {cart.length} item{cart.length === 1 ? "" : "s"} in cart
+                </small>
+              </span>
+            </div>
             <AccountFormShell
-              lead={
-                loggedInQuick
-                  ? "Your account details are already saved. Complete delivery info to place the order."
-                  : isLoggedIn
-                    ? "Fill in delivery details, or save them under Delivery option in your account."
-                    : "Tell us where to deliver. Notes are optional."
-              }
+              lead="Confirm your delivery details below."
               footer={
-                <button className="btn btn-green btn-block account-form-submit" type="submit">
-                  Continue to payment
+                <button className="btn btn-green btn-block account-form-submit" type="submit" disabled={busy}>
+                  {busy ? "Placing order…" : payMethod === "cod" ? "Place order" : "Continue to payment"}
                 </button>
               }
             >
-              {isLoggedIn ? <AccountUserChip customer={customer} /> : null}
-
-              {loggedInQuick && missingFields.includes("address") ? (
-                <div className="chk-saved-hint">
-                  <span>Delivery address not saved yet.</span>
-                  <button type="button" className="link-btn inline" onClick={() => { setCheckoutOpen(false); openProfile("address"); }}>
-                    Save in account →
-                  </button>
-                </div>
-              ) : null}
-
-              {missingFields.includes("name") ? (
-                <AccountFormField icon="👤" label="Full name" required>
-                  <input name="name" required placeholder="Your name" defaultValue={checkoutInfo?.name || savedInfo?.name} />
+              <AccountFormField icon="👤" label="Full name" required>
+                <input name="name" required placeholder="Your name" defaultValue={checkoutInfo?.name || savedInfo?.name} />
+              </AccountFormField>
+              <AccountFormField icon="📱" label="Phone" required>
+                <input name="phone" required placeholder="+91" defaultValue={checkoutInfo?.phone || savedInfo?.phone} />
+              </AccountFormField>
+              <AccountFormField icon="✉️" label="Email" required>
+                <input name="email" type="email" required placeholder="you@email.com" defaultValue={checkoutInfo?.email || savedInfo?.email} readOnly={Boolean(savedInfo?.email)} className={savedInfo?.email ? "is-readonly" : ""} />
+              </AccountFormField>
+              <AccountFormField icon="🏠" label="Delivery address" required>
+                <textarea name="address" required rows={3} placeholder="Door no, street, area, landmark" defaultValue={checkoutInfo?.address || savedInfo?.address} />
+              </AccountFormField>
+              <div className="account-form-row">
+                <AccountFormField icon="🌆" label="City" required>
+                  <input name="city" required placeholder="Chennai" defaultValue={checkoutInfo?.city || savedInfo?.city} />
                 </AccountFormField>
-              ) : null}
-              {missingFields.includes("phone") ? (
-                <AccountFormField icon="📱" label="Phone" required>
-                  <input name="phone" required placeholder="+91" defaultValue={checkoutInfo?.phone || savedInfo?.phone} />
+                <AccountFormField icon="📮" label="Pincode" required>
+                  <input name="pincode" required pattern="[0-9]{6}" placeholder="600040" defaultValue={checkoutInfo?.pincode || savedInfo?.pincode} inputMode="numeric" />
                 </AccountFormField>
-              ) : null}
-              {missingFields.includes("email") ? (
-                <AccountFormField icon="✉️" label="Email" required>
-                  <input name="email" type="email" required placeholder="you@email.com" defaultValue={checkoutInfo?.email || savedInfo?.email} readOnly={Boolean(savedInfo?.email)} className={savedInfo?.email ? "is-readonly" : ""} />
-                </AccountFormField>
-              ) : null}
-              {missingFields.includes("address") ? (
-                <AccountFormField icon="🏠" label="Delivery address" required>
-                  <textarea name="address" required rows={3} placeholder="Door no, street, area, landmark" defaultValue={checkoutInfo?.address || savedInfo?.address} autoFocus={loggedInQuick} />
-                </AccountFormField>
-              ) : null}
-              {missingFields.includes("city") || missingFields.includes("pincode") ? (
-                <div className="account-form-row">
-                  {missingFields.includes("city") ? (
-                    <AccountFormField icon="🌆" label="City" required>
-                      <input name="city" required placeholder="Chennai" defaultValue={checkoutInfo?.city || savedInfo?.city} />
-                    </AccountFormField>
-                  ) : null}
-                  {missingFields.includes("pincode") ? (
-                    <AccountFormField icon="📮" label="Pincode" required>
-                      <input name="pincode" required pattern="[0-9]{6}" placeholder="600040" defaultValue={checkoutInfo?.pincode || savedInfo?.pincode} inputMode="numeric" />
-                    </AccountFormField>
-                  ) : null}
-                </div>
-              ) : null}
+              </div>
               <AccountFormField icon="📝" label="Notes" hint="Optional">
                 <textarea name="notes" rows={2} placeholder="Delivery timing, shop name, GST needs…" defaultValue={checkoutInfo?.notes} />
               </AccountFormField>
+              <fieldset className="pay-options">
+                <legend>Payment method</legend>
+                <div className="pay-option-grid">
+                  <label className={"pay-option-card" + (payMethod === "upi" ? " on" : "")}>
+                    <input type="radio" name="pay" value="upi" defaultChecked={payMethod !== "cod"} onChange={() => setPayMethod("upi")} />
+                    <span className="pay-option-icon upi" aria-hidden="true">📱</span>
+                    <span className="pay-option-text">
+                      <strong>UPI</strong>
+                      <small>Scan QR & pay instantly</small>
+                    </span>
+                    <span className="pay-option-check" aria-hidden="true">✓</span>
+                  </label>
+                  <label className={"pay-option-card" + (payMethod === "cod" ? " on" : "")}>
+                    <input type="radio" name="pay" value="cod" defaultChecked={payMethod === "cod"} onChange={() => setPayMethod("cod")} />
+                    <span className="pay-option-icon cod" aria-hidden="true">💵</span>
+                    <span className="pay-option-text">
+                      <strong>Cash on delivery</strong>
+                      <small>Pay when order arrives</small>
+                    </span>
+                    <span className="pay-option-check" aria-hidden="true">✓</span>
+                  </label>
+                </div>
+              </fieldset>
+              <small className="gst-note">GSTIN {GSTIN}</small>
             </AccountFormShell>
           </form>
         ) : null}
@@ -285,15 +324,15 @@ export function CheckoutModal() {
               }
             }}
           >
-            {profileComplete && checkoutInfo ? (
+            {checkoutInfo ? (
               <div className="chk-delivery-card">
                 <div className="chk-delivery-icon" aria-hidden="true">
                   🚚
                 </div>
                 <div className="chk-delivery-body">
                   <div className="chk-delivery-head">
-                    <strong>Delivering to your saved address</strong>
-                    <button type="button" className="link-btn inline" onClick={() => { setCheckoutOpen(false); openProfile("address"); }}>
+                    <strong>Delivering to</strong>
+                    <button type="button" className="link-btn inline" onClick={() => setCheckoutStep(1)}>
                       Edit
                     </button>
                   </div>
@@ -400,25 +439,15 @@ export function CheckoutModal() {
               </label>
             </div>
 
-            {!profileComplete && checkoutInfo ? (
-              <div className="chk-ship-card">
-                <span aria-hidden="true">📍</span>
-                <p>
-                  Deliver to {checkoutInfo.name} · {checkoutInfo.phone}
-                  <br />
-                  {checkoutInfo.address}, {checkoutInfo.city} – {checkoutInfo.pincode}
-                </p>
-              </div>
-            ) : null}
-
             <button className="btn btn-gold chk-place-btn" type="submit" disabled={busy || !proof}>
               {busy ? "Placing order…" : proof ? "Place order ✓" : "Attach screenshot to continue"}
             </button>
-            {needsDetails ? (
-              <button className="btn btn-outline chk-back-btn" type="button" disabled={busy} onClick={() => setCheckoutStep(1)}>
-                Back to delivery
-              </button>
-            ) : null}
+            <button className="btn btn-outline chk-back-btn" type="button" disabled={busy} onClick={placeCodOrder}>
+              Cash on delivery
+            </button>
+            <button className="btn btn-outline chk-back-btn subtle" type="button" disabled={busy} onClick={() => setCheckoutStep(1)}>
+              Back to delivery
+            </button>
           </form>
         ) : null}
 

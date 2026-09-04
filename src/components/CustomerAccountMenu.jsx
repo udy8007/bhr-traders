@@ -25,11 +25,17 @@ export function CustomerAccountMenu() {
   if (!isLoggedIn) {
     return (
       <button
-        className="btn btn-outline track-btn"
+        className="btn btn-outline sign-in-btn"
         type="button"
         aria-label="Sign in"
         onClick={() => openLogin({ hint: "Sign in or register to view orders and profile." })}
       >
+        <span className="sign-in-btn-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6" />
+          </svg>
+        </span>
         Sign in
       </button>
     );

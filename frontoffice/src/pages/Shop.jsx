@@ -67,25 +67,37 @@ export function Shop() {
 
   const loading = catalogStatus === "loading";
 
-  return (
-    <MobileLayout title="Shop" variant="shop">
-      <div className="shop-sticky-top">
-        <label className="search-field-vivid">
+  const shopSearch = (
+    <div className="shop-search-wrap">
+      <label className="search-field-vivid search-field-header">
+        <span className="search-field-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="7" />
             <path d="M20 20l-3-3" />
           </svg>
-          <input
-            type="search"
-            placeholder="Search rice varieties…"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-          />
-          <button type="button" className="filter-chip" onClick={() => setFiltersOpen((v) => !v)}>
-            ⚙ {filtersOpen ? "Hide" : "Filter"}
-          </button>
-        </label>
+        </span>
+        <input
+          type="search"
+          placeholder="Search rice varieties…"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          aria-label="Search products"
+        />
+        <button
+          type="button"
+          className={"filter-chip filter-chip-header" + (filtersOpen ? " on" : "")}
+          onClick={() => setFiltersOpen((v) => !v)}
+        >
+          <span className="filter-chip-icon" aria-hidden="true">⚙</span>
+          {filtersOpen ? "Hide" : "Filter"}
+        </button>
+      </label>
+    </div>
+  );
 
+  return (
+    <MobileLayout variant="shop" headerSlot={shopSearch}>
+      <div className="shop-sticky-top">
         <CategoryScroller categories={categories} active={cat} onSelect={setCat} />
       </div>
 

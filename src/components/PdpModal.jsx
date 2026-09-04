@@ -9,6 +9,39 @@ function starChars(n) {
   return "★".repeat(r) + "☆".repeat(5 - r);
 }
 
+function formatReviewDate(value) {
+  if (!value) return "";
+  try {
+    return new Date(value).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  } catch {
+    return "";
+  }
+}
+
+function reviewerLetter(name) {
+  return String(name || "C").trim().charAt(0).toUpperCase();
+}
+
+function ReviewStars({ rating }) {
+  const r = Math.max(1, Math.min(5, Number(rating) || 5));
+  return (
+    <div className="pdp-review-stars" aria-label={r + " out of 5 stars"}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <span key={n} className={n <= r ? "on" : ""} aria-hidden="true">
+          ★
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function reviewerDisplayName(review) {
+  const name = String(review.name || "").trim();
+  if (name) return name;
+  if (review.city) return "Customer · " + review.city;
+  return "Verified customer";
+}
+
 function ZoomImage({ src, alt }) {
   const box = useRef(null);
   const [zoom, setZoom] = useState(null);
@@ -51,11 +84,12 @@ function ZoomImage({ src, alt }) {
 }
 
 export function PdpModal() {
-  const { pdpId, closePdp, addToCart, productMap } = useStore();
+  const { pdpId, closePdp, addToCart, productMap, cart, setCartOpen } = useStore();
   const [qty, setQty] = useState(1);
   const [packId, setPackId] = useState("");
   const [live, setLive] = useState([]);
   const [policyOpen, setPolicyOpen] = useState(false);
+  const [addedPulse, setAddedPulse] = useState(false);
   const p = pdpId ? productMap[pdpId] : null;
 
   useEffect(() => {
@@ -63,6 +97,7 @@ export function PdpModal() {
     setPackId("");
     setLive([]);
     setPolicyOpen(false);
+    setAddedPulse(false);
   }, [pdpId]);
 
   useEffect(() => {
@@ -81,13 +116,40 @@ export function PdpModal() {
     api.reviews(pdpId).then((d) => setLive(d.reviews || [])).catch(() => setLive([]));
   }, [pdpId]);
 
+  useEffect(() => {
+    setAddedPulse(false);
+  }, [packId]);
+
   if (!p) return null;
   const packs = productPacks(p);
   const selected = packs.find((x) => x.id === packId) || defaultPack(p);
+  const lineId = cartLineId(p.id, selected.id);
+  const inCart = cart.find((i) => i.id === lineId);
   const reviews = live;
   const avg = live.length
     ? Math.round((live.reduce((n, r) => n + Number(r.rating || 5), 0) / live.length) * 10) / 10
     : 0;
+
+  function handleAddToCart() {
+    const bagQty = Math.max(1, Number(qty) || 1);
+    addToCart({
+      id: lineId,
+      productId: p.id,
+      packId: selected.id,
+      packLabel: selected.label,
+      title: p.title,
+      price: selected.price,
+      img: p.img,
+      qty: bagQty
+    });
+    setAddedPulse(true);
+    window.setTimeout(() => setAddedPulse(false), 2800);
+  }
+
+  function openCart() {
+    closePdp();
+    setCartOpen(true);
+  }
 
   return (
     <div
@@ -172,24 +234,29 @@ export function PdpModal() {
               Qty (bags)
               <input type="number" min="1" value={qty} onChange={(e) => setQty(e.target.value)} />
             </div>
+            {(inCart || addedPulse) ? (
+              <div className={"pdp-added-banner" + (addedPulse ? " is-pulse" : "")} role="status" aria-live="polite">
+                <div className="pdp-added-banner-copy">
+                  <span className="pdp-added-check" aria-hidden="true">✓</span>
+                  <div>
+                    <strong>{addedPulse ? "Added to cart!" : inCart.qty + " bag" + (inCart.qty === 1 ? "" : "s") + " in cart"}</strong>
+                    <span>
+                      {selected.label} · {formatInr((inCart?.price || selected.price) * (inCart?.qty || Math.max(1, Number(qty) || 1)))}
+                    </span>
+                  </div>
+                </div>
+                <button type="button" className="btn btn-outline pdp-view-cart-btn" onClick={openCart}>
+                  View cart
+                </button>
+              </div>
+            ) : null}
             <div className="pdp-actions">
               <button
-                className="btn btn-green"
+                className={"btn btn-green pdp-add-btn" + (addedPulse ? " is-added" : inCart ? " has-cart" : "")}
                 type="button"
-                onClick={() =>
-                  addToCart({
-                    id: cartLineId(p.id, selected.id),
-                    productId: p.id,
-                    packId: selected.id,
-                    packLabel: selected.label,
-                    title: p.title,
-                    price: selected.price,
-                    img: p.img,
-                    qty: Math.max(1, Number(qty) || 1)
-                  })
-                }
+                onClick={handleAddToCart}
               >
-                Add to Cart
+                {addedPulse ? "Added ✓" : inCart ? "Add more · " + inCart.qty + " in cart" : "Add to Cart"}
               </button>
               <PriceListButton />
             </div>
@@ -202,9 +269,32 @@ export function PdpModal() {
                 ) : (
                   reviews.map((r) => (
                     <article className="pdp-review" key={r.id || r.orderId + r.comment}>
-                      <div className="stars">{r.stars || starChars(r.rating)}</div>
-                      <q>{r.comment || r.text}</q>
-                      <strong>{r.orderId || "Verified purchase"}</strong>
+                      <div className="pdp-review-glow" aria-hidden="true" />
+                      <div className="pdp-review-top">
+                        <div className="pdp-review-meta">
+                          <ReviewStars rating={r.rating} />
+                          <div className="pdp-review-who">
+                            <strong>{reviewerDisplayName(r)}</strong>
+                            <span>{formatReviewDate(r.created_at)}</span>
+                          </div>
+                        </div>
+                        <div className="pdp-review-avatar" aria-hidden="true">
+                          {reviewerLetter(r.name)}
+                        </div>
+                      </div>
+                      <blockquote className="pdp-review-body">
+                        <span className="pdp-review-quote-mark" aria-hidden="true">
+                          “
+                        </span>
+                        {r.comment || r.text}
+                      </blockquote>
+                      {r.orderId ? (
+                        <div className="pdp-review-foot">
+                          <span className="pdp-review-order">
+                            <i aria-hidden="true">✓</i> Verified · Order {r.orderId}
+                          </span>
+                        </div>
+                      ) : null}
                     </article>
                   ))
                 )}

@@ -317,6 +317,10 @@ create table if not exists public.customers (
 );
 
 alter table public.customers add column if not exists password_hash text;
+alter table public.customers add column if not exists failed_login_attempts int not null default 0;
+alter table public.customers add column if not exists locked_at timestamptz;
+alter table public.customers add column if not exists lock_reason text;
+alter table public.customers add column if not exists unlock_requested_at timestamptz;
 
 create table if not exists public.email_otps (
   email text primary key,

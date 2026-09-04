@@ -25,6 +25,8 @@ async function request(path, options = {}) {
     const err = new Error(data.error || "Request failed (" + res.status + ")");
     err.status = res.status;
     if (data.field) err.field = data.field;
+    if (data.code) err.code = data.code;
+    if (data.attemptsRemaining != null) err.attemptsRemaining = data.attemptsRemaining;
     throw err;
   }
   return data;
@@ -64,6 +66,7 @@ export const api = {
   downloadPriceList: () => downloadBlob("/api/price-list", "BHR-Price-List.pdf"),
   registerCustomer: (body) => request("/api/customer/register", { method: "POST", body: JSON.stringify(body) }),
   loginCustomer: (body) => request("/api/customer/login", { method: "POST", body: JSON.stringify(body) }),
+  requestAccountUnlock: (body) => request("/api/customer/unlock-request", { method: "POST", body: JSON.stringify(body) }),
   changeCustomerPassword: (body) => request("/api/customer/password", { method: "POST", body: JSON.stringify(body) }),
   customerMe: () => request("/api/customer/me"),
   updateCustomer: (body) => request("/api/customer/me", { method: "PATCH", body: JSON.stringify(body) }),
