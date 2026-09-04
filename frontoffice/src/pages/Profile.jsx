@@ -109,7 +109,7 @@ export function Profile() {
 
   if (!isLoggedIn) {
     return (
-      <MobileLayout title="Profile">
+      <MobileLayout variant="profile">
         <div className="account-empty-state account-empty-state-page">
           <span className="account-empty-emoji" aria-hidden="true">
             👤

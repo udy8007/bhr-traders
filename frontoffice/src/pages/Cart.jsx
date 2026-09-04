@@ -9,7 +9,7 @@ export function Cart() {
   const navigate = useNavigate();
 
   return (
-    <MobileLayout title="Cart">
+    <MobileLayout variant="cart">
       {!cart.length ? (
         <div className="empty-state">
           <div className="empty-icon">

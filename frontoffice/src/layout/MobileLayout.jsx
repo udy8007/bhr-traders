@@ -5,8 +5,9 @@ import { logPageVisit } from "../lib/visits.js";
 import { FloatingCartBar } from "../components/VisualBlocks.jsx";
 import { CustomerAccountMenu } from "../components/CustomerAccountMenu.jsx";
 import { HomeWelcomeBar } from "../components/HomeWelcomeBar.jsx";
-import { customerLetter } from "../components/CustomerAccountUI.jsx";
-import { useCustomer } from "../context/CustomerContext.jsx";
+import { CartHeaderBar } from "../components/CartHeaderBar.jsx";
+import { ProfileHeaderBar } from "../components/ProfileHeaderBar.jsx";
+import { HeaderDecorations, HeaderCurve } from "../components/HeaderDecor.jsx";
 import { useRouteTransition } from "../hooks/useRouteTransition.js";
 import { SITE_NAME } from "../data/site.js";
 
@@ -63,56 +64,74 @@ export function Toast() {
   return <div className="toast show">{toast}</div>;
 }
 
+function BrandedHeaderShell({ topActions, card }) {
+  return (
+    <header className="app-header app-header-home">
+      <HeaderDecorations />
+      <div className="home-header-stack">
+        <div className="home-row home-row-top">
+          <img className="header-logo-sm" src="/images/logo.png" alt={SITE_NAME} />
+          <div className="home-header-actions">{topActions}</div>
+        </div>
+        <div className="home-row home-row-loc">{card}</div>
+        <HeaderCurve />
+      </div>
+    </header>
+  );
+}
+
+function CartIconBtn() {
+  const { cartCount } = useStore();
+  return (
+    <NavLink to="/cart" className="header-icon-btn home-cart-btn" aria-label="Cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+        <path d="M6 7h15l-1.6 8.2a2 2 0 0 1-2 1.6H9.2a2 2 0 0 1-2-1.5L5 4H2" />
+        <circle cx="9" cy="20" r="1.3" />
+        <circle cx="18" cy="20" r="1.3" />
+      </svg>
+      {cartCount > 0 && <span className="badge">{cartCount > 99 ? "99+" : cartCount}</span>}
+    </NavLink>
+  );
+}
+
 export function AppHeader({ title, back, variant, profileSubtitle, headerSlot }) {
   const { cartCount } = useStore();
-  const { customer } = useCustomer();
   const navigate = useNavigate();
 
   if (variant === "home") {
     return (
-      <header className="app-header app-header-home">
-        <div className="header-gradient" />
-        <div className="home-header-stack">
-          <div className="home-row home-row-top">
-            <img className="header-logo-sm" src="/images/logo.png" alt={SITE_NAME} />
-            <div className="home-header-actions">
-              <NavLink to="/cart" className="header-icon-btn" aria-label="Cart">
-                🛒
-                {cartCount > 0 && <span className="badge">{cartCount > 99 ? "99+" : cartCount}</span>}
-              </NavLink>
-              <CustomerAccountMenu compact />
-            </div>
-          </div>
-          <div className="home-row home-row-loc">
-            <HomeWelcomeBar />
-          </div>
-        </div>
-      </header>
+      <BrandedHeaderShell
+        topActions={
+          <>
+            <CartIconBtn />
+            <CustomerAccountMenu compact />
+          </>
+        }
+        card={<HomeWelcomeBar />}
+      />
+    );
+  }
+
+  if (variant === "cart") {
+    return (
+      <BrandedHeaderShell
+        topActions={<CustomerAccountMenu compact />}
+        card={<CartHeaderBar />}
+      />
     );
   }
 
   if (variant === "profile") {
     return (
-      <header className="app-header app-header-profile">
-        <div className="header-gradient" />
-        <div className="profile-header-stack">
-          <div className="profile-header-row">
-            <div className="profile-header-user">
-              <span className="profile-header-avatar" aria-hidden="true">
-                {customerLetter(customer)}
-              </span>
-              <div className="profile-header-text">
-                <strong>{customer?.name || "My account"}</strong>
-                <small>{profileSubtitle || customer?.email || "Signed in"}</small>
-              </div>
-            </div>
-            <NavLink to="/cart" className="header-icon-btn" aria-label="Cart">
-              🛒
-              {cartCount > 0 && <span className="badge">{cartCount > 99 ? "99+" : cartCount}</span>}
-            </NavLink>
-          </div>
-        </div>
-      </header>
+      <BrandedHeaderShell
+        topActions={
+          <>
+            <CartIconBtn />
+            <CustomerAccountMenu compact />
+          </>
+        }
+        card={<ProfileHeaderBar subtitle={profileSubtitle} />}
+      />
     );
   }
 
