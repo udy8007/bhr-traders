@@ -17,6 +17,10 @@ jobs:
           NTFY_URL: https://ntfy.sh/udyilangovan
         run: |
           set +e
+          if [ -z "$API_KEY" ]; then
+            echo "Missing GitHub secret API_KEY."
+            exit 1
+          fi
           BODY_FILE=$(mktemp)
           HTTP=$(curl -sS -m 25 -o "$BODY_FILE" -w "%{http_code}" -H "X-API-Key: $API_KEY" "$HEALTH_URL")
           CURL_EXIT=$?
