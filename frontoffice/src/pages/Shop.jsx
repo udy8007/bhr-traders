@@ -83,15 +83,27 @@ export function Shop() {
           onChange={(e) => setQ(e.target.value)}
           aria-label="Search products"
         />
-        <button
-          type="button"
-          className={"filter-chip filter-chip-header" + (filtersOpen ? " on" : "")}
-          onClick={() => setFiltersOpen((v) => !v)}
-        >
-          <span className="filter-chip-icon" aria-hidden="true">⚙</span>
-          {filtersOpen ? "Hide" : "Filter"}
-        </button>
       </label>
+      <button
+        type="button"
+        className={"shop-filter-btn" + (filtersOpen ? " on" : "")}
+        onClick={() => setFiltersOpen((v) => !v)}
+        aria-label={filtersOpen ? "Hide filters" : "Show filters"}
+        aria-expanded={filtersOpen}
+      >
+        {filtersOpen ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M4 6h16M4 12h10M4 18h6" />
+            <circle cx="18" cy="6" r="2" fill="currentColor" stroke="none" />
+            <circle cx="14" cy="12" r="2" fill="currentColor" stroke="none" />
+            <circle cx="10" cy="18" r="2" fill="currentColor" stroke="none" />
+          </svg>
+        )}
+      </button>
     </div>
   );
 

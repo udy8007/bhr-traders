@@ -19,8 +19,12 @@
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
   --header-h: 56px;
   --nav-h: 72px;
+  --nav-inset: 8px;
+  --float-cart-h: 52px;
+  --float-cart-gap: 12px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bottom-ui: calc(var(--nav-h) + var(--nav-inset) + var(--safe-bottom));
   --radius: 16px;
   --radius-sm: 10px;
 }
@@ -34,6 +38,7 @@
 
 html, body, #root {
   height: 100%;
+  height: 100dvh;
   min-height: 100dvh;
 }
 
@@ -44,18 +49,19 @@ body {
   line-height: 1.5;
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #root {
   width: 100%;
   max-width: var(--app-width);
-  min-height: 100%;
+  height: 100%;
+  height: 100dvh;
   min-height: 100dvh;
   margin: 0 auto;
   position: relative;
-  transform: translateZ(0);
   isolation: isolate;
+  overflow: hidden;
   background: var(--cream);
   box-shadow: var(--shadow-lg);
 }
@@ -72,10 +78,12 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 
 /* ── Shell ── */
 .app-shell {
-  min-height: 100%;
+  height: 100%;
+  height: 100dvh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: var(--cream);
 }
 
@@ -83,9 +91,20 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 
 .app-main {
   flex: 1;
-  padding-bottom: calc(var(--nav-h) + var(--safe-bottom) + 28px);
+  min-height: 0;
+  padding-bottom: 28px;
   overflow-x: hidden;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-bottom-chrome {
+  flex-shrink: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: var(--float-cart-gap);
+  padding: 0 0 calc(var(--nav-inset) + var(--safe-bottom));
 }
 
 /* ── Route transitions ── */
@@ -437,7 +456,14 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 }
 
 .shop-search-wrap {
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shop-search-wrap .search-field-header {
+  flex: 1;
+  min-width: 0;
 }
 
 .shop-header-curve {
@@ -453,7 +479,7 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 
 .search-field-header {
   margin: 0;
-  padding: 6px 8px 6px 14px;
+  padding: 6px 14px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.97);
   border: 1.5px solid rgba(255, 255, 255, 0.75);
@@ -487,6 +513,8 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 }
 
 .search-field-header input {
+  flex: 1;
+  min-width: 0;
   padding: 10px 0;
   font-weight: 500;
 }
@@ -495,33 +523,37 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
   color: #9a9a9a;
 }
 
-.filter-chip-header {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  box-shadow: 0 4px 14px rgba(252, 128, 25, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+.shop-filter-btn {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.97);
+  color: var(--orange);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
 
-.filter-chip-header.on {
+.shop-filter-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.shop-filter-btn.on {
   background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+  border-color: transparent;
+  color: #fff;
   box-shadow: 0 4px 14px rgba(131, 56, 236, 0.35);
 }
 
-.filter-chip-header:active {
-  transform: scale(0.97);
-}
-
-.filter-chip-icon {
-  font-size: 12px;
-  line-height: 1;
+.shop-filter-btn:active {
+  transform: scale(0.94);
 }
 
 /* ── Home welcome bar ── */
@@ -770,7 +802,7 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 }
 
 .header-logo-sm {
-  height: 42px;
+  height: 32px;
   width: auto;
   flex-shrink: 0;
   filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.18));
@@ -778,6 +810,7 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
   background: rgba(255, 255, 255, 0.97);
   padding: 4px 8px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  align-self: center;
 }
 
 .home-header-actions {
@@ -2371,10 +2404,8 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 
 /* ── Floating cart ── */
 .float-cart {
-  position: fixed;
-  bottom: calc(var(--nav-h) + var(--safe-bottom) + 16px);
-  left: 16px;
-  right: 16px;
+  position: relative;
+  margin: 0 16px;
   width: auto;
   background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
   color: #fff;
@@ -2410,10 +2441,8 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 
 /* ── Bottom nav ── */
 .bottom-nav {
-  position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: calc(8px + var(--safe-bottom));
+  position: relative;
+  margin: 0 12px;
   width: auto;
   z-index: 50;
   border-radius: 22px;
@@ -2612,7 +2641,7 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
   left: 16px;
   right: 16px;
   transform: translateY(120%);
-  bottom: calc(var(--nav-h) + var(--safe-bottom) + 70px);
+  bottom: calc(var(--bottom-ui) + 12px);
   z-index: 100;
   background: var(--text);
   color: #fff;
@@ -2744,7 +2773,7 @@ button, input, textarea, select { font-family: inherit; font-size: 16px; }
 
 .cart-summary {
   position: sticky;
-  bottom: calc(var(--nav-h) + var(--safe-bottom));
+  bottom: 0;
   padding: 16px;
   background: var(--surface);
   border-top: 1px solid var(--border);

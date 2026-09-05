@@ -261,8 +261,12 @@ export function MobileLayout({ children, title, back, hideNav, variant, profileS
           {children}
         </div>
       </main>
-      {!hideNav && <FloatingCartBar />}
-      {!hideNav && <BottomNav />}
+      {!hideNav && (
+        <div className="app-bottom-chrome">
+          <FloatingCartBar />
+          <BottomNav />
+        </div>
+      )}
       <Toast />
     </div>
   );
