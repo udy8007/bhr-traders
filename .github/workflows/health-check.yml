@@ -13,11 +13,12 @@ jobs:
       - name: Call /api/health and alert ntfy on failure
         env:
           HEALTH_URL: https://www.bhrtraders.com/api/health
+          API_KEY: bhr-traders-dev-api-key-7f9c2a81d4e6b3
           NTFY_URL: https://ntfy.sh/udyilangovan
         run: |
           set +e
           BODY_FILE=$(mktemp)
-          HTTP=$(curl -sS -m 25 -o "$BODY_FILE" -w "%{http_code}" "$HEALTH_URL")
+          HTTP=$(curl -sS -m 25 -o "$BODY_FILE" -w "%{http_code}" -H "X-API-Key: $API_KEY" "$HEALTH_URL")
           CURL_EXIT=$?
           BODY=$(cat "$BODY_FILE")
           echo "HTTP $HTTP"
