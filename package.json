@@ -11,7 +11,7 @@
     "dev:app": "concurrently -n api,app -c magenta,yellow \"npm run dev:api\" \"npm --prefix frontoffice run dev\"",
     "build": "vite build",
     "build:admin": "npm --prefix backoffice run build",
-    "build:app": "npm install --prefix frontoffice && npm --prefix frontoffice run build",
+    "build:app": "node scripts/prepare-frontoffice-build.mjs && npm install --prefix frontoffice && npm --prefix frontoffice run build",
     "build:prod": "npm run build && npm run build:admin && npm run build:app && node scripts/sync-static.mjs && next build",
     "start:api": "next start -p 3001",
     "preview": "vite preview",

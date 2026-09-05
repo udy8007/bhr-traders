@@ -11,5 +11,6 @@ server/.next
 server/data
 public/index.html
 public/admin
+public/app
 public/assets
 
