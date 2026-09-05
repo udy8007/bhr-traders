@@ -2,6 +2,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/auth.jsx";
 import { api } from "../lib/api.js";
+import { AdminApkLink } from "../components/AdminApkLink.jsx";
 import { Icon } from "../components/Template.jsx";
 
 const MENU = [
@@ -155,6 +156,9 @@ export function AdminLayout() {
               );
             })}
           </ul>
+          <div className="bhr-sidenav-apk">
+            <AdminApkLink />
+          </div>
         </div>
       </aside>
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg">

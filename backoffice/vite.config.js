@@ -19,6 +19,10 @@ export default defineConfig(({ command, mode }) => ({
       "/api": {
         target: "http://localhost:3001",
         changeOrigin: true
+      },
+      "/downloads": {
+        target: "http://localhost:5173",
+        changeOrigin: true
       }
     }
   }

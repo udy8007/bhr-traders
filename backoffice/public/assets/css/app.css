@@ -1272,6 +1272,65 @@ body.bhr-graphic .card {
 .bhr-login-bg {
   background: radial-gradient(circle at 20% 20%, #2a6b40 0%, #143524 42%, #0c2418 100%);
 }
+.bhr-admin-apk-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(196, 163, 90, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  color: #143524;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.bhr-admin-apk-login:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: #c4a35a;
+  color: #143524;
+}
+.bhr-admin-apk-login .material-symbols-rounded {
+  font-size: 1.25rem;
+  color: #2a6b40;
+}
+.bhr-admin-apk-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: #143524;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.bhr-sidenav-apk {
+  margin: 0.75rem 0.75rem 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(196, 163, 90, 0.25);
+}
+.bhr-admin-apk-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 0.75rem;
+  margin: 0;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+.bhr-admin-apk-nav .material-symbols-rounded {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+.bhr-admin-apk-nav .nav-link-text {
+  min-width: 0;
+}
 body.bhr-graphic .pagination .page-link {
   color: #143524;
 }

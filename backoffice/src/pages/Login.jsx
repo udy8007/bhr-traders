@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { AdminApkLink } from "../components/AdminApkLink.jsx";
 import { api } from "../lib/api.js";
 import { useAuth } from "../lib/auth.jsx";
 
@@ -66,6 +67,7 @@ export function Login() {
                         {busy ? "Signing in…" : "Sign in"}
                       </button>
                     </div>
+                    <AdminApkLink variant="login" />
                   </form>
                 </div>
               </div>

@@ -20,6 +20,27 @@ function sanitizeProof(raw) {
   return value;
 }
 
+async function saveDeliveryAddressIfMissing(supabase, customerId, delivery) {
+  const { data: cust, error: fetchErr } = await supabase
+    .from("customers")
+    .select("address, name, phone")
+    .eq("id", customerId)
+    .maybeSingle();
+  if (fetchErr || !cust || String(cust.address || "").trim()) return false;
+
+  const patch = {
+    address: delivery.address,
+    city: delivery.city,
+    pincode: delivery.pincode,
+    updated_at: new Date().toISOString()
+  };
+  if (!String(cust.name || "").trim() && delivery.name) patch.name = delivery.name;
+  if (!String(cust.phone || "").trim() && delivery.phone) patch.phone = delivery.phone;
+
+  const { error: updateErr } = await supabase.from("customers").update(patch).eq("id", customerId);
+  return !updateErr;
+}
+
 export function OPTIONS() {
   return options();
 }
@@ -90,6 +111,17 @@ export async function POST(req) {
       orderErr = retry.error;
     }
     if (orderErr) return json({ error: orderErr.message }, 500);
+
+    let addressSaved = false;
+    if (customerAuth?.sub) {
+      addressSaved = await saveDeliveryAddressIfMissing(supabase, customerAuth.sub, {
+        name,
+        phone,
+        address,
+        city,
+        pincode
+      });
+    }
 
     const rows = items.map((i) => ({
       order_id: id,
@@ -197,7 +229,7 @@ export async function POST(req) {
       tags: "shopping_cart,bhr",
       priority: "high"
     });
-    return json({ order: { id, total, status, pay: payLabel } }, 201);
+    return json({ order: { id, total, status, pay: payLabel }, addressSaved }, 201);
   } catch (err) {
     return json({ error: err.message }, err.status || 500);
   }

@@ -35,7 +35,7 @@ export function CheckoutModal() {
     setTrackOpen,
     setTrackPrefill
   } = useStore();
-  const { isLoggedIn, openProfile, customer, openLogin } = useCustomer();
+  const { isLoggedIn, openProfile, customer, openLogin, refreshProfile } = useCustomer();
   const [proof, setProof] = useState("");
   const [proofName, setProofName] = useState("");
   const [copied, setCopied] = useState(false);
@@ -123,11 +123,16 @@ export function CheckoutModal() {
     }
   }
 
+  async function onOrderPlaced(ok) {
+    if (!ok) return;
+    setInvoiceReady(true);
+    if (isLoggedIn) refreshProfile().catch(() => {});
+  }
+
   async function placeCodOrder() {
     setBusy(true);
     try {
-      const ok = await placeOrder({ pay: "cod", skipPayment: true });
-      if (ok) setInvoiceReady(true);
+      await onOrderPlaced(await placeOrder({ pay: "cod", skipPayment: true }));
     } finally {
       setBusy(false);
     }
@@ -226,8 +231,7 @@ export function CheckoutModal() {
               if (pay === "cod") {
                 setBusy(true);
                 try {
-                  const ok = await placeOrder({ pay: "cod", skipPayment: true, checkoutInfo: merged });
-                  if (ok) setInvoiceReady(true);
+                  await onOrderPlaced(await placeOrder({ pay: "cod", skipPayment: true, checkoutInfo: merged }));
                 } finally {
                   setBusy(false);
                 }
@@ -317,8 +321,7 @@ export function CheckoutModal() {
               }
               setBusy(true);
               try {
-                const ok = await placeOrder({ pay: "upi", paymentProof: proof });
-                if (ok) setInvoiceReady(true);
+                await onOrderPlaced(await placeOrder({ pay: "upi", paymentProof: proof }));
               } finally {
                 setBusy(false);
               }

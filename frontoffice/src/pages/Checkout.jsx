@@ -27,7 +27,7 @@ const CHECKOUT_STEPS = [
 
 export function Checkout() {
   const { cart, cartSum, placeOrder, ping } = useStore();
-  const { isLoggedIn, customer, openLogin } = useCustomer();
+  const { isLoggedIn, customer, openLogin, refreshProfile } = useCustomer();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [busy, setBusy] = useState(false);
@@ -117,6 +117,7 @@ export function Checkout() {
     const order = await placeOrder(form, opts);
     setBusy(false);
     if (order) {
+      if (isLoggedIn) refreshProfile().catch(() => {});
       navigate(isLoggedIn ? "/profile?tab=orders" : "/track", {
         replace: true,
         state: { orderId: order.id, justPlaced: true }
