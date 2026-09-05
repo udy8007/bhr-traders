@@ -370,6 +370,37 @@ export async function unlockCustomerAccount(supabase, customerId) {
   return { ok: true, email: row.email };
 }
 
+export async function deleteCustomerAccount(supabase, customerId) {
+  if (!customerId) {
+    throw Object.assign(new Error("Customer id is required."), { status: 400 });
+  }
+  if (!supabase) return { ok: true };
+
+  const { data: row, error } = await supabase.from("customers").select("id, email").eq("id", customerId).maybeSingle();
+  if (error) throw Object.assign(new Error(error.message), { status: 500 });
+  if (!row) throw Object.assign(new Error("Account not found."), { status: 404 });
+
+  const refs = [
+    supabase.from("orders").update({ customer_id: null }).eq("customer_id", customerId),
+    supabase.from("product_reviews").update({ customer_id: null }).eq("customer_id", customerId),
+    supabase.from("app_devices").update({ customer_id: null }).eq("customer_id", customerId)
+  ];
+  const refResults = await Promise.all(refs);
+  refResults.forEach((res) => {
+    if (res.error) throw Object.assign(new Error(res.error.message), { status: 500 });
+  });
+
+  if (row.email) {
+    const { error: otpErr } = await supabase.from("email_otps").delete().eq("email", normalizeEmail(row.email));
+    if (otpErr) throw Object.assign(new Error(otpErr.message), { status: 500 });
+  }
+
+  const { error: deleteErr } = await supabase.from("customers").delete().eq("id", customerId);
+  if (deleteErr) throw Object.assign(new Error(deleteErr.message), { status: 500 });
+
+  return { ok: true, email: row.email };
+}
+
 export async function changeCustomerPassword(supabase, customerId, currentPassword, newPassword) {
   const current = String(currentPassword || "");
   const next = String(newPassword || "");

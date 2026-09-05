@@ -50,6 +50,23 @@ export function AppAccounts() {
     }
   }
 
+  async function resetAccount(account) {
+    const label = account.name || account.email || "this account";
+    if (!window.confirm("Permanently delete " + label + "? This removes the login and cannot be undone.")) return;
+    setBusyId(account.id);
+    setMsg("");
+    setError("");
+    try {
+      await api.deleteCustomerAccount(account.id);
+      setMsg("Account deleted.");
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusyId("");
+    }
+  }
+
   const locked = accounts.filter((a) => a.locked);
   const pending = accounts.filter((a) => a.unlockRequestedAt && a.locked);
 
@@ -100,7 +117,7 @@ export function AppAccounts() {
                   <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Failed tries</th>
                   <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                   <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Unlock request</th>
-                  <th />
+                  <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,11 +138,21 @@ export function AppAccounts() {
                     </td>
                     <td className="text-xs text-secondary">{fmtDate(a.unlockRequestedAt)}</td>
                     <td className="text-end">
-                      {a.locked ? (
-                        <button type="button" className="btn btn-sm bg-gradient-success mb-0" disabled={busyId === a.id} onClick={() => unlock(a.id)}>
-                          {busyId === a.id ? "Unlocking…" : "Unlock"}
+                      <div className="d-inline-flex flex-wrap justify-content-end gap-2">
+                        {a.locked ? (
+                          <button type="button" className="btn btn-sm bg-gradient-success mb-0" disabled={busyId === a.id} onClick={() => unlock(a.id)}>
+                            {busyId === a.id ? "Unlocking…" : "Unlock"}
+                          </button>
+                        ) : null}
+                        <button
+                          type="button"
+                          className="btn btn-sm bg-gradient-danger mb-0"
+                          disabled={busyId === a.id}
+                          onClick={() => resetAccount(a)}
+                        >
+                          {busyId === a.id ? "Working…" : "Reset"}
                         </button>
-                      ) : null}
+                      </div>
                     </td>
                   </tr>
                 ))}

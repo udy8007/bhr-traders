@@ -1,6 +1,7 @@
 const API = import.meta.env.VITE_API_URL || "";
 
 import { loadToken } from "./customerSession.js";
+import { withApiKey } from "./apiKey.js";
 
 let customerToken = loadToken();
 
@@ -9,10 +10,10 @@ export function setCustomerToken(token) {
 }
 
 async function request(path, options = {}) {
-  const headers = {
+  const headers = withApiKey({
     "Content-Type": "application/json",
     ...(options.headers || {})
-  };
+  });
   if (customerToken) headers.Authorization = "Bearer " + customerToken;
   const res = await fetch(API + path, { ...options, headers });
   let data = {};
@@ -33,7 +34,7 @@ async function request(path, options = {}) {
 }
 
 async function downloadBlob(path, fallback) {
-  const res = await fetch((API || "") + path);
+  const res = await fetch((API || "") + path, { headers: withApiKey() });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
     throw new Error(data.error || "Download failed");

@@ -2455,8 +2455,7 @@
       gap: 8px;
       flex-shrink: 0;
     }
-    .nav-app-toggle { display: none; }
-    .nav-app-desktop { display: inline-flex; }
+    .nav-app-download { display: inline-flex; }
     .nav-drawer-app { display: none; list-style: none; }
     .track-btn,
     .sign-in-btn {
@@ -4075,8 +4074,23 @@
         margin-left: 0;
         gap: 6px;
       }
-      .nav-app-desktop { display: none; }
-      .nav-app-toggle { display: inline-flex; }
+      .nav-app-download.app-dl--nav {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        justify-content: center;
+        gap: 0;
+      }
+      .nav-app-download.app-dl--nav .app-dl-copy {
+        display: none;
+      }
+      .nav-app-download.app-dl--nav .app-dl-shine {
+        display: none;
+      }
+      .nav-app-download.app-dl--nav .app-dl-badge {
+        top: -5px;
+        right: -6px;
+      }
       .sign-in-btn {
         width: 42px;
         padding: 0;

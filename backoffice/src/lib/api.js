@@ -1,4 +1,5 @@
 import { hideLoader, showLoader } from "./loader.js";
+import { withApiKey } from "./apiKey.js";
 
 const KEY = "bhr-admin-token";
 
@@ -30,7 +31,7 @@ async function request(path, options = {}) {
   delete rest.quiet;
   if (!quiet) showLoader();
   try {
-    const headers = { "Content-Type": "application/json", ...(rest.headers || {}) };
+    const headers = withApiKey({ "Content-Type": "application/json", ...(rest.headers || {}) });
     const token = getToken();
     if (token) headers.Authorization = "Bearer " + token;
     const res = await fetch(path, { ...rest, headers });
@@ -74,7 +75,7 @@ export const api = {
   downloadOrderInvoice: async (id) => {
     showLoader();
     try {
-      const headers = {};
+      const headers = withApiKey({});
       const token = getToken();
       if (token) headers.Authorization = "Bearer " + token;
       const res = await fetch("/api/orders/" + encodeURIComponent(id) + "/invoice", { headers });
@@ -109,6 +110,7 @@ export const api = {
   customers: () => request("/api/admin/customers"),
   customerAccounts: () => request("/api/admin/accounts"),
   unlockCustomerAccount: (id) => request("/api/admin/accounts/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ action: "unlock" }) }),
+  deleteCustomerAccount: (id) => request("/api/admin/accounts/" + encodeURIComponent(id), { method: "DELETE" }),
   logs: (kind, opts = {}) => {
     const q = new URLSearchParams({
       kind: kind || "all",

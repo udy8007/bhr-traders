@@ -1,5 +1,7 @@
 const API = import.meta.env.VITE_API_URL || "";
 
+import { withApiKey } from "./apiKey.js";
+
 function send(kind, extra = {}) {
   const body = {
     kind,
@@ -14,7 +16,7 @@ function send(kind, extra = {}) {
   };
   fetch(API + "/api/visits", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: withApiKey({ "Content-Type": "application/json" }),
     body: JSON.stringify(body),
     keepalive: true
   }).catch(() => {});

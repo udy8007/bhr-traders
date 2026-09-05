@@ -1,5 +1,5 @@
 import { requireAdmin, unauthorized } from "../../../../../server/lib/auth.js";
-import { unlockCustomerAccount } from "../../../../../server/lib/customerAuth.js";
+import { deleteCustomerAccount, unlockCustomerAccount } from "../../../../../server/lib/customerAuth.js";
 import { writeAudit } from "../../../../../server/lib/logs.js";
 import { getSupabase, json, options } from "../../../../../server/lib/supabase.js";
 
@@ -22,6 +22,25 @@ export async function PATCH(req, { params }) {
       entity: "customer",
       entityId: params.id,
       detail: "Unlocked customer account " + (result.email || params.id)
+    });
+    return json({ ok: true, email: result.email });
+  } catch (err) {
+    if (err.status === 401) return unauthorized();
+    return json({ error: err.message }, err.status || 500);
+  }
+}
+
+export async function DELETE(req, { params }) {
+  try {
+    const admin = requireAdmin(req);
+    const supabase = getSupabase();
+    const result = await deleteCustomerAccount(supabase, params.id);
+    writeAudit({
+      actor: admin.email || admin.sub || "admin",
+      action: "delete",
+      entity: "customer",
+      entityId: params.id,
+      detail: "Hard deleted customer account " + (result.email || params.id)
     });
     return json({ ok: true, email: result.email });
   } catch (err) {

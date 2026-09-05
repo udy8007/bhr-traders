@@ -3,7 +3,7 @@ import { API_ENDPOINTS, AUTH } from "../data/endpoints.js";
 import { PageHead } from "../components/Template.jsx";
 
 const METHODS = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
-const AUTHS = ["all", "public", "mixed", "admin", "cron"];
+const AUTHS = ["all", "apiKey", "mixed", "admin", "cron"];
 
 export function Endpoints() {
   const [q, setQ] = useState("");
@@ -23,7 +23,7 @@ export function Endpoints() {
   const groups = [...new Set(rows.map((e) => e.group))];
   const counts = {
     all: API_ENDPOINTS.length,
-    public: API_ENDPOINTS.filter((e) => e.auth === "public").length,
+    apiKey: API_ENDPOINTS.filter((e) => e.auth === "apiKey").length,
     mixed: API_ENDPOINTS.filter((e) => e.auth === "mixed").length,
     admin: API_ENDPOINTS.filter((e) => e.auth === "admin").length,
     cron: API_ENDPOINTS.filter((e) => e.auth === "cron").length
@@ -56,8 +56,8 @@ export function Endpoints() {
           ))}
         </div>
         <p className="gform-help mb-0">
-          All routes also accept <code>OPTIONS</code> for CORS. Admin calls send{" "}
-          <code>Authorization: Bearer &lt;token&gt;</code> after login.
+          Shop, mobile app, and backoffice calls send <code>X-API-Key</code> (from <code>API_KEY</code> / <code>VITE_API_KEY</code>).
+          Admin routes also send <code>Authorization: Bearer &lt;token&gt;</code> after login.
         </p>
       </section>
 

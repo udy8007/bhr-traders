@@ -2961,6 +2961,7 @@ html, body.bhr-graphic {
   white-space: nowrap;
 }
 .ep-auth.is-admin { background: #143524; color: #c4a35a; border-color: #143524; }
+.ep-auth.is-apiKey { background: #eef6ee; color: #143524; }
 .ep-auth.is-public { background: #eef6ee; color: #143524; }
 .ep-auth.is-mixed { background: #fff6e5; color: #8a6a2a; border-color: #c4a35a; }
 .ep-auth.is-cron { background: #f6f0e4; color: #143524; }
