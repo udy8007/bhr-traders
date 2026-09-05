@@ -3198,31 +3198,6 @@ html, body.bhr-graphic {
 }
 .app-dev-device-icon .material-symbols-rounded { font-size: 18px; }
 .app-dev-row-active { background: #eef8f1 !important; }
-.app-dev-battery-list { display: flex; flex-direction: column; gap: 10px; }
-.app-dev-battery-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 1fr auto;
-  gap: 10px;
-  align-items: center;
-}
-.app-dev-battery-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #5e6b57;
-}
-.app-dev-battery-track {
-  height: 8px;
-  border-radius: 999px;
-  background: #eadfc8;
-  overflow: hidden;
-}
-.app-dev-battery-fill {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  transition: width 0.3s ease;
-}
 .app-dev-chip {
   display: inline-block;
   padding: 3px 8px;

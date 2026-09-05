@@ -115,29 +115,7 @@ function RankBars({ rows, color }) {
   );
 }
 
-function BatteryBars({ devices }) {
-  const withBattery = devices.filter((d) => d.battery != null).slice(0, 8);
-  if (!withBattery.length) return <p className="text-xs text-secondary mb-0">No battery reports yet.</p>;
-  return (
-    <div className="app-dev-battery-list">
-      {withBattery.map((d) => {
-        const pct = Math.max(0, Math.min(100, Number(d.battery)));
-        const tone = pct > 50 ? "#2a6b40" : pct > 20 ? "#c4a35a" : "#c0392b";
-        return (
-          <div className="app-dev-battery-row" key={d.id}>
-            <span className="text-xs app-dev-battery-label">{d.model || d.platform || d.id.slice(0, 8)}</span>
-            <div className="app-dev-battery-track">
-              <span className="app-dev-battery-fill" style={{ width: pct + "%", background: tone }} />
-            </div>
-            <strong className="text-xs">{pct}%</strong>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function LocationMap({ devices, selectedId, onSelect }) {
+function RankBars({ rows, color }) {
   const withLoc = devices.filter((d) => d.lastLocation?.lat != null && d.lastLocation?.lng != null);
   if (!withLoc.length) {
     return (
@@ -241,7 +219,6 @@ function DeviceDetailPanel({ deviceId, onClose }) {
                 <span className="app-dev-status-dot" />
                 {d.online ? "Online" : "Offline"}
               </span>
-              {d.battery != null ? <span className="app-dev-chip">🔋 {d.battery}%</span> : null}
               {d.network ? <span className="app-dev-chip">{d.network}</span> : null}
               {d.appVersion ? <span className="app-dev-chip">v{d.appVersion}</span> : null}
             </div>
@@ -475,11 +452,6 @@ export function AppDevices() {
             <RankBars rows={charts.cityRows} color="#1f4d32" />
           </Card>
         </div>
-        <div className="col-lg-7 mb-4">
-          <Card title="Battery levels">
-            <BatteryBars devices={devices} />
-          </Card>
-        </div>
       </div>
 
       <div className="row">
@@ -539,7 +511,6 @@ export function AppDevices() {
                         </td>
                         <td>
                           <p className="text-xs mb-0">{place}</p>
-                          {d.battery != null ? <p className="text-xxs text-secondary mb-0">🔋 {d.battery}%</p> : null}
                         </td>
                         <td>
                           <p className="text-xs mb-0">{ago(d.lastHeartbeatAt)}</p>
