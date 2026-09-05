@@ -66,6 +66,17 @@ export async function GET(req) {
     const reviewKey = (orderId, productId) => orderId + "::" + productId;
     const reviewed = new Set(reviews.map((r) => reviewKey(r.orderId, r.productId)));
 
+    const productIds = [
+      ...new Set(items.map((i) => String(i.product_id || "").split("::")[0]).filter(Boolean))
+    ];
+    const productImgs = {};
+    if (productIds.length) {
+      const { data: products } = await supabase.from("products").select("id, img").in("id", productIds);
+      for (const p of products || []) {
+        productImgs[p.id] = p.img || "";
+      }
+    }
+
     const mapped = orders.map((order) => {
       const orderItems = items
         .filter((i) => i.order_id === order.id)
@@ -76,6 +87,7 @@ export async function GET(req) {
             title: i.title,
             qty: i.qty,
             price: i.price,
+            img: productImgs[productId] || "",
             reviewed: reviewed.has(reviewKey(order.id, productId))
           };
         });

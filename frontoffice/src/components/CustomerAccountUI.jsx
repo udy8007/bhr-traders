@@ -162,6 +162,9 @@ export function OrderProgressStrip({ status }) {
   );
 }
 
+const REVIEW_RATING_LABELS = ["", "Poor", "Fair", "Good", "Great", "Excellent!"];
+const REVIEW_RATING_EMOJI = ["", "😞", "😐", "🙂", "😊", "🤩"];
+
 export function OrderReviewForm({ orderId, item, onDone, onCancel }) {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
@@ -190,34 +193,76 @@ export function OrderReviewForm({ orderId, item, onDone, onCancel }) {
 
   return (
     <form className="order-review-card" onSubmit={submit}>
+      <div className="order-review-card-bg" aria-hidden="true">
+        <span className="order-review-blob order-review-blob-a" />
+        <span className="order-review-blob order-review-blob-b" />
+        <span className="order-review-spark order-review-spark-a">✨</span>
+        <span className="order-review-spark order-review-spark-b">⭐</span>
+        <span className="order-review-spark order-review-spark-c">💫</span>
+      </div>
+
       <div className="order-review-card-head">
-        <span className="order-review-card-icon" aria-hidden="true">
-          ⭐
-        </span>
+        {item.img ? (
+          <img className="order-review-product-img" src={item.img} alt="" loading="lazy" />
+        ) : (
+          <span className="order-review-card-icon" aria-hidden="true">
+            🌾
+          </span>
+        )}
         <div>
           <strong>Rate this product</strong>
           <span>{item.title}</span>
         </div>
       </div>
-      <div className="pdp-star-pick star-row-lg">
-        {[1, 2, 3, 4, 5].map((n) => (
-          <button key={n} type="button" className={"pdp-star-btn" + (rating >= n ? " on" : "")} onClick={() => setRating(n)} aria-label={n + " stars"}>
-            ★
-          </button>
-        ))}
+
+      <div className="order-review-stars-wrap">
+        <div className="order-review-rating-badge">
+          <span className="order-review-rating-emoji" aria-hidden="true">
+            {REVIEW_RATING_EMOJI[rating]}
+          </span>
+          <span className="order-review-rating-label">{REVIEW_RATING_LABELS[rating]}</span>
+        </div>
+        <div className="pdp-star-pick star-row-lg order-review-stars" role="group" aria-label="Star rating">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              type="button"
+              className={"pdp-star-btn order-review-star" + (rating >= n ? " on" : "") + (rating === n ? " active" : "")}
+              onClick={() => setRating(n)}
+              aria-label={n + " stars"}
+              aria-pressed={rating >= n}
+            >
+              ★
+            </button>
+          ))}
+        </div>
       </div>
-      <label>
-        Your review
-        <textarea rows={3} value={comment} onChange={(e) => setComment(e.target.value)} placeholder="How was the quality and packing?" required />
+
+      <label className="order-review-field">
+        <span className="order-review-field-label">
+          <span className="order-review-field-icon" aria-hidden="true">
+            💬
+          </span>
+          Your review
+        </span>
+        <textarea
+          rows={3}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="How was the quality and packing?"
+          required
+        />
       </label>
+
       {msg ? <p className="auth-msg err">{msg}</p> : null}
+
       <div className="order-review-actions">
         {onCancel ? (
-          <button type="button" className="btn btn-outline btn-sm" onClick={onCancel}>
+          <button type="button" className="order-review-btn order-review-btn-cancel" onClick={onCancel}>
             Cancel
           </button>
         ) : null}
-        <button className="btn btn-accent btn-sm" type="submit" disabled={busy}>
+        <button className="order-review-btn order-review-btn-submit" type="submit" disabled={busy}>
           {busy ? "Saving…" : "Submit review"}
         </button>
       </div>
@@ -316,9 +361,13 @@ export function MyOrdersPanel({ orders, loading, reviewKey, setReviewKey, onRelo
               return (
                 <li key={key} className="my-order-item-row">
                   <div className="my-order-item-main">
-                    <span className="my-order-item-emoji" aria-hidden="true">
-                      🌾
-                    </span>
+                    {item.img ? (
+                      <img className="my-order-item-img" src={item.img} alt="" loading="lazy" />
+                    ) : (
+                      <span className="my-order-item-emoji" aria-hidden="true">
+                        🌾
+                      </span>
+                    )}
                     <div>
                       <strong>{item.title}</strong>
                       <span>
