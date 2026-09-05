@@ -1,5 +1,9 @@
 export const SITE_URL = "https://www.bhrtraders.com";
 export const SITE_NAME = "BHR TRADERS";
+export const APP_NAME = "BHR Traders";
+export const APP_APK_URL = "/downloads/bhr-traders.apk";
+export const APP_APK_FILENAME = "BHR-Traders.apk";
+export const APP_APK_LABEL = "Android APK";
 export const SITE_TITLE = "BHR TRADERS — Wholesale Rice Traders in Chennai";
 export const SITE_DESCRIPTION =
   "BHR TRADERS is a wholesale rice trader in Anna Nagar West, Chennai. Boiled, raw, steam, idly and biryani rice with GST billing, hygienic packing and reliable city-wide supply.";

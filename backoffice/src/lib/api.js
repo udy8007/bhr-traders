@@ -147,6 +147,10 @@ export const api = {
   scheduler: (opts = {}) => request("/api/admin/scheduler", { quiet: opts.quiet }),
   saveScheduler: (body) => request("/api/admin/scheduler", { method: "PATCH", body: JSON.stringify(body || {}) }),
   runScheduler: (opts = {}) => request("/api/admin/scheduler", { method: "POST", quiet: opts.quiet }),
+  appDevices: (opts = {}) => request("/api/admin/app/devices", { quiet: opts.quiet }),
+  appDevice: (id, opts = {}) => request("/api/admin/app/devices/" + encodeURIComponent(id), { quiet: opts.quiet }),
+  updateAppDeviceStatus: (id, status) =>
+    request("/api/admin/app/devices/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ status }) }),
   downloadReportPdf: async (kind, category) => {
     showLoader();
     try {

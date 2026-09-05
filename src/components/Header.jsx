@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { EMAIL, MARQUEE, NAV_LINKS, PHONE } from "../data/site.js";
 import { useStore } from "../context/StoreContext.jsx";
 import { useCustomer } from "../context/CustomerContext.jsx";
+import { AppDownloadButton } from "./AppDownload.jsx";
 import { CustomerAccountMenu } from "./CustomerAccountMenu.jsx";
 import { CartIcon, LeafIcon } from "./Icons.jsx";
 
@@ -134,6 +135,9 @@ export function Navbar() {
             <img src="images/logo.png?v=3" alt="BHR TRADERS" />
           </a>
           <ul className={"nav-links" + (menuOpen ? " open" : "")}>
+            <li className="nav-drawer-app">
+              <AppDownloadButton variant="hero" className="nav-drawer-app-btn" onClick={closeNav} />
+            </li>
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <a
@@ -149,18 +153,22 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          <div className="nav-actions">
-            <CustomerAccountMenu />
-            <button
-              className="btn btn-green cart-btn"
-              type="button"
-              aria-label="Open cart"
-              onClick={() => setCartOpen(true)}
-            >
-              <CartIcon />
-              Cart
-              <span className="cart-badge">{cartCount}</span>
-            </button>
+          <div className="nav-row-end">
+            <AppDownloadButton variant="nav" className="nav-app-desktop" />
+            <AppDownloadButton variant="toggle" className="nav-app-toggle" />
+            <div className="nav-actions">
+              <CustomerAccountMenu />
+              <button
+                className="btn btn-green cart-btn"
+                type="button"
+                aria-label="Open cart"
+                onClick={() => setCartOpen(true)}
+              >
+                <CartIcon />
+                <span className="cart-btn-label">Cart</span>
+                <span className="cart-badge">{cartCount}</span>
+              </button>
+            </div>
           </div>
         </div>
         <div className="nav-marquee" aria-label="Highlights">

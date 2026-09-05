@@ -1,17 +1,55 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useCustomer } from "../context/CustomerContext.jsx";
 import { AccountDropdownMenuItems } from "./CustomerAccountUI.jsx";
+
+function useDropdownPosition(open, anchorRef) {
+  const [pos, setPos] = useState(null);
+
+  useLayoutEffect(() => {
+    if (!open || !anchorRef.current) {
+      setPos(null);
+      return;
+    }
+    function update() {
+      const r = anchorRef.current.getBoundingClientRect();
+      const width = Math.min(300, window.innerWidth - 16);
+      const right = Math.max(8, window.innerWidth - r.right);
+      const top = r.bottom + 8;
+      const maxTop = window.innerHeight - 16;
+      setPos({
+        top: Math.min(top, maxTop),
+        right,
+        width
+      });
+    }
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [open, anchorRef]);
+
+  return pos;
+}
 
 export function CustomerAccountMenu({ compact }) {
   const { customer, isLoggedIn, openLogin, logout } = useCustomer();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
+  const btnRef = useRef(null);
+  const menuRef = useRef(null);
+  const pos = useDropdownPosition(open, btnRef);
 
   useEffect(() => {
     function onDocClick(e) {
-      if (!wrapRef.current?.contains(e.target)) setOpen(false);
+      const t = e.target;
+      if (wrapRef.current?.contains(t) || menuRef.current?.contains(t)) return;
+      setOpen(false);
     }
     function onEsc(e) {
       if (e.key === "Escape") setOpen(false);
@@ -44,9 +82,43 @@ export function CustomerAccountMenu({ compact }) {
     navigate("/profile?tab=" + tab);
   }
 
+  const menu = open && pos ? (
+    <div
+      ref={menuRef}
+      className="account-dropdown account-dropdown-mobile account-dropdown-portal"
+      role="menu"
+      style={{
+        top: pos.top + "px",
+        right: pos.right + "px",
+        width: pos.width + "px"
+      }}
+    >
+      <div className="account-dropdown-banner">
+        <div className="account-dropdown-head">
+          <div className="account-dropdown-avatar" aria-hidden="true">
+            {letter}
+          </div>
+          <div>
+            <strong>{customer?.name || "My account"}</strong>
+            <span>{customer?.email}</span>
+          </div>
+        </div>
+      </div>
+
+      <AccountDropdownMenuItems
+        onPick={pick}
+        onLogout={() => {
+          setOpen(false);
+          logout();
+        }}
+      />
+    </div>
+  ) : null;
+
   return (
-    <div className={"account-menu-wrap" + (compact ? " account-menu-compact" : "")} ref={wrapRef}>
+    <div className={"account-menu-wrap" + (compact ? " account-menu-compact" : "") + (open ? " is-open" : "")} ref={wrapRef}>
       <button
+        ref={btnRef}
         type="button"
         className="account-avatar header-icon-btn account-avatar-btn"
         aria-label="My account menu"
@@ -56,29 +128,7 @@ export function CustomerAccountMenu({ compact }) {
         {letter}
       </button>
 
-      {open ? (
-        <div className="account-dropdown account-dropdown-mobile" role="menu">
-          <div className="account-dropdown-banner">
-            <div className="account-dropdown-head">
-              <div className="account-dropdown-avatar" aria-hidden="true">
-                {letter}
-              </div>
-              <div>
-                <strong>{customer?.name || "My account"}</strong>
-                <span>{customer?.email}</span>
-              </div>
-            </div>
-          </div>
-
-          <AccountDropdownMenuItems
-            onPick={pick}
-            onLogout={() => {
-              setOpen(false);
-              logout();
-            }}
-          />
-        </div>
-      ) : null}
+      {menu ? createPortal(menu, document.body) : null}
     </div>
   );
 }

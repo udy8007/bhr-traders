@@ -1,3 +1,4 @@
+import { MobileAppPrompt } from "./components/AppDownload.jsx";
 import { VisitTracker } from "./components/VisitTracker.jsx";
 import { SeoHead } from "./components/SeoHead.jsx";
 import { StoreProvider } from "./context/StoreContext.jsx";
@@ -48,6 +49,7 @@ export default function App() {
         <CustomerLoginModal />
         <CustomerProfileModal />
         <Toast />
+        <MobileAppPrompt />
       </StoreProvider>
     </CustomerProvider>
   );

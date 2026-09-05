@@ -16,6 +16,7 @@ import { AuditLog, ErrorLog } from "./pages/Logs.jsx";
 import { ChangePassword, DbBackup, SchedulerSettings } from "./pages/Settings.jsx";
 import { Endpoints } from "./pages/Endpoints.jsx";
 import { NotificationConfig, NotificationLog } from "./pages/Notifications.jsx";
+import { AppDevices } from "./pages/AppDevices.jsx";
 import { ReportBug } from "./pages/ReportBug.jsx";
 
 function RedirectProduct() {
@@ -51,6 +52,7 @@ export default function App() {
             <Route path="sales/enquiries" element={<Enquiries />} />
             <Route path="sales/customers" element={<Customers />} />
             <Route path="sales/accounts" element={<AppAccounts />} />
+            <Route path="sales/app-devices" element={<AppDevices />} />
             <Route path="sales/reviews" element={<CustomerReviews />} />
             <Route path="reports" element={<Analytics />} />
             <Route path="reports/download" element={<DownloadReport />} />

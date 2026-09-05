@@ -1,3 +1,4 @@
+import { AppDownloadButton } from "../components/AppDownload.jsx";
 import { ArrowIcon } from "../components/Icons.jsx";
 import { PriceListButton } from "../components/PriceListButton.jsx";
 
@@ -24,6 +25,7 @@ export function Hero() {
               <ArrowIcon />
             </a>
             <PriceListButton />
+            <AppDownloadButton variant="hero" />
           </div>
           <div className="hero-points">
             <div className="hero-point">

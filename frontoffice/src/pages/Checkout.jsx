@@ -145,12 +145,13 @@ export function Checkout() {
             <span className="checkout-hero-grain checkout-hero-grain-b">🍚</span>
             <span className="checkout-hero-grain checkout-hero-grain-c">✨</span>
           </div>
-          <button type="button" className="checkout-back" aria-label="Go back" onClick={goBack}>
-            ←
-          </button>
-          <div className="checkout-hero-copy">
-            <small>BHR Traders · Wholesale rice</small>
-            <strong>Place your order</strong>
+          <div className="checkout-hero-inner">
+            <div className="checkout-hero-main">
+              <button type="button" className="checkout-back" aria-label="Go back" onClick={goBack}>
+                ←
+              </button>
+              <strong>Place your order</strong>
+            </div>
           </div>
         </div>
 

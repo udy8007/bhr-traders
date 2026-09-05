@@ -35,6 +35,11 @@ export const API_ENDPOINTS = [
   { group: "Shop sales", path: "/api/reviews", method: "POST", auth: "public", note: "Post review with order ID." },
   { group: "Shop sales", path: "/api/visits", method: "POST", auth: "public", note: "Shop visit / checkout tracking." },
 
+  { group: "Mobile app", path: "/api/app/register", method: "POST", auth: "public", note: "Register or refresh a webview / mobile device. Body: deviceId, platform, model, appVersion, pushToken." },
+  { group: "Mobile app", path: "/api/app/deregister", method: "POST", auth: "public", note: "Deregister device (sets status Inactive, keeps record). Body: deviceId." },
+  { group: "Mobile app", path: "/api/app/heartbeat", method: "POST", auth: "public", note: "Device keep-alive. Body: deviceId, battery, network, appState." },
+  { group: "Mobile app", path: "/api/app/location", method: "POST", auth: "public", note: "Report GPS. Body: deviceId, lat, lng, accuracy, city, region, country." },
+
   { group: "Admin sales", path: "/api/admin/stats", method: "GET", auth: "admin", note: "Dashboard snapshot." },
   { group: "Admin sales", path: "/api/admin/visits", method: "DELETE", auth: "admin", note: "Reset all shop page visits." },
   { group: "Admin sales", path: "/api/admin/orders", method: "GET", auth: "admin", note: "All orders." },
@@ -60,6 +65,9 @@ export const API_ENDPOINTS = [
   { group: "Admin ops", path: "/api/admin/scheduler", method: "POST", auth: "admin", note: "Run scheduler tick now." },
   { group: "Admin ops", path: "/api/admin/logs", method: "GET", auth: "admin", note: "Error and audit logs." },
   { group: "Admin ops", path: "/api/admin/bugs", method: "POST", auth: "admin", note: "Report a bug from backoffice." },
+  { group: "Admin ops", path: "/api/admin/app/devices", method: "GET", auth: "admin", note: "List registered app devices with online status and last location." },
+  { group: "Admin ops", path: "/api/admin/app/devices/:id", method: "GET", auth: "admin", note: "Device detail and recent location history." },
+  { group: "Admin ops", path: "/api/admin/app/devices/:id", method: "PATCH", auth: "admin", note: "Update device status: Active, Inactive, or Blocked." },
   { group: "Admin ops", path: "/api/cron/orders", method: "GET", auth: "cron", note: "Vercel Cron daily fallback (~2:00 AM IST). Same tick as in-app scheduler (orders, pending enquiries, reports, backup)." },
   { group: "Admin ops", path: "/api/cron/orders", method: "POST", auth: "cron", note: "Same as GET." },
 

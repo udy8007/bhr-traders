@@ -36,7 +36,7 @@ export function CustomerAccountMenu() {
             <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6" />
           </svg>
         </span>
-        Sign in
+        <span className="sign-in-btn-text">Sign in</span>
       </button>
     );
   }

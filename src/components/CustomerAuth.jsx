@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api.js";
 import { useCustomer } from "../context/CustomerContext.jsx";
 import { MyOrdersPanel, ProfileTabHero, AccountFormField, AccountFormShell, AccountFormActions, AccountUserChip } from "./CustomerAccountUI.jsx";
+import { AppDownloadPromo } from "./AppDownload.jsx";
 
 export function CustomerLoginModal() {
   const { loginOpen, closeLogin, completeLogin, loginHint, loginMode } = useCustomer();
@@ -218,6 +219,7 @@ export function CustomerLoginModal() {
                       </>
                     )}
                   </p>
+                  <AppDownloadPromo className="auth-app-download" />
                 </>
               }
             >

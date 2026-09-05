@@ -39,6 +39,7 @@ export async function applySchema() {
     for (const file of FILES) {
       await client.query(readFileSync(file, "utf8"));
     }
+    await client.query("notify pgrst, 'reload schema'");
   } finally {
     await client.end();
   }

@@ -1,5 +1,6 @@
 import { ADDRESS, EMAIL, GSTIN, NAV_LINKS, PHONE, PHONE_2 } from "../data/site.js";
 import { useStore } from "../context/StoreContext.jsx";
+import { AppDownloadButton } from "./AppDownload.jsx";
 
 export function Footer() {
   const { catalog } = useStore();
@@ -14,6 +15,7 @@ export function Footer() {
           <p style={{ marginTop: 12 }}>
             BHR TRADERS is a wholesale rice trading business offering high-quality rice at very competitive and affordable prices.
           </p>
+          <AppDownloadButton variant="footer" />
         </div>
         <div>
           <h4>Quick Links</h4>

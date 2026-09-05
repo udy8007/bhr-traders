@@ -3124,3 +3124,196 @@ html, body.bhr-graphic {
     margin-left: 0;
   }
 }
+
+/* App devices admin */
+.app-dev-donut-wrap { min-height: 120px; }
+.app-dev-legend p { color: #5e6b57; }
+.app-dev-map {
+  min-height: 280px;
+  border-radius: 12px;
+  border: 1px solid #eadfc8;
+}
+.app-dev-map-empty {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(145deg, #eef8f1, #f6f0e4);
+  border-radius: 12px;
+  border: 1px dashed #c4a35a;
+}
+.app-dev-map-empty .material-symbols-rounded {
+  font-size: 42px;
+  color: #c4a35a;
+}
+.app-dev-map-pin circle { transition: r 0.15s ease; }
+.app-dev-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #f6f0e4;
+  color: #8b7355;
+  border: 1px solid #eadfc8;
+}
+.app-dev-status-pill.is-online {
+  background: #eef8f1;
+  color: #143524;
+  border-color: #b8dcc4;
+}
+.app-dev-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8b7355;
+}
+.app-dev-status-pill.is-online .app-dev-status-dot {
+  background: #2a6b40;
+  box-shadow: 0 0 0 3px rgba(42, 107, 64, 0.2);
+  animation: appDevPulse 2s ease infinite;
+}
+@keyframes appDevPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.app-dev-cell-device {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.app-dev-device-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(195deg, #2a6b40, #143524);
+  color: #fff;
+  flex-shrink: 0;
+}
+.app-dev-device-icon .material-symbols-rounded { font-size: 18px; }
+.app-dev-row-active { background: #eef8f1 !important; }
+.app-dev-battery-list { display: flex; flex-direction: column; gap: 10px; }
+.app-dev-battery-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+.app-dev-battery-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #5e6b57;
+}
+.app-dev-battery-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #eadfc8;
+  overflow: hidden;
+}
+.app-dev-battery-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.app-dev-chip {
+  display: inline-block;
+  padding: 3px 8px;
+  margin: 0 6px 6px 0;
+  border-radius: 8px;
+  background: #f6f0e4;
+  border: 1px solid #eadfc8;
+  font-size: 11px;
+  color: #143524;
+}
+.app-dev-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(12, 36, 24, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.app-dev-detail-panel {
+  width: min(480px, 100%);
+  max-height: min(88vh, 720px);
+  overflow: auto;
+  background: #fffef9;
+  border: 1px solid #eadfc8;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(20, 53, 36, 0.22);
+}
+.app-dev-detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 18px 12px;
+  border-bottom: 1px solid #eadfc8;
+  background: linear-gradient(180deg, #f6f0e4, #fffef9);
+}
+.app-dev-detail-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 10px;
+  color: #c4a35a;
+  margin-bottom: 4px;
+}
+.app-dev-detail-close {
+  border: 0;
+  background: #eadfc8;
+  color: #143524;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
+.app-dev-detail-body { padding: 16px 18px 20px; }
+.app-dev-detail-stats { margin-bottom: 14px; }
+.app-dev-detail-loc {
+  padding: 12px;
+  border-radius: 12px;
+  background: #eef8f1;
+  border: 1px solid #b8dcc4;
+}
+.app-dev-history {
+  max-height: 220px;
+  overflow: auto;
+  padding-right: 4px;
+}
+.app-dev-history-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0e8d8;
+}
+.app-dev-history-row:last-child { border-bottom: 0; }
+.app-dev-history-pin {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #c4a35a;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.app-dev-empty-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #5e6b57;
+}
+.app-dev-empty-inline .material-symbols-rounded {
+  font-size: 32px;
+  color: #c4a35a;
+}
