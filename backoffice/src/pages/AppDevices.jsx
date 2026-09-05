@@ -115,7 +115,7 @@ function RankBars({ rows, color }) {
   );
 }
 
-function RankBars({ rows, color }) {
+function LocationMap({ devices, selectedId, onSelect }) {
   const withLoc = devices.filter((d) => d.lastLocation?.lat != null && d.lastLocation?.lng != null);
   if (!withLoc.length) {
     return (
